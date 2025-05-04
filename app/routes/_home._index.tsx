@@ -44,8 +44,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 		<div>
 			<h1>Home</h1>
 			<EventList events={eventsData} />
-
-			<Sitemap />
 		</div>
 	)
 }
