@@ -10,14 +10,15 @@ export default function DashboardEventCreate() {
 			<Form method='post'>
 				<label htmlFor='name'>esemeny neve</label>
 				<input type='text' name='name' id='name' required />
-
+				<label htmlFor='date'>esemeny idopontja</label>
+				<input type='date' name='date' id='date' required />
 				<input type='submit' value='letrehozas' />
 			</Form>
 
 			{data && (
 				<div>
 					<p>{data.name} nevu esemeny letrehozva!</p>
-					<Link to={`/dashboard/event/${data.name}`}>megnyitas</Link>
+					<Link to={`/dashboard/event/${data.name}`}>esemeny szerkesztese</Link>
 				</div>
 			)}
 		</div>
@@ -27,6 +28,8 @@ export default function DashboardEventCreate() {
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
 	const name = formData.get('name')
+	//const date = formData.get('date')
+
 	const event = { name }
 	console.log('uj esemeny letrehozva', event)
 	return event
