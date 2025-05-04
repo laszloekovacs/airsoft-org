@@ -1,7 +1,6 @@
-import { Form, useActionData } from 'react-router'
+import { Form, Link, useActionData } from 'react-router'
 
 export default function DashboardEventCreate() {
-	// read action data
 	const data = useActionData()
 
 	return (
@@ -18,6 +17,7 @@ export default function DashboardEventCreate() {
 			{data && (
 				<div>
 					<p>{data.name} nevu esemeny letrehozva!</p>
+					<Link to={`/dashboard/event/${data.name}`}>megnyitas</Link>
 				</div>
 			)}
 		</div>
