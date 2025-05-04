@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 type EventItemPropType = {
 	id: number
 	title: string
@@ -25,7 +27,9 @@ export const EventItem = (props: { event: EventItemPropType }) => {
 	const { title, description, date, location } = props.event
 	return (
 		<div>
-			<h2>{title}</h2>
+			<Link to={`/events/${props.event.id}`}>
+				<h2>{title}</h2>
+			</Link>
 			<p>{description}</p>
 			<p>{date}</p>
 			<p>{location}</p>
