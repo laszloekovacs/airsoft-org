@@ -1,5 +1,6 @@
 import type { Route } from './+types/_home._index'
 import { EventList } from '../components/events'
+import Sitemap from '~/components/sitemap'
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const eventsData = [
@@ -43,6 +44,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 		<div>
 			<h1>Home</h1>
 			<EventList events={eventsData} />
+
+			<Sitemap />
 		</div>
 	)
 }
