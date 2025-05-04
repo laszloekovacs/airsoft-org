@@ -3,7 +3,8 @@ import { Link } from 'react-router'
 export default function Sitemap() {
 	const links = [
 		{ to: '/', label: 'Home' },
-		{ to: '/dashboard', label: 'Dashboard' }
+		{ to: '/dashboard', label: 'Dashboard' },
+		{ to: '/dashboard/event/create', label: 'Create Event' }
 	]
 
 	return (

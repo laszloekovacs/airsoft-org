@@ -16,3 +16,20 @@ User sees an event → Clicks "Apply to Join"
 → Accepted user gets assigned to group (optional)
 → User can cancel RSVP at any time
 → Organizer can send messages or updates to accepted users
+
+
+## Schema
+
+event: 
+title: string
+owner: → user id
+date: date
+timeline: starting, lunch, end etc
+location:  → location reference
+Max players: number
+RSVP deadline: datetime
+tags: milsim, etc. string array or string
+description: string
+rules: string
+published: boolean
+
