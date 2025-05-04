@@ -25,12 +25,14 @@ export default function DashboardEventCreate() {
 	)
 }
 
+// should return a generated event link, or an error message
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
 	const name = formData.get('name')
-	//const date = formData.get('date')
+	const date = formData.get('date')
 
-	const event = { name }
-	console.log('uj esemeny letrehozva', event)
-	return event
+	// TODO: validate name and date
+	// return error if already exists
+
+	return { name, date } // TODO: return generated event link
 }
