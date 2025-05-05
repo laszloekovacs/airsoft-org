@@ -27,10 +27,10 @@ export async function action({ request }: { request: Request }) {
 	console.log('parseResult', parseResult)
 
 	if (parseResult.success) {
-		return { data: parseResult.data }
+		return { ...parseResult.data }
 	} else {
 		return {
-			errors: parseResult.error.format()
+			...parseResult.error.format()
 		}
 	}
 }
