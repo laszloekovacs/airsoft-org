@@ -19,7 +19,7 @@ export async function action({ request }: { request: Request }) {
 					const eventDate = new Date(date)
 					return eventDate > today
 				},
-				{ message: 'a jövőbeli dátum szükséges' }
+				{ message: 'jövőbeli dátum szükséges' }
 			),
 
 		generatedUrlName: z
@@ -56,17 +56,18 @@ export async function action({ request }: { request: Request }) {
 		})
 
 		return {
+			state: 'success',
 			generatedUrlName
 		}
 	}
 
-	return parseResult.error.format()
+	return { ...parseResult.error.format(), state: 'error' }
 }
 
 export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
 
-	const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
 		const formData = new FormData(event.currentTarget)
@@ -80,9 +81,14 @@ export default function DashboardEventCreate() {
 		formData.append('generatedUrlName', generatedUrlName)
 
 		// post with fetcher
-		fetcher.submit(formData, {
+		await fetcher.submit(formData, {
 			method: 'post'
 		})
+
+		// reset form
+		if (fetcher.data?.state == 'success') {
+			event.currentTarget.reset()
+		}
 	}
 
 	return (
@@ -95,11 +101,17 @@ export default function DashboardEventCreate() {
 						<span>esemény neve</span>
 						<input type='text' name='name' id='name' />
 					</label>
+					{fetcher.data?.name?._errors && (
+						<FieldError _errors={fetcher.data?.name?._errors} />
+					)}
 
 					<label>
 						<span>esemény időpontja</span>
 						<input type='date' name='date' id='date' />
 					</label>
+					{fetcher.data?.date?._errors && (
+						<FieldError _errors={fetcher.data?.date?._errors} />
+					)}
 
 					<input
 						type='submit'
@@ -109,18 +121,15 @@ export default function DashboardEventCreate() {
 				</div>
 			</fetcher.Form>
 
-			{fetcher.data && typeof fetcher.data.generatedUrlName == 'string' && (
-				<CreatedEventLink generatedUrlName={fetcher.data.generatedUrlName} />
-			)}
-
-			{fetcher.data && (
-				<div>
-					<pre>{JSON.stringify(fetcher.data, null, 3)}</pre>
-				</div>
-			)}
+			<div>
+				{typeof fetcher.data?.generatedUrlName == 'string' && (
+					<CreatedEventLink generatedUrlName={fetcher.data.generatedUrlName} />
+				)}
+			</div>
 		</div>
 	)
 }
+//{fetcher.data && <pre>{JSON.stringify(fetcher.data, null, 3)}</pre>}
 
 const CreatedEventLink = ({
 	generatedUrlName
@@ -134,6 +143,16 @@ const CreatedEventLink = ({
 			<h2>Esemény létrehozva!</h2>
 			<p>{generatedUrlName}</p>
 			<Link to={url}>létrehozott esemény szerkesztése</Link>
+		</div>
+	)
+}
+
+const FieldError = ({ _errors }: { _errors: string[] }) => {
+	return (
+		<div>
+			{_errors.map((error, index) => (
+				<p key={index}>{error}</p>
+			))}
 		</div>
 	)
 }
