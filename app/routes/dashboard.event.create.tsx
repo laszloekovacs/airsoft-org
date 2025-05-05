@@ -1,6 +1,7 @@
 import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
+import mockDatabase from '~/mock/db.server'
 
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
@@ -29,15 +30,26 @@ export async function action({ request }: { request: Request }) {
 
 	if (parseResult.success) {
 		// generate suggested url for event
-		const generatedname = generateUrlSafeName(
+		const generatedName = generateUrlSafeName(
 			parseResult.data.date + ' ' + parseResult.data.name
 		)
 
 		// check if event exists with this name in the database
+		const existingEvents = await mockDatabase.findEventByUrl(
+			generatedName,
+			false
+		)
+
+		if (existingEvents.length > 0) {
+			return {
+				error: 'Esemény már létezik ezzel a névvel',
+				suggestedName: generatedName
+			}
+		}
 
 		// create event in the database
 
-		return { ...parseResult.data, generatedname }
+		return { generatedName }
 	} else {
 		return {
 			...parseResult.error.format()
