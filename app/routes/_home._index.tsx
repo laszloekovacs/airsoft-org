@@ -42,7 +42,6 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div>
-			<h1>Home</h1>
 			<EventList events={eventsData} />
 		</div>
 	)
