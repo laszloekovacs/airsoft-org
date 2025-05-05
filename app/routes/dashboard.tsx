@@ -1,10 +1,12 @@
-import { Outlet } from 'react-router'
+import { Link, Outlet } from 'react-router'
 import Sitemap from '~/components/sitemap'
 
 export default function DashboardIndex() {
 	return (
 		<div>
-			<h1>Dashboard</h1>
+			<Link to='/dashboard'>
+				<h1>Dashboard</h1>
+			</Link>
 			<Outlet />
 			<Sitemap />
 		</div>

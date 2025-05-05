@@ -40,7 +40,7 @@ export default function DashboardEventCreate() {
 
 	return (
 		<div>
-			<h1>Új esemény létrehozása</h1>
+			<h2>Új esemény létrehozása</h2>
 
 			<fetcher.Form method='post'>
 				<label>
