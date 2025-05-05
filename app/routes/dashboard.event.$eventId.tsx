@@ -1,3 +1,4 @@
+import { Link, Outlet } from 'react-router'
 import type { Route } from './+types/dashboard.event.$eventId'
 
 export const loader = async ({ params }: { params: { eventId: string } }) => {
@@ -22,6 +23,23 @@ export default function DashboardEventsEventId({
 		<div>
 			<h2>{name}</h2>
 			<p>{description}</p>
+
+			<TabList />
+
+			<Outlet />
 		</div>
+	)
+}
+
+const TabList = () => {
+	return (
+		<ul>
+			<li>Details</li>
+			<li>Attendees</li>
+			<li>Settings</li>
+			<li>
+				<Link to='./dates'>Dates</Link>
+			</li>
+		</ul>
 	)
 }
