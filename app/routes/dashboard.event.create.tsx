@@ -1,5 +1,6 @@
 import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
+import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
 
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
@@ -27,7 +28,16 @@ export async function action({ request }: { request: Request }) {
 	console.log('parseResult', parseResult)
 
 	if (parseResult.success) {
-		return { ...parseResult.data }
+		// generate suggested url for event
+		const generatedname = generateUrlSafeName(
+			parseResult.data.date + ' ' + parseResult.data.name
+		)
+
+		// check if event exists with this name in the database
+
+		// create event in the database
+
+		return { ...parseResult.data, generatedname }
 	} else {
 		return {
 			...parseResult.error.format()
