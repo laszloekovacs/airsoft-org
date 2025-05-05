@@ -49,13 +49,13 @@ export async function action({ request }: { request: Request }) {
 	if (parseResult.success) {
 		// create event in the database
 		const { name, date, generatedUrlName } = parseResult.data
-		const event = await mockDatabase.createEvent({
+		await mockDatabase.createEvent({
 			url: generatedUrlName,
 			name,
 			date
 		})
 
-		return { generatedUrlName: event.url }
+		return { generatedUrlName }
 	} else {
 		return {
 			...parseResult.error.format()
