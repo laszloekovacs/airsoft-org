@@ -1,6 +1,5 @@
 import type { Route } from './+types/_home._index'
-import { EventList } from '../components/events'
-import Sitemap from '~/components/sitemap'
+import { EventList } from '../components/home_index/events'
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const eventsData = [
