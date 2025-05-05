@@ -55,12 +55,12 @@ export async function action({ request }: { request: Request }) {
 			date
 		})
 
-		return { generatedUrlName }
-	} else {
 		return {
-			error: parseResult.error.format()
+			generatedUrlName
 		}
 	}
+
+	return parseResult.error.format()
 }
 
 export default function DashboardEventCreate() {
@@ -105,7 +105,7 @@ export default function DashboardEventCreate() {
 				</div>
 			</fetcher.Form>
 
-			{fetcher.data?.generatedUrlName && (
+			{fetcher.data && typeof fetcher.data.generatedUrlName == 'string' && (
 				<CreatedEventLink generatedUrlName={fetcher.data.generatedUrlName} />
 			)}
 
@@ -123,9 +123,13 @@ const CreatedEventLink = ({
 }: {
 	generatedUrlName: string
 }) => {
+	const url = `/dashboard/event/${generatedUrlName}`
+
 	return (
 		<div>
-			<Link to={`/events/${generatedUrlName}`}>{generatedUrlName}</Link>
+			<h2>Esemény létrehozva!</h2>
+			<p>{generatedUrlName}</p>
+			<Link to={url}>létrehozott esemény szerkesztése</Link>
 		</div>
 	)
 }
