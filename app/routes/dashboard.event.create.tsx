@@ -101,7 +101,11 @@ export default function DashboardEventCreate() {
 						<input type='date' name='date' id='date' />
 					</label>
 
-					<input type='submit' value='létrehozás' />
+					<input
+						type='submit'
+						value='létrehozás'
+						disabled={fetcher.state != 'idle'}
+					/>
 				</div>
 			</fetcher.Form>
 
