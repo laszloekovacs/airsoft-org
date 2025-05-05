@@ -27,11 +27,10 @@ export async function action({ request }: { request: Request }) {
 	console.log('parseResult', parseResult)
 
 	if (parseResult.success) {
-		return { data: parseResult.data, errors: null }
+		return { data: parseResult.data }
 	} else {
 		return {
-			errors: parseResult.error.format(),
-			data: null
+			errors: parseResult.error.format()
 		}
 	}
 }
@@ -44,11 +43,15 @@ export default function DashboardEventCreate() {
 			<h1>Új esemény létrehozása</h1>
 
 			<fetcher.Form method='post'>
-				<label htmlFor='name'>esemény neve</label>
-				<input type='text' name='name' id='name' />
+				<label>
+					<span>esemény neve</span>
+					<input type='text' name='name' id='name' />
+				</label>
 
-				<label htmlFor='date'>esemény időpontja</label>
-				<input type='date' name='date' id='date' />
+				<label>
+					<span>esemény időpontja</span>
+					<input type='date' name='date' id='date' />
+				</label>
 
 				<input type='submit' value='létrehozás' />
 			</fetcher.Form>
