@@ -58,7 +58,7 @@ export async function action({ request }: { request: Request }) {
 		return { generatedUrlName }
 	} else {
 		return {
-			...parseResult.error.format()
+			error: parseResult.error.format()
 		}
 	}
 }
@@ -105,11 +105,27 @@ export default function DashboardEventCreate() {
 				</div>
 			</fetcher.Form>
 
+			{fetcher.data?.generatedUrlName && (
+				<CreatedEventLink generatedUrlName={fetcher.data.generatedUrlName} />
+			)}
+
 			{fetcher.data && (
 				<div>
 					<pre>{JSON.stringify(fetcher.data, null, 3)}</pre>
 				</div>
 			)}
+		</div>
+	)
+}
+
+const CreatedEventLink = ({
+	generatedUrlName
+}: {
+	generatedUrlName: string
+}) => {
+	return (
+		<div>
+			<Link to={`/events/${generatedUrlName}`}>{generatedUrlName}</Link>
 		</div>
 	)
 }
