@@ -35,7 +35,7 @@ export async function action({ request }: { request: Request }) {
 			)
 			.refine(
 				async name => {
-					const existingEvents = await mockDatabase.findEventByUrl(name, false)
+					const existingEvents = await mockDatabase.findEventByUrl(name, true)
 					return existingEvents.length > 0
 				},
 				{ message: 'már létezik ilyen nevű esemény' }
@@ -48,7 +48,14 @@ export async function action({ request }: { request: Request }) {
 
 	if (parseResult.success) {
 		// create event in the database
-		return { generatedUrlName: parseResult.data.generatedUrlName }
+		const { name, date, generatedUrlName } = parseResult.data
+		const event = await mockDatabase.createEvent({
+			url: generatedUrlName,
+			name,
+			date
+		})
+
+		return { generatedUrlName: event.url }
 	} else {
 		return {
 			...parseResult.error.format()

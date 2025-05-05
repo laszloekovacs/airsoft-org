@@ -13,6 +13,15 @@ const mockDatabase = {
 	],
 	findEventByUrl: async function (url: string, success: boolean = true) {
 		return success == true ? this.events : []
+	},
+
+	createEvent: async function (event: {
+		url: string
+		name: string
+		date: string
+	}) {
+		this.events.push(event)
+		return event
 	}
 }
 
