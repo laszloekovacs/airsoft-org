@@ -43,17 +43,19 @@ export default function DashboardEventCreate() {
 			<h2>Új esemény létrehozása</h2>
 
 			<fetcher.Form method='post'>
-				<label>
-					<span>esemény neve</span>
-					<input type='text' name='name' id='name' />
-				</label>
+				<div>
+					<label>
+						<span>esemény neve</span>
+						<input type='text' name='name' id='name' />
+					</label>
 
-				<label>
-					<span>esemény időpontja</span>
-					<input type='date' name='date' id='date' />
-				</label>
+					<label>
+						<span>esemény időpontja</span>
+						<input type='date' name='date' id='date' />
+					</label>
 
-				<input type='submit' value='létrehozás' />
+					<input type='submit' value='létrehozás' />
+				</div>
 			</fetcher.Form>
 
 			{fetcher.data && (
