@@ -3,15 +3,14 @@ import { z } from 'zod'
 
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
-	const name = formData.get('name')
-	const date = formData.get('date')
+	const formDataEntries = Object.fromEntries(formData.entries())
 
 	const createEventSchema = z.object({
 		name: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
 
 		date: z
 			.string()
-			.date()
+			.date('érvénytelen dátum formátum')
 			.refine(
 				date => {
 					const today = new Date()
@@ -22,17 +21,18 @@ export async function action({ request }: { request: Request }) {
 			)
 	})
 
-	const parseResult = createEventSchema.safeParse({ name, date })
+	const parseResult = createEventSchema.safeParse(formDataEntries)
+
+	// TODO: save to db, generate link
 	console.log('parseResult', parseResult)
 
-	if (!parseResult.success) {
+	if (parseResult.success) {
+		return { data: parseResult.data, errors: null }
+	} else {
 		return {
 			errors: parseResult.error.format(),
 			data: null
 		}
-	} else {
-		const event = parseResult.data
-		return { event }
 	}
 }
 
@@ -45,10 +45,10 @@ export default function DashboardEventCreate() {
 
 			<fetcher.Form method='post'>
 				<label htmlFor='name'>esemény neve</label>
-				<input type='text' name='name' id='name' required />
+				<input type='text' name='name' id='name' />
 
 				<label htmlFor='date'>esemény időpontja</label>
-				<input type='date' name='date' id='date' required />
+				<input type='date' name='date' id='date' />
 
 				<input type='submit' value='létrehozás' />
 			</fetcher.Form>
