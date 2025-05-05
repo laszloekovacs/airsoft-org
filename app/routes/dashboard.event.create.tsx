@@ -1,28 +1,40 @@
-import { Form, Link, useActionData, useFetcher } from 'react-router'
+import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
-
 
 export async function action({ request }: { request: Request }) {
 	const formData = await request.formData()
 	const name = formData.get('name')
 	const date = formData.get('date')
 
-
 	const createEventSchema = z.object({
-		name: z.string().length(3, 'legalább 3 karakter hosszú név szükséges'),
+		name: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
 
 		date: z
-			.date({
-				required_error: 'az esemény időpontja kötelező',
-				invalid_type_error: 'az esemény időpontja nem megfelelő formátumú'
-			})
-			.min(new Date(), 'az esemény időpontja nem lehet a múltban')
+			.string()
+			.date()
+			.refine(
+				date => {
+					const today = new Date()
+					const eventDate = new Date(date)
+					return eventDate > today
+				},
+				{ message: 'a jövőbeli dátum szükséges' }
+			)
 	})
 
 	const parseResult = createEventSchema.safeParse({ name, date })
-	return parseResult
-}
+	console.log('parseResult', parseResult)
 
+	if (!parseResult.success) {
+		return {
+			errors: parseResult.error.format(),
+			data: null
+		}
+	} else {
+		const event = parseResult.data
+		return { event }
+	}
+}
 
 export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
@@ -43,12 +55,7 @@ export default function DashboardEventCreate() {
 
 			{fetcher.data && (
 				<div>
-					<h2>uj esemeny letrehozva</h2>
-					<p>esemeny neve: {fetcher.data.}</p>
-					<p>esemeny idopontja: {fetcher.data.date}</p>
-					<Link to={`/dashboard/event/${fetcher.data.name}`}>
-						létrehozott esemény szerkesztése
-					</Link>
+					<pre>{JSON.stringify(fetcher.data, null, 3)}</pre>
 				</div>
 			)}
 		</div>
