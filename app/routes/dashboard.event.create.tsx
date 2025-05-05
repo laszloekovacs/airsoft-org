@@ -20,36 +20,35 @@ export async function action({ request }: { request: Request }) {
 					return eventDate > today
 				},
 				{ message: 'a jövőbeli dátum szükséges' }
+			),
+
+		generatedUrlName: z
+			.string()
+			.refine(
+				name => {
+					const generated = generateUrlSafeName(name)
+					return generated === name
+				},
+				{
+					message: 'érvénytelen generált URL név'
+				}
+			)
+			.refine(
+				async name => {
+					const existingEvents = await mockDatabase.findEventByUrl(name, false)
+					return existingEvents.length > 0
+				},
+				{ message: 'már létezik ilyen nevű esemény' }
 			)
 	})
 
-	const parseResult = createEventSchema.safeParse(formDataEntries)
-
-	// TODO: save to db, generate link
+	// validate form data submitted by the user
+	const parseResult = await createEventSchema.safeParseAsync(formDataEntries)
 	console.log('parseResult', parseResult)
 
 	if (parseResult.success) {
-		// generate suggested url for event
-		const generatedName = generateUrlSafeName(
-			parseResult.data.date + ' ' + parseResult.data.name
-		)
-
-		// check if event exists with this name in the database
-		const existingEvents = await mockDatabase.findEventByUrl(
-			generatedName,
-			false
-		)
-
-		if (existingEvents.length > 0) {
-			return {
-				error: 'Esemény már létezik ezzel a névvel',
-				suggestedName: generatedName
-			}
-		}
-
 		// create event in the database
-
-		return { generatedName }
+		return { generatedUrlName: parseResult.data.generatedUrlName }
 	} else {
 		return {
 			...parseResult.error.format()
@@ -60,11 +59,30 @@ export async function action({ request }: { request: Request }) {
 export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
 
+	const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+		event.preventDefault()
+
+		const formData = new FormData(event.currentTarget)
+		const formDataEntries = Object.fromEntries(formData.entries())
+
+		const generatedUrlName = generateUrlSafeName(
+			formDataEntries.date + ' ' + formDataEntries.name
+		)
+
+		// add to formData
+		formData.append('generatedUrlName', generatedUrlName)
+
+		// post with fetcher
+		fetcher.submit(formData, {
+			method: 'post'
+		})
+	}
+
 	return (
 		<div>
 			<h2>Új esemény létrehozása</h2>
 
-			<fetcher.Form method='post'>
+			<fetcher.Form method='post' onSubmit={handleSubmit}>
 				<div>
 					<label>
 						<span>esemény neve</span>
