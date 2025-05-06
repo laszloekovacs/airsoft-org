@@ -18,6 +18,10 @@ type SuccessResponseType = {
 
 type ActionResponseType = ErrorResponseType | SuccessResponseType
 
+const generateSlug = (name: string, year: number) => {
+	return generateUrlSafeName(year + ' ' + name)
+}
+
 export async function action({
 	request
 }: {
@@ -36,7 +40,7 @@ export async function action({
 				date => {
 					const today = new Date()
 					const eventDate = new Date(date)
-					return eventDate > today
+					return today < eventDate
 				},
 				{ message: 'jövőbeli dátum szükséges' }
 			),
@@ -81,16 +85,16 @@ export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
 
 	const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
-		event.preventDefault()
-
 		const formData = new FormData(event.currentTarget)
 		const formDataEntries = Object.fromEntries(formData.entries())
 
+		event.preventDefault()
+
 		// extract year from date
-		const year = Temporal.PlainDate.from(formDataEntries.date.toString()).year
+		const year = new Date(formDataEntries.date.toString()).getFullYear()
 
 		// generate a name for the event
-		const eventUrlSlug = generateUrlSafeName(year + ' ' + formDataEntries.name)
+		const eventUrlSlug = generateSlug(formDataEntries.name.toString(), year)
 
 		// add event name to formData
 		formData.append('eventUrlSlug', eventUrlSlug)
