@@ -4,7 +4,8 @@ export default function Sitemap() {
 	const links = [
 		{ to: '/', label: 'Home' },
 		{ to: '/dashboard', label: 'Dashboard' },
-		{ to: '/dashboard/event/create', label: 'Create Event' }
+		{ to: '/dashboard/event/create', label: 'Create Event' },
+		{ to: '/account', label: 'Account' }
 	]
 
 	return (
