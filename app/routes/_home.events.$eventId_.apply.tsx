@@ -1,4 +1,5 @@
 import { useFetcher } from 'react-router'
+import type { Route } from './+types/_home.events.$eventId_.apply'
 
 export default function ApplyEventPage() {
 	const fetcher = useFetcher()
@@ -20,4 +21,23 @@ export default function ApplyEventPage() {
 	)
 }
 
-export async function action() {}
+type ErrorResponse = {
+	status: 'error'
+	reason: string
+}
+
+type SuccessResponse = {
+	status: 'success'
+	message: string
+}
+
+type ActionResponse = ErrorResponse | SuccessResponse
+
+export async function action({
+	request
+}: Route.ActionArgs): Promise<ActionResponse> {
+	return {
+		status: 'success',
+		message: 'Sikeres jelentkezés!'
+	}
+}

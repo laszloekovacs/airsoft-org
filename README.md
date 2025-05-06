@@ -35,3 +35,9 @@ published: boolean
 
 https://orm.drizzle.team/docs
 https://www.better-auth.com/docs
+
+
+
+
+### notes
+- use viewModels and query functions
