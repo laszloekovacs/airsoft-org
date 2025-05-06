@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth'
 import db from './db.server'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 
-export const auth = betterAuth({
+export const authServer = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: 'sqlite'
 	}),
