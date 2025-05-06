@@ -1,6 +1,12 @@
 import { useFetcher } from 'react-router'
 import type { Route } from './+types/_home.events.$eventId_.apply'
 
+export const loader = async () => {
+	// TODO: only for logged in
+
+	return {}
+}
+
 export default function ApplyEventPage() {
 	const fetcher = useFetcher()
 
@@ -15,6 +21,7 @@ export default function ApplyEventPage() {
 					<input type='checkbox' name='acceptTerms' id='acceptTerms'></input>
 				</label>
 				<br />
+				<input type='hidden' name='intent' value='apply' />
 				<input type='submit' value='Jelentkezek' />
 			</fetcher.Form>
 		</div>
@@ -36,6 +43,9 @@ type ActionResponse = ErrorResponse | SuccessResponse
 export async function action({
 	request
 }: Route.ActionArgs): Promise<ActionResponse> {
+	const formData = await request.formData()
+	const formEntries = Object.fromEntries(formData.entries())
+
 	return {
 		status: 'success',
 		message: 'Sikeres jelentkezés!'
