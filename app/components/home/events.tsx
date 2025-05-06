@@ -10,6 +10,9 @@ export const EventList = (props: {
 	return (
 		<div>
 			<h1>Upcomming events</h1>
+
+			{eventList.length == 0 && <p>"nincs megjeleníthető esemény"</p>}
+
 			<ul>
 				{eventList.map(e => (
 					<EventItem key={e.id} event={e} />
