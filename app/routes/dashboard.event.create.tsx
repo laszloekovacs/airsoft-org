@@ -34,7 +34,7 @@ export async function action({
 	const formDataEntries = Object.fromEntries(formData.entries())
 
 	const createEventSchema = z.object({
-		name: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
+		title: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
 
 		date: z
 			.string()
@@ -52,11 +52,11 @@ export async function action({
 			.string()
 			.min(3, 'legalább 3 karakter hosszú név szükséges')
 			.refine(
-				async name => {
+				async slug => {
 					const existingEvents = await db
 						.select()
 						.from(eventsTable)
-						.where(eq(eventsTable.urlSlug, name))
+						.where(eq(eventsTable.urlSlug, slug))
 
 					return existingEvents.length == 0
 				},
@@ -69,9 +69,9 @@ export async function action({
 
 	if (parseResult.success) {
 		// create event in the database
-		const { name, date, eventUrlSlug } = parseResult.data
+		const { title, date, eventUrlSlug } = parseResult.data
 		const result = await db.insert(eventsTable).values({
-			name,
+			title,
 			date,
 			urlSlug: eventUrlSlug
 		})
@@ -110,7 +110,7 @@ export default function DashboardEventCreate() {
 		const year = new Date(formDataEntries.date.toString()).getFullYear()
 
 		// generate a name for the event
-		const eventUrlSlug = generateSlug(formDataEntries.name.toString(), year)
+		const eventUrlSlug = generateSlug(formDataEntries.title.toString(), year)
 
 		// add event name to formData
 		formData.append('eventUrlSlug', eventUrlSlug)
@@ -132,10 +132,10 @@ export default function DashboardEventCreate() {
 				<div>
 					<label>
 						<span>esemény neve</span>
-						<input type='text' name='name' id='name' />
+						<input type='text' name='title' id='title' />
 					</label>
 					{fetcher.data?.state == 'error' && (
-						<FieldValidationErrors errors={fetcher.data.fieldErrors?.name} />
+						<FieldValidationErrors errors={fetcher.data.fieldErrors?.title} />
 					)}
 
 					<label>

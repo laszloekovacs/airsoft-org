@@ -1,36 +1,37 @@
 {
-  "name": "airsoft-org",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
-  },
-  "dependencies": {
-    "@js-temporal/polyfill": "^0.5.1",
-    "@libsql/client": "^0.15.4",
-    "@react-router/fs-routes": "^7.5.3",
-    "@react-router/node": "^7.5.3",
-    "@react-router/serve": "^7.5.3",
-    "drizzle-orm": "^0.43.1",
-    "isbot": "^5.1.27",
-    "pg": "^8.15.6",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-router": "^7.5.3",
-    "zod": "^3.24.4"
-  },
-  "devDependencies": {
-    "@react-router/dev": "^7.5.3",
-    "@types/node": "^20",
-    "@types/pg": "^8.12.0",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
-    "drizzle-kit": "^0.31.1",
-    "typescript": "^5.8.3",
-    "vite": "^6.3.3",
-    "vite-tsconfig-paths": "^5.1.4"
-  }
+	"name": "airsoft-org",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "react-router dev",
+		"pushdb": "drizzle-kit push",
+		"build": "react-router build",
+		"start": "react-router-serve ./build/server/index.js",
+		"typecheck": "react-router typegen && tsc"
+	},
+	"dependencies": {
+		"@js-temporal/polyfill": "^0.5.1",
+		"@libsql/client": "^0.15.4",
+		"@react-router/fs-routes": "^7.5.3",
+		"@react-router/node": "^7.5.3",
+		"@react-router/serve": "^7.5.3",
+		"drizzle-orm": "^0.43.1",
+		"isbot": "^5.1.27",
+		"pg": "^8.15.6",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-router": "^7.5.3",
+		"zod": "^3.24.4"
+	},
+	"devDependencies": {
+		"@react-router/dev": "^7.5.3",
+		"@types/node": "^20",
+		"@types/pg": "^8.12.0",
+		"@types/react": "^19.1.2",
+		"@types/react-dom": "^19.1.2",
+		"drizzle-kit": "^0.31.1",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.3",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
 }

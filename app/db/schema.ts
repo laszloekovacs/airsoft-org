@@ -8,7 +8,10 @@ export const usersTable = sqliteTable('users', {
 
 export const eventsTable = sqliteTable('events', {
 	id: int('id').primaryKey({ autoIncrement: true }),
-	name: text('name').notNull(),
+	title: text('name').notNull(),
 	date: text('date').notNull(),
-	urlSlug: text('url_slug').notNull().unique()
+	urlSlug: text('url_slug').notNull().unique(),
+	createdAt: text('created_at')
+		.notNull()
+		.$default(() => new Date().toISOString())
 })
