@@ -2,6 +2,8 @@ import db from '~/services/db.server'
 import type { Route } from './+types/_home.events.$eventId'
 import { eventsTable } from '~/db/schema'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
+import { Link } from 'react-router'
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const event = await db
@@ -24,6 +26,8 @@ export default function EventDetailPage({ loaderData }: Route.ComponentProps) {
 		<div>
 			<h1>{event.title}</h1>
 			<p>{event.date}</p>
+
+			<Link to='./apply'>Jelentkezek</Link>
 		</div>
 	)
 }
