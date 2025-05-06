@@ -1,10 +1,10 @@
-import { auth } from '~/services/auth.server'
+import { authServer } from '~/services/auth.server'
 import type { Route } from './+types/api.auth.$'
 
 export async function loader({ request }: Route.LoaderArgs) {
-	return auth.handler(request)
+	return authServer.handler(request)
 }
 
 export async function action({ request }: Route.ActionArgs) {
-	return auth.handler(request)
+	return authServer.handler(request)
 }
