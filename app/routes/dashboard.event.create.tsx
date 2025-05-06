@@ -1,3 +1,4 @@
+import { Temporal } from '@js-temporal/polyfill'
 import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
@@ -12,16 +13,16 @@ type ErrorResponseType = {
 
 type SuccessResponseType = {
 	state: 'success'
-	generatedUrlName: string
+	eventUrlSlug: string
 }
 
-type FormActionResponseType = ErrorResponseType | SuccessResponseType
+type ActionResponseType = ErrorResponseType | SuccessResponseType
 
 export async function action({
 	request
 }: {
 	request: Request
-}): Promise<FormActionResponseType> {
+}): Promise<ActionResponseType> {
 	const formData = await request.formData()
 	const formDataEntries = Object.fromEntries(formData.entries())
 
@@ -40,17 +41,9 @@ export async function action({
 				{ message: 'jövőbeli dátum szükséges' }
 			),
 
-		generatedUrlName: z
+		eventUrlSlug: z
 			.string()
-			.refine(
-				name => {
-					const generated = generateUrlSafeName(name)
-					return generated === name
-				},
-				{
-					message: 'érvénytelen generált URL név'
-				}
-			)
+			.min(3, 'legalább 3 karakter hosszú név szükséges')
 			.refine(
 				async name => {
 					const existingEvents = await mockDatabase.findEventByUrl(name, true)
@@ -65,16 +58,16 @@ export async function action({
 
 	if (parseResult.success) {
 		// create event in the database
-		const { name, date, generatedUrlName } = parseResult.data
+		const { name, date, eventUrlSlug } = parseResult.data
 		await mockDatabase.createEvent({
-			url: generatedUrlName,
+			url: eventUrlSlug,
 			name,
 			date
 		})
 
 		return {
 			state: 'success',
-			generatedUrlName
+			eventUrlSlug
 		}
 	} else {
 		return {
@@ -93,17 +86,18 @@ export default function DashboardEventCreate() {
 		const formData = new FormData(event.currentTarget)
 		const formDataEntries = Object.fromEntries(formData.entries())
 
-		const generatedUrlName = generateUrlSafeName(
-			formDataEntries.date + ' ' + formDataEntries.name
-		)
+		// extract year from date
+		const year = Temporal.PlainDate.from(formDataEntries.date.toString()).year
 
-		// add to formData
-		formData.append('generatedUrlName', generatedUrlName)
+		const eventUrlSlug = generateUrlSafeName(year + ' ' + formDataEntries.name)
+
+		// add event name to formData
+		formData.append('generatedUrlName', eventUrlSlug)
+		// add intent
+		formData.append('intent', 'createEvent')
 
 		// post with fetcher
-		await fetcher.submit(formData, {
-			method: 'post'
-		})
+		fetcher.submit(formData)
 	}
 
 	return (
@@ -130,6 +124,7 @@ export default function DashboardEventCreate() {
 
 					<input
 						type='submit'
+						name='intent'
 						value='létrehozás'
 						disabled={fetcher.state != 'idle'}
 					/>
@@ -140,33 +135,28 @@ export default function DashboardEventCreate() {
 
 			<div>
 				{fetcher.data?.state == 'success' && (
-					<CreatedEventEditorLink
-						generatedUrlName={fetcher.data.generatedUrlName}
-					/>
+					<CreatedEventEditorLink eventUrlSlug={fetcher.data.eventUrlSlug} />
 				)}
 			</div>
 		</div>
 	)
 }
 
-const CreatedEventEditorLink = ({
-	generatedUrlName
-}: {
-	generatedUrlName: string
-}) => {
-	const url = `/dashboard/event/${generatedUrlName}`
-
+const CreatedEventEditorLink = ({ eventUrlSlug }: { eventUrlSlug: string }) => {
 	return (
 		<div>
 			<h2>Esemény létrehozva!</h2>
-			<p>{generatedUrlName}</p>
-			<Link to={url}>létrehozott esemény szerkesztése</Link>
+			<p>{`/dashboard/event/${eventUrlSlug}`}</p>
+			<Link to={`/dashboard/event/${eventUrlSlug}`}>
+				létrehozott esemény szerkesztése
+			</Link>
 		</div>
 	)
 }
 
 const FieldValidationErrors = ({ errors }: { errors?: string[] }) => {
 	if (!errors) return null
+	if (errors.length === 0) return null
 
 	return (
 		<div>
