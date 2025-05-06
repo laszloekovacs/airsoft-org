@@ -58,8 +58,6 @@ export async function action({
 						.from(eventsTable)
 						.where(eq(eventsTable.urlSlug, name))
 
-					console.log('existingEvents', existingEvents)
-
 					return existingEvents.length == 0
 				},
 				{ message: 'már létezik ilyen nevű esemény' }
