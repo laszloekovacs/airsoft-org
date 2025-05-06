@@ -80,7 +80,7 @@ export async function action({
 export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
 
-	const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
+	const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
 		const formData = new FormData(event.currentTarget)
@@ -89,15 +89,19 @@ export default function DashboardEventCreate() {
 		// extract year from date
 		const year = Temporal.PlainDate.from(formDataEntries.date.toString()).year
 
+		// generate a name for the event
 		const eventUrlSlug = generateUrlSafeName(year + ' ' + formDataEntries.name)
 
 		// add event name to formData
-		formData.append('generatedUrlName', eventUrlSlug)
+		formData.append('eventUrlSlug', eventUrlSlug)
+
 		// add intent
 		formData.append('intent', 'createEvent')
 
 		// post with fetcher
-		fetcher.submit(formData)
+		fetcher.submit(formData, {
+			method: 'post'
+		})
 	}
 
 	return (
