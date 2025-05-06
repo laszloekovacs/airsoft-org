@@ -124,7 +124,12 @@ export default function DashboardEventCreate() {
 
 					<label>
 						<span>esemény időpontja</span>
-						<input type='date' name='date' id='date' />
+						<input
+							type='date'
+							name='date'
+							id='date'
+							defaultValue={Temporal.Now.plainDateISO().toString()}
+						/>
 					</label>
 					{fetcher.data?.state == 'error' && (
 						<FieldValidationErrors errors={fetcher.data.fieldErrors?.date} />
