@@ -33,3 +33,5 @@ description: string
 rules: string
 published: boolean
 
+https://orm.drizzle.team/docs
+https://www.better-auth.com/docs
