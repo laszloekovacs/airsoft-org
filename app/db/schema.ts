@@ -5,3 +5,10 @@ export const usersTable = sqliteTable('users', {
 	name: text('name').notNull(),
 	email: text('email').notNull().unique()
 })
+
+export const eventsTable = sqliteTable('events', {
+	id: int('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull(),
+	date: text('date').notNull(),
+	urlSlug: text('url_slug').notNull().unique()
+})

@@ -2,13 +2,16 @@ import { Temporal } from '@js-temporal/polyfill'
 import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
-import mockDatabase from '~/mock/db.server'
+import db from '~/services/db.server'
+import { eventsTable } from '~/db/schema'
+import { eq } from 'drizzle-orm'
 
 type ErrorResponseType = {
 	state: 'error'
 	fieldErrors: {
 		[key: string]: string[]
 	}
+	formErrors: string[]
 }
 
 type SuccessResponseType = {
@@ -50,8 +53,14 @@ export async function action({
 			.min(3, 'legalább 3 karakter hosszú név szükséges')
 			.refine(
 				async name => {
-					const existingEvents = await mockDatabase.findEventByUrl(name, true)
-					return existingEvents.length > 0
+					const existingEvents = await db
+						.select()
+						.from(eventsTable)
+						.where(eq(eventsTable.urlSlug, name))
+
+					console.log('existingEvents', existingEvents)
+
+					return existingEvents.length == 0
 				},
 				{ message: 'már létezik ilyen nevű esemény' }
 			)
@@ -63,11 +72,19 @@ export async function action({
 	if (parseResult.success) {
 		// create event in the database
 		const { name, date, eventUrlSlug } = parseResult.data
-		await mockDatabase.createEvent({
-			url: eventUrlSlug,
+		const result = await db.insert(eventsTable).values({
 			name,
-			date
+			date,
+			urlSlug: eventUrlSlug
 		})
+
+		if (result.rowsAffected == 0) {
+			return {
+				state: 'error',
+				fieldErrors: {},
+				formErrors: ['esemény létrehozása sikertelen']
+			}
+		}
 
 		return {
 			state: 'success',
@@ -76,7 +93,8 @@ export async function action({
 	} else {
 		return {
 			state: 'error',
-			fieldErrors: parseResult.error.flatten().fieldErrors
+			fieldErrors: parseResult.error.flatten().fieldErrors,
+			formErrors: []
 		}
 	}
 }
