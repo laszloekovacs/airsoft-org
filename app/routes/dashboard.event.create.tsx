@@ -3,7 +3,25 @@ import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
 import mockDatabase from '~/mock/db.server'
 
-export async function action({ request }: { request: Request }) {
+type ErrorResponseType = {
+	state: 'error'
+	fieldErrors: {
+		[key: string]: string[]
+	}
+}
+
+type SuccessResponseType = {
+	state: 'success'
+	generatedUrlName: string
+}
+
+type FormActionResponseType = ErrorResponseType | SuccessResponseType
+
+export async function action({
+	request
+}: {
+	request: Request
+}): Promise<FormActionResponseType> {
 	const formData = await request.formData()
 	const formDataEntries = Object.fromEntries(formData.entries())
 
@@ -44,7 +62,6 @@ export async function action({ request }: { request: Request }) {
 
 	// validate form data submitted by the user
 	const parseResult = await createEventSchema.safeParseAsync(formDataEntries)
-	console.log('parseResult', parseResult)
 
 	if (parseResult.success) {
 		// create event in the database
@@ -59,9 +76,12 @@ export async function action({ request }: { request: Request }) {
 			state: 'success',
 			generatedUrlName
 		}
+	} else {
+		return {
+			state: 'error',
+			fieldErrors: parseResult.error.flatten().fieldErrors
+		}
 	}
-
-	return { ...parseResult.error.format(), state: 'error' }
 }
 
 export default function DashboardEventCreate() {
@@ -84,11 +104,6 @@ export default function DashboardEventCreate() {
 		await fetcher.submit(formData, {
 			method: 'post'
 		})
-
-		// reset form
-		if (fetcher.data?.state == 'success') {
-			event.currentTarget.reset()
-		}
 	}
 
 	return (
@@ -101,16 +116,16 @@ export default function DashboardEventCreate() {
 						<span>esemény neve</span>
 						<input type='text' name='name' id='name' />
 					</label>
-					{fetcher.data?.name?._errors && (
-						<FieldError _errors={fetcher.data?.name?._errors} />
+					{fetcher.data?.state == 'error' && (
+						<FieldValidationErrors errors={fetcher.data.fieldErrors?.name} />
 					)}
 
 					<label>
 						<span>esemény időpontja</span>
 						<input type='date' name='date' id='date' />
 					</label>
-					{fetcher.data?.date?._errors && (
-						<FieldError _errors={fetcher.data?.date?._errors} />
+					{fetcher.data?.state == 'error' && (
+						<FieldValidationErrors errors={fetcher.data.fieldErrors?.date} />
 					)}
 
 					<input
@@ -121,17 +136,20 @@ export default function DashboardEventCreate() {
 				</div>
 			</fetcher.Form>
 
+			{fetcher.data && <pre>{JSON.stringify(fetcher.data, null, 3)}</pre>}
+
 			<div>
-				{typeof fetcher.data?.generatedUrlName == 'string' && (
-					<CreatedEventLink generatedUrlName={fetcher.data.generatedUrlName} />
+				{fetcher.data?.state == 'success' && (
+					<CreatedEventEditorLink
+						generatedUrlName={fetcher.data.generatedUrlName}
+					/>
 				)}
 			</div>
 		</div>
 	)
 }
-//{fetcher.data && <pre>{JSON.stringify(fetcher.data, null, 3)}</pre>}
 
-const CreatedEventLink = ({
+const CreatedEventEditorLink = ({
 	generatedUrlName
 }: {
 	generatedUrlName: string
@@ -147,11 +165,13 @@ const CreatedEventLink = ({
 	)
 }
 
-const FieldError = ({ _errors }: { _errors: string[] }) => {
+const FieldValidationErrors = ({ errors }: { errors?: string[] }) => {
+	if (!errors) return null
+
 	return (
 		<div>
-			{_errors.map((error, index) => (
-				<p key={index}>{error}</p>
+			{errors.map(error => (
+				<p key={error}>{error}</p>
 			))}
 		</div>
 	)
