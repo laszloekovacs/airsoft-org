@@ -1,4 +1,12 @@
-import { uuid, integer, text, pgTable, date, unique } from 'drizzle-orm/pg-core'
+import {
+	uuid,
+	integer,
+	text,
+	pgTable,
+	date,
+	unique,
+	boolean
+} from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 
 export const eventsTable = pgTable('events', {
@@ -26,7 +34,8 @@ export const eventAttendeesTable = pgTable(
 			.references(() => user.id, { onDelete: 'set null' }),
 		createdAt: date('created_at')
 			.notNull()
-			.$default(() => new Date().toISOString())
+			.$default(() => new Date().toISOString()),
+		isConfirmed: boolean('is_confirmed').notNull().default(false)
 	},
 	table => [unique().on(table.eventId, table.userId)]
 )
