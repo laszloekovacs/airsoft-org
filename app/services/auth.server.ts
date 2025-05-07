@@ -22,7 +22,7 @@ export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)
 
 	if (sessionCookieData == null) {
-		throw new Error('not authenticated')
+		throw new Response('Unauthorized', { status: 401 })
 	} else {
 		return { ...sessionCookieData }
 	}
