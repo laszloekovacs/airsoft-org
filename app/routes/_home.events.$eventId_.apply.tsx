@@ -1,8 +1,12 @@
 import { useFetcher } from 'react-router'
 import type { Route } from './+types/_home.events.$eventId_.apply'
+import { AuthenticatedOnly, authServer } from '~/services/auth.server'
+import db from '~/services/db.server'
+import { eventAttendeesTable, eventsTable } from '~/db/schema'
+import { eq } from 'drizzle-orm'
 
-export const loader = async () => {
-	// TODO: only for logged in
+export const loader = async ({ request }: Route.LoaderArgs) => {
+	AuthenticatedOnly(request)
 
 	return {}
 }
@@ -41,10 +45,36 @@ type SuccessResponse = {
 type ActionResponse = ErrorResponse | SuccessResponse
 
 export async function action({
-	request
+	request,
+	params
 }: Route.ActionArgs): Promise<ActionResponse> {
-	const formData = await request.formData()
-	const formEntries = Object.fromEntries(formData.entries())
+	AuthenticatedOnly(request)
+	const sessionData = await authServer.api.getSession(request)
+
+	if (!sessionData) {
+		throw new Error('Session not found')
+	}
+
+	const { user } = sessionData
+
+	// find event id from stub
+	const event = await db
+		.select()
+		.from(eventsTable)
+		.where(eq(eventsTable.urlSlug, params.eventId))
+
+	// create an entry in the application
+	const result = await db.insert(eventAttendeesTable).values({
+		userId: user.id,
+		eventId: event[0].id
+	})
+
+	if (result.rowsAffected != 1) {
+		return {
+			status: 'error',
+			reason: 'Sikertelen jelentkezés!'
+		}
+	}
 
 	return {
 		status: 'success',

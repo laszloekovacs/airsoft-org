@@ -11,7 +11,7 @@ export const eventsTable = sqliteTable('events', {
 		.$default(() => new Date().toISOString())
 })
 
-export const applicationsTable = sqliteTable(
+export const eventAttendeesTable = sqliteTable(
 	'applications',
 	{
 		id: int('id').primaryKey({ autoIncrement: true }),
