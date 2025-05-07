@@ -5,7 +5,7 @@ import * as schema from '~/db/auth-schema'
 
 export const authServer = betterAuth({
 	database: drizzleAdapter(db, {
-		provider: 'sqlite',
+		provider: 'pg',
 		schema: {
 			...schema
 		}
@@ -14,6 +14,9 @@ export const authServer = betterAuth({
 		enabled: true
 	}
 })
+
+// required for better auth cli
+export const auth = authServer
 
 export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)

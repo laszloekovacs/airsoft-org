@@ -1,27 +1,28 @@
-import { int, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core'
+import { uuid, integer, text, pgTable, date, unique } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 
-export const eventsTable = sqliteTable('events', {
-	id: int('id').primaryKey({ autoIncrement: true }),
+export const eventsTable = pgTable('events', {
+	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+	userId: text('user_id'),
 	title: text('name').notNull(),
-	date: text('date').notNull(),
+	date: date('date').notNull(),
 	urlSlug: text('url_slug').notNull().unique(),
-	createdAt: text('created_at')
+	createdAt: date('created_at')
 		.notNull()
 		.$default(() => new Date().toISOString())
 })
 
-export const eventAttendeesTable = sqliteTable(
+export const eventAttendeesTable = pgTable(
 	'eventAttendees',
 	{
-		id: int('id').primaryKey({ autoIncrement: true }),
-		eventId: int('event_id')
+		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+		eventId: integer('event_id')
 			.notNull()
 			.references(() => eventsTable.id, { onDelete: 'set null' }),
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'set null' }),
-		createdAt: text('created_at')
+		createdAt: date('created_at')
 			.notNull()
 			.$default(() => new Date().toISOString())
 	},
