@@ -10,13 +10,12 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 		.select()
 		.from(eventsTable)
 		.where(eq(eventsTable.urlSlug, params.eventId))
-		.get()
 
 	if (!event) {
 		throw new Response('Event not found', { status: 404 })
 	}
 
-	return { event }
+	return { event: event[0] }
 }
 
 export default function EventDetailPage({ loaderData }: Route.ComponentProps) {

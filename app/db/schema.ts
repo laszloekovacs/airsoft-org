@@ -3,7 +3,9 @@ import { user } from './auth-schema'
 
 export const eventsTable = pgTable('events', {
 	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-	userId: text('user_id'),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'set null' }),
 	title: text('name').notNull(),
 	date: date('date').notNull(),
 	urlSlug: text('url_slug').notNull().unique(),
