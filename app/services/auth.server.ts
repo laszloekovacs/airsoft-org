@@ -20,5 +20,7 @@ export const AuthenticatedOnly = async (request: Request) => {
 
 	if (sessionCookieData == null) {
 		throw new Error('not authenticated')
+	} else {
+		return { ...sessionCookieData }
 	}
 }
