@@ -14,3 +14,11 @@ export const authServer = betterAuth({
 		enabled: true
 	}
 })
+
+export const AuthenticatedOnly = async (request: Request) => {
+	const sessionCookieData = await authServer.api.getSession(request)
+
+	if (sessionCookieData == null) {
+		throw new Error('not authenticated')
+	}
+}
