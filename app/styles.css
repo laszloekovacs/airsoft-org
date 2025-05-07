@@ -13,3 +13,9 @@
 body {
 	background-color: lightslategrey;
 }
+
+a,
+a:visited {
+	color: black;
+	font-weight: normal;
+}
