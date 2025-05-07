@@ -12,7 +12,7 @@ export const eventsTable = sqliteTable('events', {
 })
 
 export const eventAttendeesTable = sqliteTable(
-	'applications',
+	'eventAttendees',
 	{
 		id: int('id').primaryKey({ autoIncrement: true }),
 		eventId: int('event_id')
