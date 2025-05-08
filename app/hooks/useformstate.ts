@@ -5,23 +5,35 @@ export function useFormState<T extends Record<string, string>>(
 	initialState: T,
 	schema: z.ZodSchema<T>
 ) {
-	// state, set to defaults
+	/**
+	 * internal state of the form, set from initial state
+	 */
 	const [formState, setFormState] = useState(initialState)
 
-	// errors, maps keys => string array
-	const [formErrors, setFormErrors] = useState<{
+	/**
+	 * errors for individual fields. can handle multiple
+	 * maps key => string[]
+	 */
+	const [fieldErrors, setFieldErrors] = useState<{
 		[key: string]: string[]
 	}>(Object.fromEntries(Object.keys(initialState).map(key => [key, []])))
 
-	// form error, set by form validation or custom logic, array of strings
+	/**
+	 * Error relating to the form and not individual fields
+	 */
 	const [formError, setFormError] = useState<string[]>([])
 
-	// changed fields, maps key => boolean
+	/**
+	 * fields that have changed
+	 * maps key => boolean
+	 */
 	const [changedFields, setChangedFields] = useState<{
 		[key: string]: boolean
 	}>(Object.fromEntries(Object.keys(initialState).map(key => [key, false])))
 
-	// usually called from onChange
+	/**
+	 * change value, also check if it has changed relative to default value
+	 */
 	const setFieldValue = (field: string, value: string) => {
 		setFormState(state => ({
 			...state,
@@ -34,7 +46,9 @@ export function useFormState<T extends Record<string, string>>(
 		}))
 	}
 
-	// automatically sets attributes of input tags eg.: {...bind("name")}
+	/**
+	 * automatically sets attributes of input tags eg.: {...bind("name")}
+	 */
 	const bind = (field: string) => {
 		return {
 			name: field,
@@ -47,7 +61,7 @@ export function useFormState<T extends Record<string, string>>(
 
 	return {
 		formState,
-		formErrors,
+		fieldErrors,
 		formError,
 		changedFields,
 		setFieldValue,

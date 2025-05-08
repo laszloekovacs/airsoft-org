@@ -16,7 +16,7 @@ export default function PageWithForm() {
 		age: '12'
 	}
 
-	const { formState, formError, formErrors, changedFields, bind } =
+	const { formState, formError, fieldErrors, changedFields, bind } =
 		useFormState<FormData>(initialState, userSchema)
 
 	return (
@@ -31,7 +31,7 @@ export default function PageWithForm() {
 
 			<pre>
 				{JSON.stringify(
-					{ formState, formError, formErrors, changedFields },
+					{ formState, formError, fieldErrors, changedFields },
 					null,
 					2
 				)}
