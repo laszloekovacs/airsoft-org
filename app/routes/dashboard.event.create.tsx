@@ -5,6 +5,7 @@ import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
 import db from '~/services/db.server'
 import { eventsTable } from '~/db/schema'
 import { eq } from 'drizzle-orm'
+import { AuthenticatedOnly } from '~/services/auth.server'
 
 type ErrorResponseType = {
 	state: 'error'
@@ -30,42 +31,54 @@ export async function action({
 }: {
 	request: Request
 }): Promise<ActionResponseType> {
+	const { user } = await AuthenticatedOnly(request)
+
 	const formData = await request.formData()
 	const formDataEntries = Object.fromEntries(formData.entries())
 
-	const createEventSchema = z.object({
-		title: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
+	const createEventSchema = z
+		.object({
+			title: z.string().min(3, 'legalább 3 karakter hosszú név szükséges'),
 
-		date: z
-			.string()
-			.date('érvénytelen dátum formátum')
-			.refine(
-				date => {
-					const today = new Date()
-					const eventDate = new Date(date)
-					return today < eventDate
-				},
-				{ message: 'jövőbeli dátum szükséges' }
-			),
+			date: z
+				.string()
+				.date('érvénytelen dátum formátum')
+				.refine(
+					date => {
+						const today = new Date()
+						const eventDate = new Date(date)
+						return today < eventDate
+					},
+					{ message: 'jövőbeli dátum szükséges' }
+				),
 
-		eventUrlSlug: z
-			.string()
-			.min(3, 'legalább 3 karakter hosszú név szükséges')
-			.refine(
-				async slug => {
-					const existingEvents = await db
-						.select()
-						.from(eventsTable)
-						.where(eq(eventsTable.urlSlug, slug))
+			eventUrlSlug: z
+				.string()
+				.min(3, 'legalább 3 karakter hosszú név szükséges')
+				.refine(
+					async slug => {
+						const existingEvents = await db
+							.select()
+							.from(eventsTable)
+							.where(eq(eventsTable.urlSlug, slug))
 
-					return existingEvents.length == 0
-				},
-				{ message: 'már létezik ilyen nevű esemény' }
-			)
-	})
+						return existingEvents.length == 0
+					},
+					{ message: 'már létezik ilyen nevű esemény' }
+				)
+		})
+		.refine(
+			async formData => {
+				// TODO: check if form passes?
+				return true
+			},
+			{ message: 'form invalid' }
+		)
 
 	// validate form data submitted by the user
 	const parseResult = await createEventSchema.safeParseAsync(formDataEntries)
+
+	// if only validating, then return errors or sucess and dont touch the database
 
 	if (parseResult.success) {
 		// create event in the database
@@ -73,10 +86,11 @@ export async function action({
 		const result = await db.insert(eventsTable).values({
 			title,
 			date,
+			userId: user.id,
 			urlSlug: eventUrlSlug
 		})
 
-		if (result.rowsAffected == 0) {
+		if (result.rowCount == 0) {
 			return {
 				state: 'error',
 				fieldErrors: {},
@@ -101,10 +115,9 @@ export default function DashboardEventCreate() {
 	const fetcher = useFetcher<typeof action>()
 
 	const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+		event.preventDefault()
 		const formData = new FormData(event.currentTarget)
 		const formDataEntries = Object.fromEntries(formData.entries())
-
-		event.preventDefault()
 
 		// extract year from date
 		const year = new Date(formDataEntries.date.toString()).getFullYear()
@@ -135,7 +148,7 @@ export default function DashboardEventCreate() {
 						<input type='text' name='title' id='title' />
 					</label>
 					{fetcher.data?.state == 'error' && (
-						<FieldValidationErrors errors={fetcher.data.fieldErrors?.title} />
+						<FieldValidationErrors errors={fetcher.data.fieldErrors.title} />
 					)}
 
 					<label>
@@ -148,7 +161,7 @@ export default function DashboardEventCreate() {
 						/>
 					</label>
 					{fetcher.data?.state == 'error' && (
-						<FieldValidationErrors errors={fetcher.data.fieldErrors?.date} />
+						<FieldValidationErrors errors={fetcher.data.fieldErrors.date} />
 					)}
 
 					<input
