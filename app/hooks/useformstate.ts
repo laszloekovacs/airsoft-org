@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { z } from 'zod'
 
-export function useFormState<T extends Record<string, string>>(
+export function useFormState<T extends Record<string, string | number>>(
 	initialState: T,
 	schema: z.ZodSchema<T>
 ) {
@@ -55,7 +55,33 @@ export function useFormState<T extends Record<string, string>>(
 			value: formState[field],
 			onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
 				setFieldValue(field, e.target.value)
+			},
+			onBlur: () => {
+				validateField(field)
 			}
+		}
+	}
+
+	/**
+	 * Validate field with zod and set it's errors
+	 */
+	const validateField = (field: string) => {
+		const validation = schema.safeParse(formState)
+
+		// map errors into an array of string and set it on the state
+		if (validation.success) {
+			setFieldErrors(errors => ({
+				...errors,
+				[field]: []
+			}))
+		} else {
+			const errors = validation.error.flatten()
+			console.log(errors)
+
+			setFieldErrors(prev => ({
+				...prev,
+				[field]: errors.fieldErrors[field]
+			}))
 		}
 	}
 
@@ -65,6 +91,7 @@ export function useFormState<T extends Record<string, string>>(
 		formError,
 		changedFields,
 		setFieldValue,
+		validateField,
 		bind
 	}
 }
