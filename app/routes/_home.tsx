@@ -10,18 +10,22 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 }
 
 export default function HomeContainer({ loaderData }: Route.ComponentProps) {
+	const user = loaderData?.user
+
 	return (
-		<div>
-			<h1>
-				<Link to='/'>Airsoft Naptár</Link>
-			</h1>
-			<Session name={loaderData?.user?.name} />
+		<div className='grid grid-cols-1 grid-rows-[auto_1fr_auto] min-h-screen p-4'>
+			<div className='flex justify-between items-center mb-4'>
+				<h1 className='text-xl font-bold'>
+					<Link to='/'>Airsoft Naptár</Link>
+				</h1>
+				{user && <Session name={user.name} />}
+			</div>
 			<Outlet />
 			<Sitemap />
 		</div>
 	)
 }
 
-const Session = ({ name }: { name?: string }) => {
+const Session = ({ name }: { name: string }) => {
 	return <>{name && <span>{name}</span>}</>
 }

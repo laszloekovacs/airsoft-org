@@ -2,15 +2,15 @@ import { Link } from 'react-router'
 
 export default function Sitemap() {
 	const links = [
-		{ to: '/', label: 'Home' },
-		{ to: '/dashboard', label: 'Dashboard' },
-		{ to: '/dashboard/event/create', label: 'Create Event' },
-		{ to: '/account', label: 'Account' }
+		{ to: '/', label: 'főoldal' },
+		{ to: '/dashboard', label: 'szervezőoldal' },
+		{ to: '/dashboard/event/create', label: 'esemény létrehozása' },
+		{ to: '/account', label: 'fiók' }
 	]
 
 	return (
-		<div>
-			<h1>Sitemap</h1>
+		<div className='bg-gray-400 p-4 mt-8'>
+			<h1 className='font-bold'>Oldalak</h1>
 			<ul>
 				{links.map((link, index) => (
 					<li key={index}>

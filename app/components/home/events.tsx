@@ -8,10 +8,14 @@ export const EventList = (props: {
 	const { eventList } = props
 
 	return (
-		<div>
-			<h1>Upcomming events</h1>
+		<div className='h-full w-full'>
+			<h1>Események</h1>
 
-			{eventList.length == 0 && <p>"nincs megjeleníthető esemény"</p>}
+			{eventList.length == 0 && (
+				<div className='grid place-content-center h-full w-full'>
+					<p>nincs megjeleníthető esemény</p>
+				</div>
+			)}
 
 			<ul>
 				{eventList.map(e => (
