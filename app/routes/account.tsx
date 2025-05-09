@@ -53,6 +53,7 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			<div>
 				<pre>{JSON.stringify(loaderData, null, 2)}</pre>
 			</div>
+			<img src={loaderData?.user?.image ?? ''} />
 		</div>
 	)
 }
