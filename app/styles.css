@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-.input_email,
-.input_password {
-	@apply border border-black;
+.input,
+.input {
+	@apply border-2 border-black;
 }

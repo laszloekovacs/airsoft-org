@@ -36,14 +36,14 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			<form onSubmit={handleSubmit}>
 				<p>create</p>
 				<input
-					className='input_email'
+					className='input'
 					type='email'
 					placeholder='Email'
 					value={email}
 					onChange={e => setEmail(e.target.value)}
 				/>
 				<input
-					className='input_password'
+					className='input'
 					type='password'
 					placeholder='Password'
 					value={password}

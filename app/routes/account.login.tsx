@@ -4,13 +4,22 @@ import { useNavigate } from 'react-router'
 export default function LoginPage() {
 	const navigate = useNavigate()
 
-	const handleSubmit = async event => {
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
-		const email = event.target.username.value
-		const password = event.target.password.value
+		const formData = new FormData(event.currentTarget)
 
-		await authClient.signIn.email({ email, password })
+		const email = formData.get('mail')?.toString()
+		const password = formData.get('password')?.toString()
+
+		if (!email || !password) {
+			return
+		}
+
+		const result = await authClient.signIn.email({ email, password })
+
+		result.error && console.log(result.error)
+		result.data && console.log(result.data)
 
 		// redirect
 		navigate('/')
@@ -21,9 +30,14 @@ export default function LoginPage() {
 			<h1>Belépés</h1>
 
 			<form method='post' onSubmit={handleSubmit}>
-				<input type='email' name='mail' placeholder='email' />
-				<input type='password' name='password' placeholder='Jelszó' />
-				<input type='submit' value='Belépés' />
+				<input className='input' type='email' name='mail' placeholder='email' />
+				<input
+					className='input'
+					type='password'
+					name='password'
+					placeholder='Jelszó'
+				/>
+				<input className='bg-black text-white' type='submit' value='Belépés' />
 			</form>
 		</div>
 	)
