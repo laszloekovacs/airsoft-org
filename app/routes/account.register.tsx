@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { authClient } from '~/services/auth.client'
 import { authServer } from '~/services/auth.server'
-import type { Route } from './+types/account.signup'
+import type { Route } from './+types/account.register'
 
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')

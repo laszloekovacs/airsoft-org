@@ -5,7 +5,8 @@ export default function Sitemap() {
 		{ to: '/', label: 'főoldal' },
 		{ to: '/dashboard', label: 'szervezőoldal' },
 		{ to: '/dashboard/event/create', label: 'esemény létrehozása' },
-		{ to: '/account', label: 'fiók' }
+		{ to: '/account/login', label: 'belépés' },
+		{ to: '/account/register', label: 'regisztráció' }
 	]
 
 	return (
