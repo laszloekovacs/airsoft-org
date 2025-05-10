@@ -1,40 +1,43 @@
 {
-	"name": "airsoft-org",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"dev": "bunx react-router dev",
-		"drizzle-kit-push": "bunx drizzle-kit push",
-		"better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
-		"build": "bunx react-router build",
-		"start": "bunx react-router-serve ./build/server/index.js"
-	},
-	"dependencies": {
-		"@js-temporal/polyfill": "^0.5.1",
-		"@react-router/fs-routes": "^7.5.3",
-		"@react-router/node": "^7.5.3",
-		"@react-router/serve": "^7.5.3",
-		"@tailwindcss/vite": "^4.1.6",
-		"better-auth": "^1.2.7",
-		"drizzle-orm": "^0.43.1",
-		"isbot": "^5.1.27",
-		"pg": "^8.15.6",
-		"react": "^19.1.0",
-		"react-dom": "^19.1.0",
-		"react-router": "^7.5.3",
-		"tailwindcss": "^4.1.6",
-		"zod": "^3.24.4"
-	},
-	"devDependencies": {
-		"@react-router/dev": "^7.5.3",
-		"@types/bun": "^1.2.12",
-		"@types/node": "^20",
-		"@types/pg": "^8.12.0",
-		"@types/react": "^19.1.2",
-		"@types/react-dom": "^19.1.2",
-		"drizzle-kit": "^0.31.1",
-		"typescript": "^5.8.3",
-		"vite": "^6.3.3",
-		"vite-tsconfig-paths": "^5.1.4"
-	}
+  "name": "airsoft-org",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bunx react-router dev",
+    "drizzle-kit-push": "bunx drizzle-kit push",
+    "better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
+    "build": "bunx react-router build",
+    "start": "bunx react-router-serve ./build/server/index.js"
+  },
+  "dependencies": {
+    "@js-temporal/polyfill": "^0.5.1",
+    "@react-router/fs-routes": "^7.5.3",
+    "@react-router/node": "^7.5.3",
+    "@react-router/serve": "^7.5.3",
+    "@tailwindcss/vite": "^4.1.6",
+    "better-auth": "^1.2.7",
+    "drizzle-orm": "^0.43.1",
+    "isbot": "^5.1.27",
+    "pg": "^8.15.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.5.3",
+    "tailwindcss": "^4.1.6",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^7.5.3",
+    "@types/bun": "^1.2.12",
+    "@types/node": "^20",
+    "@types/pg": "^8.12.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "drizzle-kit": "^0.31.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "trustedDependencies": [
+    "@tailwindcss/oxide"
+  ]
 }
