@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { authClient } from '~/services/auth.client'
 import { authServer } from '~/services/auth.server'
-import type { Route } from './+types/account'
+import type { Route } from './+types/account.signup'
 
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')
@@ -36,12 +36,14 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			<form onSubmit={handleSubmit}>
 				<p>create</p>
 				<input
+					className='input_email'
 					type='email'
 					placeholder='Email'
 					value={email}
 					onChange={e => setEmail(e.target.value)}
 				/>
 				<input
+					className='input_password'
 					type='password'
 					placeholder='Password'
 					value={password}
