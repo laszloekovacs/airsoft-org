@@ -3,12 +3,11 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "react-router dev",
-		"drizzle-kit-push": "drizzle-kit push",
-		"better-auth-generate": "npx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
-		"build": "react-router build",
-		"start": "react-router-serve ./build/server/index.js",
-		"typecheck": "react-router typegen && tsc"
+		"dev": "bunx react-router dev",
+		"drizzle-kit-push": "bunx drizzle-kit push",
+		"better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
+		"build": "bunx react-router build",
+		"start": "bunx react-router-serve ./build/server/index.js"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
@@ -28,6 +27,7 @@
 	},
 	"devDependencies": {
 		"@react-router/dev": "^7.5.3",
+		"@types/bun": "^1.2.12",
 		"@types/node": "^20",
 		"@types/pg": "^8.12.0",
 		"@types/react": "^19.1.2",
