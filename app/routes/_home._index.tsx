@@ -1,8 +1,7 @@
-import type { Route } from './+types/_home._index'
-import { EventList } from '../components/home/events'
-import db from '~/services/db.server'
 import { eventsTable } from '~/db/schema'
-import { eq } from 'drizzle-orm'
+import db from '~/services/db.server'
+import { EventList } from '../components/home/events'
+import type { Route } from './+types/_home._index'
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const eventList = await db.select().from(eventsTable)

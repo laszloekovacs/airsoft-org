@@ -69,7 +69,7 @@ export async function action({
 		eventId: event[0].id
 	})
 
-	if (result.rowsAffected != 1) {
+	if (result.rowCount != 1) {
 		return {
 			status: 'error',
 			reason: 'Sikertelen jelentkezés!'

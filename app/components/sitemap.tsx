@@ -9,7 +9,7 @@ export default function Sitemap() {
 	]
 
 	return (
-		<div className='bg-gray-400 p-4 mt-8'>
+		<div className='p-4 mt-8'>
 			<h1 className='font-bold'>Oldalak</h1>
 			<ul>
 				{links.map((link, index) => (
