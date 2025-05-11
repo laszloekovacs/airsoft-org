@@ -7,7 +7,8 @@
 		"drizzle-kit-push": "bunx drizzle-kit push",
 		"better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
 		"build": "bunx --bun react-router build",
-		"start": "bun run --bun react-router-serve ./build/server/index.js"
+		"start": "bun run --bun react-router-serve ./build/server/index.js",
+		"test": "bunx test"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
