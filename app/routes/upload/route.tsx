@@ -11,7 +11,7 @@ export default function UploadPage() {
 
 			<Form method='post' encType='multipart/form-data'>
 				<input type='file' name='file' />
-				<input type='submit' value='Upload' />"
+				<input type='submit' value='Upload' />
 			</Form>
 
 			{actionData && <pre>{JSON.stringify(actionData, null, 2)}</pre>}
@@ -32,7 +32,7 @@ export const action = async ({ request }: { request: Request }) => {
 	const result = await s3.write(file.name, arrayBuffer, {
 		accessKeyId: process.env.ACCESSKEYID,
 		secretAccessKey: process.env.SECRETACCESSKEY,
-		bucket: process.env.BUCKET,
+		bucket: 'airsoft',
 		endpoint: process.env.ENDPOINT
 	})
 
