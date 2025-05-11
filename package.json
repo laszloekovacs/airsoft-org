@@ -17,6 +17,7 @@
 		"@react-router/serve": "^7.5.3",
 		"@tailwindcss/vite": "^4.1.6",
 		"better-auth": "^1.2.7",
+		"bun": "^1.2.13",
 		"drizzle-orm": "^0.43.1",
 		"isbot": "^5.1.27",
 		"pg": "^8.15.6",
