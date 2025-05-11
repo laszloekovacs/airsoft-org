@@ -16,6 +16,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet='utf-8' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
+				<script
+					defer
+					src='http://demo-umami-5ebf6f-149-200-31-97.traefik.me/script.js'
+					data-website-id='ffc94a90-8cdd-41ef-a6f4-2b2fc7f78ec6'></script>
 				<Meta />
 				<Links />
 			</head>
