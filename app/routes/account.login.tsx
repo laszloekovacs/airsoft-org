@@ -37,7 +37,12 @@ export default function LoginPage() {
 					name='password'
 					placeholder='Jelszó'
 				/>
-				<input className='bg-black text-white' type='submit' value='Belépés' />
+				<input
+					className='bg-black text-white'
+					type='submit'
+					value='Belépés'
+					data-umami-event='login'
+				/>
 			</form>
 		</div>
 	)
