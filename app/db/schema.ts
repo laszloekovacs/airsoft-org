@@ -22,7 +22,7 @@ export const eventsTable = pgTable('events', {
 })
 
 export const userAtEventTable = pgTable(
-	'eventAttendees',
+	'userAtEvent',
 	{
 		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 		userId: text('user_id')
