@@ -8,7 +8,7 @@ import {
 } from 'react-router'
 
 import type { Route } from './+types/root'
-import './tailwindcss.css'
+import './tailwind.css'
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
@@ -16,7 +16,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet='utf-8' />
 				<meta name='viewport' content='width=device-width, initial-scale=1' />
-				<script defer src="https://umami.am4.duckdns.org/script.js" data-website-id="b1eb4441-ba11-4fd4-b873-408554f22640"></script>
+				<script
+					defer
+					src='https://umami.am4.duckdns.org/script.js'
+					data-website-id='b1eb4441-ba11-4fd4-b873-408554f22640'></script>
 				<Meta />
 				<Links />
 			</head>
