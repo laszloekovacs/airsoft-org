@@ -2,9 +2,9 @@ import { AuthenticatedOnly } from '~/services/auth.server'
 import type { Route } from './+types/route'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-	const { session } = await AuthenticatedOnly(request)
+	const { session, user } = await AuthenticatedOnly(request)
 
-	return { session }
+	return { session, user }
 }
 
 export default function AccountPage({
