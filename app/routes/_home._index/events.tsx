@@ -9,19 +9,21 @@ export const EventList = (props: {
 
 	return (
 		<div className='h-full w-full'>
-			<h1>Események</h1>
+			<div>
+				<h1>Események</h1>
 
-			{eventList.length == 0 && (
-				<div className='grid place-content-center h-full w-full'>
-					<p>nincs megjeleníthető esemény</p>
-				</div>
-			)}
+				{eventList.length == 0 && (
+					<div className='grid place-content-center h-full w-full'>
+						<p>nincs megjeleníthető esemény</p>
+					</div>
+				)}
 
-			<ul>
-				{eventList.map(e => (
-					<EventItem key={e.id} event={e} />
-				))}
-			</ul>
+				<ul>
+					{eventList.map(e => (
+						<EventItem key={e.id} event={e} />
+					))}
+				</ul>
+			</div>
 		</div>
 	)
 }
@@ -36,6 +38,7 @@ export const EventItem = (props: {
 				<h2>{title}</h2>
 			</Link>
 
+			<p>id: {props.event.userId}</p>
 			<p>{date}</p>
 		</li>
 	)
