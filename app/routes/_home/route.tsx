@@ -18,7 +18,8 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 				<h1 className='text-xl font-bold'>
 					<Link to='/'>Airsoft Naptár</Link>
 				</h1>
-				{user && <Session name={user.name} />}
+				<Navbar />
+				{user ? <Session name={user.name} /> : <LoginOrRegister />}
 			</div>
 			<Outlet />
 			<Sitemap />
@@ -28,4 +29,25 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 const Session = ({ name }: { name: string }) => {
 	return <>{name && <span>{name}</span>}</>
+}
+
+const LoginOrRegister = () => {
+	return <Link to='/account/login'>belepes</Link>
+}
+
+const Navbar = () => {
+	const links = [
+		{ label: 'szervezo', to: '/dashboard' },
+		{ label: 'regisztralas', to: '/account/register' }
+	]
+
+	return (
+		<ul className='flex flex-row gap-4 justify-center'>
+			{links.map(item => (
+				<li key={item.label}>
+					<Link to={item.to}>{item.label}</Link>
+				</li>
+			))}
+		</ul>
+	)
 }
