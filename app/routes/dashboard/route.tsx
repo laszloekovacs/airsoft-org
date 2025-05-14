@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router'
-import Sitemap from '~/components/sitemap'
+import Sitemap from '~/routes/_home/sitemap'
 
 export default function DashboardIndex() {
 	return (
