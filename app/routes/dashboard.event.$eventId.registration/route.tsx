@@ -1,4 +1,4 @@
-import { userAtEventTable, eventsTable } from '~/db/schema'
+import { userAtEventTable, eventRecord } from '~/db/schema'
 import db from '~/services/db.server'
 import type { Route } from './+types/route'
 import { eq } from 'drizzle-orm'
@@ -13,9 +13,9 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	const data = await db
 		.select()
 		.from(userAtEventTable)
-		.leftJoin(eventsTable, eq(userAtEventTable.eventId, eventsTable.id))
+		.leftJoin(eventRecord, eq(userAtEventTable.eventId, eventRecord.id))
 		.leftJoin(user, eq(userAtEventTable.userId, user.id))
-		.where(eq(eventsTable.urlSlug, params.eventId))
+		.where(eq(eventRecord.urlSlug, params.eventId))
 
 	return data
 }

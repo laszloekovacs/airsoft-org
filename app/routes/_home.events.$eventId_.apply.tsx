@@ -2,7 +2,7 @@ import { useFetcher } from 'react-router'
 import type { Route } from './+types/_home.events.$eventId_.apply'
 import { AuthenticatedOnly, authServer } from '~/services/auth.server'
 import db from '~/services/db.server'
-import { userAtEventTable, eventsTable } from '~/db/schema'
+import { userAtEventTable, eventRecord } from '~/db/schema'
 import { eq } from 'drizzle-orm'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
@@ -60,8 +60,8 @@ export async function action({
 	// find event id from stub
 	const event = await db
 		.select()
-		.from(eventsTable)
-		.where(eq(eventsTable.urlSlug, params.eventId))
+		.from(eventRecord)
+		.where(eq(eventRecord.urlSlug, params.eventId))
 
 	// create an entry in the application
 	const result = await db.insert(userAtEventTable).values({

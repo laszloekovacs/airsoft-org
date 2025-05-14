@@ -1,6 +1,6 @@
 import db from '~/services/db.server'
 import type { Route } from './+types/_home.events.$eventId'
-import { eventsTable } from '~/db/schema'
+import { eventRecord } from '~/db/schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { Link } from 'react-router'
@@ -8,8 +8,8 @@ import { Link } from 'react-router'
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const event = await db
 		.select()
-		.from(eventsTable)
-		.where(eq(eventsTable.urlSlug, params.eventId))
+		.from(eventRecord)
+		.where(eq(eventRecord.urlSlug, params.eventId))
 
 	if (!event) {
 		throw new Response('Event not found', { status: 404 })

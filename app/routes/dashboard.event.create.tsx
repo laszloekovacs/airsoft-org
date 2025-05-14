@@ -3,7 +3,7 @@ import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
 import db from '~/services/db.server'
-import { eventsTable } from '~/db/schema'
+import { eventRecord } from '~/db/schema'
 import { eq } from 'drizzle-orm'
 import { AuthenticatedOnly } from '~/services/auth.server'
 
@@ -59,8 +59,8 @@ export async function action({
 					async slug => {
 						const existingEvents = await db
 							.select()
-							.from(eventsTable)
-							.where(eq(eventsTable.urlSlug, slug))
+							.from(eventRecord)
+							.where(eq(eventRecord.urlSlug, slug))
 
 						return existingEvents.length == 0
 					},
@@ -83,7 +83,7 @@ export async function action({
 	if (parseResult.success) {
 		// create event in the database
 		const { title, date, eventUrlSlug } = parseResult.data
-		const result = await db.insert(eventsTable).values({
+		const result = await db.insert(eventRecord).values({
 			title,
 			date,
 			userId: user.id,

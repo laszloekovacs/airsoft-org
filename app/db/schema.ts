@@ -8,7 +8,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 
-export const eventsTable = pgTable('events', {
+export const eventRecord = pgTable('eventRecord', {
 	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 	userId: text('user_id')
 		.notNull()
@@ -30,7 +30,7 @@ export const userAtEventTable = pgTable(
 			.references(() => user.id, { onDelete: 'set null' }),
 		eventId: integer('event_id')
 			.notNull()
-			.references(() => eventsTable.id, { onDelete: 'set null' }),
+			.references(() => eventRecord.id, { onDelete: 'set null' }),
 		createdAt: date('created_at')
 			.notNull()
 			.$default(() => new Date().toISOString()),
