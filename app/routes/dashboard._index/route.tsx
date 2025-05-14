@@ -1,5 +1,4 @@
-import { Link } from 'react-router'
-import { Summary } from '~/routes/dashboard/summary'
+import { Summary } from './summary'
 
 export default function DashboardIndex() {
 	return (
