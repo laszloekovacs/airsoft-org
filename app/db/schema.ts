@@ -21,16 +21,16 @@ export const eventsTable = pgTable('events', {
 		.$default(() => new Date().toISOString())
 })
 
-export const eventAttendeesTable = pgTable(
+export const userAtEventTable = pgTable(
 	'eventAttendees',
 	{
 		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-		eventId: integer('event_id')
-			.notNull()
-			.references(() => eventsTable.id, { onDelete: 'set null' }),
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'set null' }),
+		eventId: integer('event_id')
+			.notNull()
+			.references(() => eventsTable.id, { onDelete: 'set null' }),
 		createdAt: date('created_at')
 			.notNull()
 			.$default(() => new Date().toISOString()),

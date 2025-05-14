@@ -1,4 +1,4 @@
-import { eventAttendeesTable, eventsTable } from '~/db/schema'
+import { userAtEventTable, eventsTable } from '~/db/schema'
 import db from '~/services/db.server'
 import type { Route } from './+types/route'
 import { eq } from 'drizzle-orm'
@@ -8,13 +8,13 @@ import { useActionData, useFetcher } from 'react-router'
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// TODO get user and check if event is his
 	// check for claim that he's an organizer
-	const filter = { id: eventAttendeesTable.id }
+	const filter = { id: userAtEventTable.id }
 
 	const data = await db
 		.select()
-		.from(eventAttendeesTable)
-		.leftJoin(eventsTable, eq(eventAttendeesTable.eventId, eventsTable.id))
-		.leftJoin(user, eq(eventAttendeesTable.userId, user.id))
+		.from(userAtEventTable)
+		.leftJoin(eventsTable, eq(userAtEventTable.eventId, eventsTable.id))
+		.leftJoin(user, eq(userAtEventTable.userId, user.id))
 		.where(eq(eventsTable.urlSlug, params.eventId))
 
 	return data
@@ -64,9 +64,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
 		// set isConfirmed to true
 
 		const result = await db
-			.update(eventAttendeesTable)
+			.update(userAtEventTable)
 			.set({ isConfirmed: true })
-			.where(eq(eventAttendeesTable.id, parseInt(eventId)))
+			.where(eq(userAtEventTable.id, parseInt(eventId)))
 
 		return { status: 'ok' }
 	}
