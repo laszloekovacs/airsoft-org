@@ -1,12 +1,12 @@
 import { Outlet, Link } from 'react-router'
 import Sitemap from '~/components/sitemap'
-import type { Route } from './+types/_home'
+import type { Route } from './+types/route'
 import { authServer } from '~/services/auth.server'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
 
-	return sessionData
+	return { ...sessionData }
 }
 
 export default function HomeContainer({ loaderData }: Route.ComponentProps) {
