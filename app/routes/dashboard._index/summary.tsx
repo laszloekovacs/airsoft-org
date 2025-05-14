@@ -1,7 +1,25 @@
-export const Summary = () => {
+import { Link } from 'react-router'
+import { eventsTable } from '~/db/schema'
+
+type EventSelect = typeof eventsTable.$inferSelect
+
+export const Summary = ({ events }: { events: EventSelect[] }) => {
+	if (events.length == 0) {
+		return <p>nincsenek események</p>
+	}
+
 	return (
 		<div>
-			<p>Here you can find a summary of your data.</p>
+			<table>
+				{events.map((item, index) => (
+					<tr key={item.id}>
+						<Link to={`/dashboard/event/${item.urlSlug}/registration`}>
+							<td>{item.createdAt}</td>
+							<td>{item.title}</td>
+						</Link>
+					</tr>
+				))}
+			</table>
 		</div>
 	)
 }
