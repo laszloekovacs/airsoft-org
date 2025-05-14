@@ -6,5 +6,7 @@
 }
 
 @theme {
-	--theme-muted: rgb(255, 233, 23);
+	--color-muted: rgb(255, 233, 23);
+	--color-foreground: #363435;
+	--color-background: #faf3eb;
 }
