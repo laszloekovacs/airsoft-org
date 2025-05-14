@@ -25,8 +25,9 @@ export default function DashboardEventsEventId({
 			<p>{description}</p>
 
 			<TabList />
-
-			<Outlet />
+			<div className='border p-6'>
+				<Outlet />
+			</div>
 		</div>
 	)
 }
