@@ -4,11 +4,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bun run --bun react-router dev",
-		"drizzle-kit-push": "bunx drizzle-kit push",
-		"better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
-		"build": "bunx --bun react-router build",
+		"drizzle-kit-push": "bun run --bun drizzle-kit push",
+		"better-auth-generate": "bun run --bun @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
+		"build": "bun run --bun react-router build",
 		"start": "bun run --bun react-router-serve ./build/server/index.js",
-		"test": "bunx bun test"
+		"test": "bun run --bun test"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
