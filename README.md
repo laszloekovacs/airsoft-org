@@ -41,3 +41,6 @@ https://www.better-auth.com/docs
 
 ### notes
 - use viewModels and query functions
+
+https://github.com/rphlmr/react-router-hono-server
+
