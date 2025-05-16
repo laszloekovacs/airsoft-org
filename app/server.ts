@@ -5,6 +5,10 @@ import { createHonoServer } from 'react-router-hono-server/bun'
 
 // if you want to store clients, tho some db would be more fitting
 //const clients = new Set<WSContext>()
-//const app = new Hono()
+const app = new Hono()
 
-export default await createHonoServer()
+app.get('/health', c => c.json({ status: 'ok' }))
+
+export default await createHonoServer({
+	app
+})
