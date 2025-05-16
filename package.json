@@ -18,11 +18,13 @@
 		"@tailwindcss/vite": "^4.1.6",
 		"better-auth": "^1.2.7",
 		"drizzle-orm": "^0.43.1",
+		"hono": "^4.7.9",
 		"isbot": "^5.1.27",
 		"pg": "^8.15.6",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
 		"react-router": "^7.5.3",
+		"react-router-hono-server": "^2.13.0",
 		"tailwindcss": "^4.1.6",
 		"zod": "^3.24.4"
 	},
