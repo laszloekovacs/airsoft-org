@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/node-postgres'
-import * as schema1 from '~/db/schema'
-import * as schema2 from '~/db/auth-schema'
+import * as schema1 from '~/schema/schema'
+import * as schema2 from '~/schema/auth-schema'
 
 if (typeof process.env.DATABASE_URL != 'string') {
 	console.log(process.env.DATABASE_URL)

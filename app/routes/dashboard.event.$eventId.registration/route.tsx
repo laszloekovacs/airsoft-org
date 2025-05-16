@@ -1,8 +1,8 @@
-import { userAtEventTable, eventRecord } from '~/db/schema'
+import { userAtEventTable, eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
 import type { Route } from './+types/route'
 import { eq } from 'drizzle-orm'
-import { user } from '~/db/auth-schema'
+import { user } from '~/schema/auth-schema'
 import { useActionData, useFetcher } from 'react-router'
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {

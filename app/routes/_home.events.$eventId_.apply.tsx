@@ -2,7 +2,7 @@ import { useFetcher } from 'react-router'
 import type { Route } from './+types/_home.events.$eventId_.apply'
 import { AuthenticatedOnly, authServer } from '~/services/auth.server'
 import db from '~/services/db.server'
-import { userAtEventTable, eventRecord } from '~/db/schema'
+import { userAtEventTable, eventRecord } from '~/schema/schema'
 import { eq } from 'drizzle-orm'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {

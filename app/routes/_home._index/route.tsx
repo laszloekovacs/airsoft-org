@@ -1,4 +1,4 @@
-import { eventRecord } from '~/db/schema'
+import { eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
 import { EventList } from './events'
 import type { Route } from './+types/route'

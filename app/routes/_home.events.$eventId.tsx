@@ -1,6 +1,6 @@
 import db from '~/services/db.server'
 import type { Route } from './+types/_home.events.$eventId'
-import { eventRecord } from '~/db/schema'
+import { eventRecord } from '~/schema/schema'
 import { eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { Link } from 'react-router'

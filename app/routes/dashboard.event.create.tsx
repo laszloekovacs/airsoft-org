@@ -3,7 +3,7 @@ import { Link, useFetcher } from 'react-router'
 import { z } from 'zod'
 import { generateUrlSafeName } from '~/helpers/generateUrlSafeName'
 import db from '~/services/db.server'
-import { eventRecord } from '~/db/schema'
+import { eventRecord } from '~/schema/schema'
 import { eq } from 'drizzle-orm'
 import { AuthenticatedOnly } from '~/services/auth.server'
 

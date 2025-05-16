@@ -1,6 +1,6 @@
 import { Summary } from './summary'
 import type { Route } from './+types/route'
-import { eventRecord } from '~/db/schema'
+import { eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
 
 export const loader = async ({ params }: { params: Route.LoaderArgs }) => {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { eventRecord } from '~/db/schema'
+import { eventRecord } from '~/schema/schema'
 
 type EventSelect = typeof eventRecord.$inferSelect
 
