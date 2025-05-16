@@ -8,7 +8,6 @@ import {
 } from 'react-router'
 
 import type { Route } from './+types/root'
-import './tailwind.css'
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
