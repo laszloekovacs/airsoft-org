@@ -8,7 +8,8 @@
 		"better-auth-generate": "bun run --bun @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
 		"build": "react-router build",
 		"start": "bun ./build/server/index.js",
-		"test": "bun test"
+		"test": "bun test",
+		"dbml": "bun ./misc/dbmlgen.ts"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",
@@ -16,6 +17,7 @@
 		"@react-router/node": "^7.5.3",
 		"@react-router/serve": "^7.5.3",
 		"better-auth": "^1.2.7",
+		"drizzle-dbml-generator": "^0.10.0",
 		"drizzle-orm": "^0.43.1",
 		"hono": "^4.7.9",
 		"isbot": "^5.1.27",

@@ -1,0 +1,66 @@
+table eventRecord {
+  id integer [pk, not null]
+  user_id text [not null]
+  name text [not null]
+  date date [not null]
+  url_slug text [not null, unique]
+  created_at date [not null]
+}
+
+table userAtEvent {
+  id integer [pk, not null]
+  user_id text [not null]
+  event_id integer [not null]
+  created_at date [not null]
+  is_confirmed boolean [not null, default: false]
+
+  indexes {
+    (event_id, user_id) [name: 'userAtEvent_event_id_user_id_unique', unique]
+  }
+}
+
+table account {
+  id text [pk, not null]
+  account_id text [not null]
+  provider_id text [not null]
+  user_id text [not null]
+  access_token text
+  refresh_token text
+  id_token text
+  access_token_expires_at timestamp
+  refresh_token_expires_at timestamp
+  scope text
+  password text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+table session {
+  id text [pk, not null]
+  expires_at timestamp [not null]
+  token text [not null, unique]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+  ip_address text
+  user_agent text
+  user_id text [not null]
+}
+
+table user {
+  id text [pk, not null]
+  name text [not null]
+  email text [not null, unique]
+  email_verified boolean [not null]
+  image text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+table verification {
+  id text [pk, not null]
+  identifier text [not null]
+  value text [not null]
+  expires_at timestamp [not null]
+  created_at timestamp
+  updated_at timestamp
+}
