@@ -4,8 +4,11 @@ import {
 	pgTable,
 	date,
 	unique,
-	boolean
+	boolean,
+	pgView,
+	uuid
 } from 'drizzle-orm/pg-core'
+import { eq } from 'drizzle-orm'
 import { user } from './auth-schema'
 
 export const eventRecord = pgTable('eventRecord', {
@@ -37,4 +40,19 @@ export const userAtEventTable = pgTable(
 		isConfirmed: boolean('is_confirmed').notNull().default(false)
 	},
 	table => [unique().on(table.eventId, table.userId)]
+)
+
+/*
+ * join the users details with the user at event table
+ */
+export const userAtEventView = pgView('user_at_event_view').as(qb =>
+	qb
+		.select({
+			id: userAtEventTable.id,
+			eventId: userAtEventTable.eventId,
+			isConfirmed: userAtEventTable.isConfirmed,
+			userName: user.name
+		})
+		.from(userAtEventTable)
+		.leftJoin(user, eq(user.id, userAtEventTable.userId))
 )
