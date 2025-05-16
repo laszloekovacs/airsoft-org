@@ -6,8 +6,9 @@
 		"dev": "bun run --bun react-router dev",
 		"drizzle-kit-push": "bun run --bun drizzle-kit push",
 		"better-auth-generate": "bun run --bun @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/db/auth-schema.ts",
-		"build": "react-router build",
-		"start": "bun run --bun react-router-serve ./build/server/index.js",
+		"build": "bun run --bun react-router build",
+		"start": "bun run --bun ./build/server/index.js",
+		"old-start": "bun run --bun react-router-serve ./build/server/index.js",
 		"test": "bun run --bun test"
 	},
 	"dependencies": {
