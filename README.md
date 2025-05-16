@@ -35,12 +35,17 @@ published: boolean
 
 https://orm.drizzle.team/docs
 https://www.better-auth.com/docs
-
-
+https://github.com/rphlmr/react-router-hono-server
 
 
 ### notes
 - use viewModels and query functions
 
-https://github.com/rphlmr/react-router-hono-server
 
+- facebook, google metadata for sharing
+- honeypot endpoints for logging probing, record it into umami
+- health endpoint, with database health reporting?
+- social login, tho it can wait till the end : discord, fb, google, github
+- readme with links to used tech
+- sse with hono for notifications, messaging?
+- automatically refrest event data? comments?
