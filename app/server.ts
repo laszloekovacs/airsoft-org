@@ -7,7 +7,13 @@ import { createHonoServer } from 'react-router-hono-server/bun'
 //const clients = new Set<WSContext>()
 const app = new Hono()
 
-app.get('/health', c => c.json({ status: 'ok' }))
+app.get('/health', c =>
+	c.json({
+		status: 'ok',
+		mode: process.env.MODE,
+		timestamp: Date.now()
+	})
+)
 
 export default await createHonoServer({
 	app

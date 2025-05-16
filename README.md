@@ -42,10 +42,20 @@ https://github.com/rphlmr/react-router-hono-server
 - use viewModels and query functions
 
 
-- facebook, google metadata for sharing
+- facebook, google twitter card
 - honeypot endpoints for logging probing, record it into umami
-- health endpoint, with database health reporting?
+- health endpoint, with database health reporting? uptime?
 - social login, tho it can wait till the end : discord, fb, google, github
 - readme with links to used tech
 - sse with hono for notifications, messaging?
 - automatically refrest event data? comments?
+- time, date locale formating
+- manifest.json?
+- better logging, sentry? window.onerror handler
+- favicon apple touch icons
+- robots.txt sitemap.xml
+- env banner (dev, production), versioning
+- more error boundaries
+- seed script for db
+- metadata on routes
+- response compression
