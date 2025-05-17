@@ -37,7 +37,12 @@ export default function LoginPage() {
 				<form method='post' onSubmit={handleSubmit}>
 					<fieldset>
 						<label htmlFor='email'>email</label>
-						<input className='input' type='email' name='email' />
+						<input
+							className='input'
+							autoComplete='off'
+							type='email'
+							name='email'
+						/>
 					</fieldset>
 					<fieldset>
 						<label htmlFor='password'>password</label>
