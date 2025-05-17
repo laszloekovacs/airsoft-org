@@ -89,3 +89,7 @@ textarea:not([rows]) {
 	--spacing-md: 18px;
 	--spacing-lg: 24px;
 }
+
+fieldset {
+	border: none;
+}

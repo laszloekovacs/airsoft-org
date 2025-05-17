@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { authClient } from '~/services/auth.client'
 import { authServer } from '~/services/auth.server'
 import type { Route } from './+types/route'
-import './register.module.css'
+import styles from './register.module.css'
 
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')
@@ -36,34 +36,33 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	}
 
 	return (
-		<div>
-			<h2>Account management</h2>
-			<form onSubmit={handleSubmit}>
-				<p>create</p>
-				<input
-					className='input'
-					type='email'
-					placeholder='Email'
-					value={email}
-					onChange={e => setEmail(e.target.value)}
-				/>
-				<input
-					className='input'
-					type='password'
-					placeholder='Password'
-					value={password}
-					onChange={e => setPassword(e.target.value)}
-				/>
-				<input type='submit' value='Create account' />
-			</form>
-
-			<div>
-				<pre>{JSON.stringify(loaderData, null, 2)}</pre>
+		<div className={styles.container}>
+			<div className={styles.logincard}>
+				<h2>Felíratkozás email fiókal</h2>
+				<form onSubmit={handleSubmit}>
+					<fieldset>
+						<label htmlFor='email'>email</label>
+						<input
+							className='input'
+							type='email'
+							placeholder='név@szolgáltató.hu'
+							value={email}
+							onChange={e => setEmail(e.target.value)}
+						/>
+					</fieldset>
+					<fieldset>
+						<label htmlFor='password'>jelszó</label>
+						<input
+							className='input'
+							type='password'
+							placeholder='********'
+							value={password}
+							onChange={e => setPassword(e.target.value)}
+						/>
+					</fieldset>
+					<input type='submit' value='regisztrálok' />
+				</form>
 			</div>
-			<img src={loaderData?.user?.image ?? ''} />
-
-			{error && <pre>{JSON.stringify(error, null, 2)}</pre>}
-			{data && <pre>{JSON.stringify(data, null, 2)}</pre>}
 		</div>
 	)
 }
