@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, useNavigation } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { authClient } from '~/services/auth.client'
 import styles from './register.module.css'
 import { z } from 'zod'
