@@ -59,3 +59,7 @@ https://github.com/rphlmr/react-router-hono-server
 - seed script for db
 - metadata on routes
 - response compression
+- notifications VAPID
+- mainfest file for mobile install
+- geolocation GPS
+- ical reminder
