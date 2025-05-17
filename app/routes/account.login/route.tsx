@@ -34,7 +34,7 @@ export default function LoginPage() {
 			<div className={styles.card}>
 				<h1>Belépés</h1>
 
-				<form method='post' onSubmit={handleSubmit}>
+				<form method='post' onSubmit={handleSubmit} noValidate>
 					<fieldset>
 						<label htmlFor='email'>email</label>
 						<input
@@ -42,6 +42,7 @@ export default function LoginPage() {
 							autoComplete='off'
 							type='email'
 							name='email'
+							autoFocus
 						/>
 					</fieldset>
 					<fieldset>
