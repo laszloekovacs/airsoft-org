@@ -15,11 +15,11 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div className={styles.container}>
-			<div>
+			<div className={styles.header}>
 				<h1>
 					<Link to='/'>Airsoft Naptár</Link>
 				</h1>
-				<Navbar />
+				<SiteNavigation />
 				{user ? <Session name={user.name} /> : <LoginOrRegister />}
 			</div>
 			<Outlet />
@@ -36,14 +36,14 @@ const LoginOrRegister = () => {
 	return <Link to='/account/login'>belepes</Link>
 }
 
-const Navbar = () => {
+const SiteNavigation = () => {
 	const links = [
-		{ label: 'szervezo', to: '/dashboard' },
-		{ label: 'regisztralas', to: '/account/register' }
+		{ label: 'szervező', to: '/dashboard' },
+		{ label: 'regisztrálás', to: '/account/register' }
 	]
 
 	return (
-		<ul>
+		<ul className={styles.navbar}>
 			{links.map(item => (
 				<li key={item.label}>
 					<Link to={item.to}>{item.label}</Link>
