@@ -55,7 +55,8 @@ export default function LoginPage() {
 					<button disabled>discord</button>
 				</div>
 				<div>
-					<Link to='/account/register'>email regisztrálás</Link>
+					<p>még nincs fiókod?</p>
+					<Link to='/account/register'>regisztrálj email-el</Link>
 				</div>
 			</div>
 			<br />
