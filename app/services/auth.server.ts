@@ -20,7 +20,8 @@ export const authServer = betterAuth({
 				input: false
 			}
 		}
-	}
+	},
+	trustedOrigins: [process.env.BASE_URL!]
 })
 
 // required for better auth cli
