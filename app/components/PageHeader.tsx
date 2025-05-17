@@ -1,3 +1,4 @@
+import { createAuthClient } from 'better-auth/react'
 import { Link } from 'react-router'
 
 export function PageHeader() {
@@ -20,6 +21,23 @@ export function PageHeader() {
 					</li>
 				))}
 			</nav>
+			<Session />
 		</header>
+	)
+}
+
+/* you need to recreate the hook inside client components*/
+const { useSession } = createAuthClient()
+
+const Session = () => {
+	const { isPending, data, error } = useSession()
+
+	if (isPending) return <p>loading...</p>
+	if (error) return <p>error loading session: {error.message}</p>
+
+	return (
+		<div>
+			<p>{data?.user.name}</p>
+		</div>
 	)
 }
