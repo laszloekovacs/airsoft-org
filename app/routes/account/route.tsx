@@ -1,16 +1,17 @@
 import { Link, Outlet } from 'react-router'
+import styles from './account.module.css'
+import Sitemap from '~/components/sitemap'
 
 export default function AccountLayout() {
 	return (
-		<div className='w-full h-dvh p-8'>
-			<div>
-				<h1 className='text-2xl mb-4'>Felhasználó fiók</h1>
-				<div className='my-4'>
-					<Link to='/'>Főoldal</Link>
-				</div>
+		<div className={styles.container}>
+			<h1>Felhasználó fiók</h1>
 
-				<Outlet />
-			</div>
+			<Link to='/'>vissza a főoldalra</Link>
+
+			<Outlet />
+
+			<Sitemap />
 		</div>
 	)
 }

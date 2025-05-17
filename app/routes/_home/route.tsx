@@ -1,5 +1,5 @@
 import { Outlet, Link } from 'react-router'
-import Sitemap from '~/routes/_home/sitemap'
+import Sitemap from '~/components/sitemap'
 import type { Route } from './+types/route'
 import { authServer } from '~/services/auth.server'
 

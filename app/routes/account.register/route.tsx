@@ -2,15 +2,16 @@ import { useState } from 'react'
 import { authClient } from '~/services/auth.client'
 import { authServer } from '~/services/auth.server'
 import type { Route } from './+types/route'
+import './register.module.css'
 
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState<any>({})
+	const [data, setData] = useState<any>({})
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
-		e.stopPropagation()
 
 		const { data, error } = await authClient.signUp.email(
 			{
@@ -31,6 +32,7 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 		)
 
 		setError(error)
+		setData(data)
 	}
 
 	return (
@@ -61,6 +63,7 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			<img src={loaderData?.user?.image ?? ''} />
 
 			{error && <pre>{JSON.stringify(error, null, 2)}</pre>}
+			{data && <pre>{JSON.stringify(data, null, 2)}</pre>}
 		</div>
 	)
 }
