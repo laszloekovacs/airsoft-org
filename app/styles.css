@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 /* Box sizing rules, also no unexpected margins and padding */
 *,
 *::before,
@@ -75,4 +76,9 @@ textarea:not([rows]) {
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
 	scroll-margin-block: 5ex;
+}
+
+* {
+	font-family: 'Inter', sans-serif;
+	font-optical-sizing: auto;
 }
