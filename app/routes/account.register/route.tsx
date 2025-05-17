@@ -105,7 +105,7 @@ export default function AccountPage() {
 								id='email'
 								className='input'
 								type='email'
-								autoComplete='email'
+								autoComplete='off'
 								value={email}
 								onChange={e => setEmail(e.target.value)}
 								onBlur={e => validateEmail()}
@@ -118,7 +118,7 @@ export default function AccountPage() {
 								id='password'
 								className='input'
 								type='password'
-								autoComplete='new-password'
+								autoComplete='off'
 								value={password}
 								onChange={e => setPassword(e.target.value)}
 								onBlur={e => validatePassword()}
