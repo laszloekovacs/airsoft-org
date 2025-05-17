@@ -1,3 +1,4 @@
+import type { Route } from './+types/root'
 import {
 	isRouteErrorResponse,
 	Links,
@@ -6,8 +7,23 @@ import {
 	Scripts,
 	ScrollRestoration
 } from 'react-router'
+import './styles.css'
 
-import type { Route } from './+types/root'
+export function meta() {
+	return [
+		{
+			title: 'Airsoft Naptár'
+		},
+		{
+			property: 'description',
+			content: 'Magyarorszag elso szamu airsoft esemeny szervezo oldala'
+		},
+		{
+			property: 'og:title',
+			content: 'Airsoft Naptár'
+		}
+	]
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (

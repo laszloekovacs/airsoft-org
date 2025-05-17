@@ -1,0 +1,10 @@
+/* css resets and other goodies */
+
+body {
+	background-color: rgb(225, 238, 238);
+}
+
+ul,
+ol {
+	list-style: none;
+}

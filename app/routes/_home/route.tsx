@@ -13,9 +13,9 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	const user = loaderData?.user
 
 	return (
-		<div className='grid grid-cols-1 grid-rows-[auto_1fr_auto] min-h-screen p-4'>
-			<div className='flex justify-between items-center mb-4'>
-				<h1 className='text-xl font-bold'>
+		<div>
+			<div>
+				<h1>
 					<Link to='/'>Airsoft Naptár</Link>
 				</h1>
 				<Navbar />
@@ -42,7 +42,7 @@ const Navbar = () => {
 	]
 
 	return (
-		<ul className='flex flex-row gap-4 justify-center'>
+		<ul>
 			{links.map(item => (
 				<li key={item.label}>
 					<Link to={item.to}>{item.label}</Link>
