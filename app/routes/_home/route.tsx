@@ -1,9 +1,9 @@
-import { Outlet, Link } from 'react-router'
-import Sitemap from '~/components/sitemap'
-import type { Route } from './+types/route'
-import { authServer } from '~/services/auth.server'
-import styles from './home.module.css'
+import { Outlet } from 'react-router'
+import { PageHeader } from '~/components/PageHeader'
 import { PageLayout } from '~/components/PageLayout'
+import Sitemap from '~/components/sitemap'
+import { authServer } from '~/services/auth.server'
+import type { Route } from './+types/route'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
@@ -16,40 +16,9 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<PageLayout>
-			<div className={styles.header}>
-				<h1>
-					<Link to='/'>Airsoft Naptár</Link>
-				</h1>
-				<SiteNavigation />
-				{user ? <Session name={user.name} /> : <LoginOrRegister />}
-			</div>
+			<PageHeader />
 			<Outlet />
 			<Sitemap />
 		</PageLayout>
-	)
-}
-
-const Session = ({ name }: { name: string }) => {
-	return <>{name && <span>{name}</span>}</>
-}
-
-const LoginOrRegister = () => {
-	return <Link to='/account/login'>belepes</Link>
-}
-
-const SiteNavigation = () => {
-	const links = [
-		{ label: 'szervező', to: '/dashboard' },
-		{ label: 'regisztrálás', to: '/account/register' }
-	]
-
-	return (
-		<ul className={styles.navbar}>
-			{links.map(item => (
-				<li key={item.label}>
-					<Link to={item.to}>{item.label}</Link>
-				</li>
-			))}
-		</ul>
 	)
 }

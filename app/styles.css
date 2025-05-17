@@ -17,7 +17,8 @@ html {
 
 /* Remove list styles on ul, ol */
 ul,
-ol {
+ol,
+nav {
 	list-style: none;
 }
 
@@ -83,13 +84,13 @@ textarea:not([rows]) {
 	font-optical-sizing: auto;
 }
 
+fieldset {
+	border: none;
+}
+
 /* style tokens */
 :root {
 	--spacing-sm: 8px;
 	--spacing-md: 18px;
 	--spacing-lg: 24px;
-}
-
-fieldset {
-	border: none;
 }

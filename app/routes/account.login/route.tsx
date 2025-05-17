@@ -9,11 +9,13 @@ export default function LoginPage() {
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-
+		console.log('logging in')
 		const formData = new FormData(event.currentTarget)
 
-		const email = formData.get('mail')?.toString()
+		const email = formData.get('email')?.toString()
 		const password = formData.get('password')?.toString()
+
+		console.log(email, password)
 
 		if (!email || !password) {
 			setFormError('hibás email vagy jelszó')
@@ -22,6 +24,7 @@ export default function LoginPage() {
 
 		const { data, error } = await authClient.signIn.email({ email, password })
 
+		console.log(error, data)
 		if (error?.status) {
 			setFormError(error.statusText)
 		} else {

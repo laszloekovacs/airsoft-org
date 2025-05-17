@@ -65,3 +65,8 @@ https://react-icons.github.io/react-icons/
 - geolocation GPS
 - ical reminder
 - console.onerror handler
+
+
+## mistakes were made
+- form had the name mail instead of email
+- betterauth had a process env on the client
