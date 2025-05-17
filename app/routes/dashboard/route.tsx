@@ -1,9 +1,10 @@
 import { Link, Outlet } from 'react-router'
+import { PageLayout } from '~/components/PageLayout'
 import Sitemap from '~/components/sitemap'
 
 export default function DashboardIndex() {
 	return (
-		<div>
+		<PageLayout>
 			<Link to='/dashboard'>
 				<h1>Dashboard</h1>
 			</Link>
@@ -12,6 +13,6 @@ export default function DashboardIndex() {
 
 			<Outlet />
 			<Sitemap />
-		</div>
+		</PageLayout>
 	)
 }

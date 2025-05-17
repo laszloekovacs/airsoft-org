@@ -1,11 +1,5 @@
+import styles from './PageLatout.module.css'
+
 export const PageLayout = ({ children }: { children: React.ReactNode }) => {
-	return (
-		<div
-			style={{
-				display: 'grid',
-				gridTemplateRows: 'auto 1fr auto'
-			}}>
-			{children}
-		</div>
-	)
+	return <div className={styles.container}>{children}</div>
 }

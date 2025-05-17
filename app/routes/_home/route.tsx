@@ -3,6 +3,7 @@ import Sitemap from '~/components/sitemap'
 import type { Route } from './+types/route'
 import { authServer } from '~/services/auth.server'
 import styles from './home.module.css'
+import { PageLayout } from '~/components/PageLayout'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
@@ -14,7 +15,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	const user = loaderData?.user
 
 	return (
-		<div className={styles.container}>
+		<PageLayout>
 			<div className={styles.header}>
 				<h1>
 					<Link to='/'>Airsoft Naptár</Link>
@@ -24,7 +25,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 			</div>
 			<Outlet />
 			<Sitemap />
-		</div>
+		</PageLayout>
 	)
 }
 
