@@ -15,9 +15,9 @@ html {
 	text-size-adjust: none;
 }
 
-/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
-ul[role='list'],
-ol[role='list'] {
+/* Remove list styles on ul, ol */
+ul,
+ol {
 	list-style: none;
 }
 
@@ -81,4 +81,11 @@ textarea:not([rows]) {
 * {
 	font-family: 'Inter', sans-serif;
 	font-optical-sizing: auto;
+}
+
+/* style tokens */
+:root {
+	--spacing-sm: 8px;
+	--spacing-md: 18px;
+	--spacing-lg: 24px;
 }

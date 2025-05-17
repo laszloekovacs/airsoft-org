@@ -1,4 +1,11 @@
 .container {
-	padding: 18px;
+	padding: var(--spacing-md);
 	min-height: 100dvh;
+	width: 100dvw;
+	display: grid;
+	grid-template-rows: min-content 1fr min-content;
+}
+
+.heading {
+	padding-bottom: var(--spacing-md);
 }
