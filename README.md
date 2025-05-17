@@ -70,3 +70,4 @@ https://react-icons.github.io/react-icons/
 ## mistakes were made
 - form had the name mail instead of email
 - betterauth had a process env on the client
+- need to call createAuth on top level if used in client
