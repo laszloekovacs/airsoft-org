@@ -11,7 +11,7 @@ import {
 import { eq } from 'drizzle-orm'
 import { user } from './auth-schema'
 
-export const eventRecord = pgTable('eventRecord', {
+export const eventRecord = pgTable('event_record', {
 	id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 	userId: text('user_id')
 		.notNull()
@@ -25,7 +25,7 @@ export const eventRecord = pgTable('eventRecord', {
 })
 
 export const userAtEventTable = pgTable(
-	'userAtEvent',
+	'user_at_event',
 	{
 		id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
 		userId: text('user_id')
