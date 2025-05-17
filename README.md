@@ -63,3 +63,4 @@ https://github.com/rphlmr/react-router-hono-server
 - mainfest file for mobile install
 - geolocation GPS
 - ical reminder
+- console.onerror handler

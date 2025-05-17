@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate, useNavigation } from 'react-router'
 import { authClient } from '~/services/auth.client'
 import styles from './register.module.css'
 import { z } from 'zod'
+
+const MIN_PASSWORD = 8
 
 export default function AccountPage() {
 	const [email, setEmail] = useState('')
@@ -11,11 +13,15 @@ export default function AccountPage() {
 	const [password, setPassword] = useState('')
 	const [passwordError, setPasswordError] = useState<string>('')
 
+	const [formError, setFormError] = useState<string>()
+
+	const navigate = useNavigate()
+
 	const validateEmail = () => {
 		const emailValidation = z
 			.string()
 			.email({ message: 'hibás email' })
-			.safeParse(email)
+			.safeParse(email.trim())
 
 		if (emailValidation.success) {
 			setEmailError('')
@@ -27,8 +33,10 @@ export default function AccountPage() {
 	const validatePassword = () => {
 		const passwordValidation = z
 			.string()
-			.min(4, { message: 'legalább 4 karakter kell hogy legyen' })
-			.safeParse(password)
+			.min(MIN_PASSWORD, {
+				message: `legalább ${MIN_PASSWORD} karakter kell hogy legyen`
+			})
+			.safeParse(password.trim())
 
 		if (passwordValidation.success) {
 			setPasswordError('')
@@ -41,20 +49,32 @@ export default function AccountPage() {
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
+		/* submit might happen before blur, revalidate */
+		validateEmail()
+		validatePassword()
+
+		if (emailError.length || passwordError.length) {
+			return
+		}
+
+		/* better auth signup will log you in automatically */
 		const { data, error } = await authClient.signUp.email(
 			{
 				email,
 				password,
 				name: email,
-				image: 'https://picsum.photos/200/200',
-				callbackURL: '/'
+				image: 'https://picsum.photos/200/200'
 			},
 			{
-				onSuccess: ctx => {
-					console.log('onSuccess', ctx)
-				},
 				onError: ctx => {
-					console.log('onError', ctx)
+					if (ctx.error.code == 'USER_ALREADY_EXISTS') {
+						setFormError('ez az email már regisztrálva van!')
+					} else {
+						setFormError(ctx.error.message)
+					}
+				},
+				onSuccess: ctx => {
+					navigate('/account/result/signup')
 				}
 			}
 		)
@@ -78,10 +98,11 @@ export default function AccountPage() {
 			<div className={styles.content}>
 				<div className={styles.logincard}>
 					<h2>Felíratkozás email fiókal</h2>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} noValidate>
 						<fieldset>
 							<label htmlFor='email'>email</label>
 							<input
+								id='email'
 								className='input'
 								type='email'
 								autoComplete='email'
@@ -94,6 +115,7 @@ export default function AccountPage() {
 						<fieldset>
 							<label htmlFor='password'>jelszó</label>
 							<input
+								id='password'
 								className='input'
 								type='password'
 								autoComplete='new-password'
@@ -103,6 +125,7 @@ export default function AccountPage() {
 							/>
 							{passwordError && <p>{passwordError}</p>}
 						</fieldset>
+						{formError && <p>{formError}</p>}
 						<input type='submit' value='regisztrálok' />
 
 						<div>
