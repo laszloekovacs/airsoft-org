@@ -1,5 +1,6 @@
 import { authClient } from '~/services/auth.client'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
+import styles from './login.module.css'
 
 export default function LoginPage() {
 	const navigate = useNavigate()
@@ -26,24 +27,37 @@ export default function LoginPage() {
 	}
 
 	return (
-		<div>
-			<h1>Belépés</h1>
+		<div className={styles.container}>
+			<div className={styles.card}>
+				<h1>Belépés</h1>
 
-			<form method='post' onSubmit={handleSubmit}>
-				<input className='input' type='email' name='mail' placeholder='email' />
-				<input
-					className='input'
-					type='password'
-					name='password'
-					placeholder='Jelszó'
-				/>
-				<input
-					className='bg-black text-white'
-					type='submit'
-					value='Belépés'
-					data-umami-event='login'
-				/>
-			</form>
+				<form method='post' onSubmit={handleSubmit}>
+					<fieldset>
+						<label htmlFor='email'>email</label>
+						<input className='input' type='email' name='email' />
+					</fieldset>
+					<fieldset>
+						<label htmlFor='password'>password</label>
+						<input
+							className='input'
+							type='password'
+							name='password'
+							autoComplete='off'
+						/>
+					</fieldset>
+					<input type='submit' value='Belépés' data-umami-event='login' />
+
+					<hr />
+				</form>
+				<div className={styles.socials}>
+					<button disabled>facebook</button>
+					<button disabled>github</button>
+					<button disabled>discord</button>
+				</div>
+				<div>
+					<Link to='/account/register'>email regisztrálás</Link>
+				</div>
+			</div>
 		</div>
 	)
 }

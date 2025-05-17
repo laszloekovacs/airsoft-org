@@ -11,7 +11,7 @@ export default function Sitemap() {
 
 	return (
 		<div className='p-4 mt-8'>
-			<h1 className='font-bold'>Oldalak</h1>
+			<h3 className='font-bold'>Oldalak</h3>
 			<ul>
 				{links.map((link, index) => (
 					<li key={index}>
