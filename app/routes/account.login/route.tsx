@@ -34,25 +34,18 @@ export default function LoginPage() {
 			<div className={styles.card}>
 				<h1>Belépés</h1>
 
-				<form method='post' onSubmit={handleSubmit} noValidate>
+				<form
+					method='post'
+					onSubmit={handleSubmit}
+					noValidate
+					autoComplete='off'>
 					<fieldset>
 						<label htmlFor='email'>email</label>
-						<input
-							className='input'
-							autoComplete='off'
-							type='email'
-							name='email'
-							autoFocus
-						/>
+						<input className='input' type='email' name='email' autoFocus />
 					</fieldset>
 					<fieldset>
 						<label htmlFor='password'>password</label>
-						<input
-							className='input'
-							type='password'
-							name='password'
-							autoComplete='off'
-						/>
+						<input className='input' type='password' name='password' />
 					</fieldset>
 					<input type='submit' value='Belépés' data-umami-event='login' />
 

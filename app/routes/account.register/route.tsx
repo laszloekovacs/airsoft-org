@@ -98,14 +98,13 @@ export default function AccountPage() {
 			<div className={styles.content}>
 				<div className={styles.logincard}>
 					<h2>Felíratkozás email fiókal</h2>
-					<form onSubmit={handleSubmit} noValidate>
+					<form onSubmit={handleSubmit} noValidate autoComplete='off'>
 						<fieldset>
 							<label htmlFor='email'>email</label>
 							<input
 								id='email'
 								className='input'
 								type='email'
-								autoComplete='off'
 								autoFocus
 								value={email}
 								onChange={e => setEmail(e.target.value)}
@@ -119,7 +118,6 @@ export default function AccountPage() {
 								id='password'
 								className='input'
 								type='password'
-								autoComplete='off'
 								value={password}
 								onChange={e => setPassword(e.target.value)}
 								onBlur={e => validatePassword()}
