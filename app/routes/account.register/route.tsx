@@ -6,6 +6,7 @@ import type { Route } from './+types/route'
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const [error, setError] = useState<any>({})
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
@@ -15,7 +16,7 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			{
 				email,
 				password,
-				name: password,
+				name: email,
 				image: 'https://picsum.photos/200/200',
 				callbackURL: '/'
 			},
@@ -28,6 +29,8 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 				}
 			}
 		)
+
+		setError(error)
 	}
 
 	return (
@@ -56,6 +59,8 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 				<pre>{JSON.stringify(loaderData, null, 2)}</pre>
 			</div>
 			<img src={loaderData?.user?.image ?? ''} />
+
+			{error && <pre>{JSON.stringify(error, null, 2)}</pre>}
 		</div>
 	)
 }

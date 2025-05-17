@@ -9,7 +9,8 @@
 		"build": "react-router build",
 		"start": "bun ./build/server/index.js",
 		"test": "bun test",
-		"dbml": "bun ./misc/dbmlgen.ts"
+		"dbml": "bun ./misc/dbmlgen.ts",
+		"studio": "bunx drizzle-kit studio"
 	},
 	"dependencies": {
 		"@js-temporal/polyfill": "^0.5.1",

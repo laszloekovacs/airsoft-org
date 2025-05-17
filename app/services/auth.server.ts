@@ -1,10 +1,14 @@
 import { betterAuth } from 'better-auth'
 import db from './db.server'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import * as schema from '~/schema/auth-schema'
 
 export const authServer = betterAuth({
 	database: drizzleAdapter(db, {
-		provider: 'pg'
+		provider: 'pg',
+		schema: {
+			...schema
+		}
 	}),
 	emailAndPassword: {
 		enabled: true
@@ -13,7 +17,6 @@ export const authServer = betterAuth({
 		additionalFields: {
 			claims: {
 				type: 'string[]',
-				required: true,
 				input: false
 			}
 		}
