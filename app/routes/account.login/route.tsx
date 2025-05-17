@@ -1,9 +1,11 @@
 import { authClient } from '~/services/auth.client'
 import { Link, useNavigate } from 'react-router'
 import styles from './login.module.css'
+import { useState } from 'react'
 
 export default function LoginPage() {
 	const navigate = useNavigate()
+	const [formError, setFormError] = useState<string>('')
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -14,16 +16,17 @@ export default function LoginPage() {
 		const password = formData.get('password')?.toString()
 
 		if (!email || !password) {
+			setFormError('hibás email vagy jelszó')
 			return
 		}
 
-		const result = await authClient.signIn.email({ email, password })
+		const { data, error } = await authClient.signIn.email({ email, password })
 
-		result.error && console.log(result.error)
-		result.data && console.log(result.data)
-
-		// redirect
-		navigate('/')
+		if (error?.status) {
+			setFormError(error.statusText)
+		} else {
+			navigate('/')
+		}
 	}
 
 	return (
@@ -47,6 +50,7 @@ export default function LoginPage() {
 					</fieldset>
 					<input type='submit' value='Belépés' data-umami-event='login' />
 
+					{formError && <p>{formError}</p>}
 					<hr />
 				</form>
 				<div className={styles.socials}>
