@@ -3,6 +3,7 @@ import { authClient } from '~/services/auth.client'
 import { authServer } from '~/services/auth.server'
 import type { Route } from './+types/route'
 import styles from './register.module.css'
+import { Link } from 'react-router'
 
 export default function AccountPage({ loaderData }: Route.ComponentProps) {
 	const [email, setEmail] = useState('')
@@ -37,31 +38,46 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.logincard}>
-				<h2>Felíratkozás email fiókal</h2>
-				<form onSubmit={handleSubmit}>
-					<fieldset>
-						<label htmlFor='email'>email</label>
-						<input
-							className='input'
-							type='email'
-							placeholder='név@szolgáltató.hu'
-							value={email}
-							onChange={e => setEmail(e.target.value)}
-						/>
-					</fieldset>
-					<fieldset>
-						<label htmlFor='password'>jelszó</label>
-						<input
-							className='input'
-							type='password'
-							placeholder='********'
-							value={password}
-							onChange={e => setPassword(e.target.value)}
-						/>
-					</fieldset>
-					<input type='submit' value='regisztrálok' />
-				</form>
+			<div className={styles.heading}>
+				<div>
+					<h1>Airsoft Naptár</h1>
+					<Link to='/'>vissza a főoldalra</Link>
+				</div>
+			</div>
+			<div className={styles.content}>
+				<div className={styles.logincard}>
+					<h2>Felíratkozás email fiókal</h2>
+					<form onSubmit={handleSubmit}>
+						<fieldset>
+							<label htmlFor='email'>email</label>
+							<input
+								className='input'
+								type='email'
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+								autoComplete='email'
+							/>
+						</fieldset>
+						<fieldset>
+							<label htmlFor='password'>jelszó</label>
+							<input
+								className='input'
+								type='password'
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+								autoComplete='new-password'
+							/>
+						</fieldset>
+						<input type='submit' value='regisztrálok' />
+
+						<div>
+							<p>
+								<span>van már fiókod? &nbsp;</span>
+								<Link to='/account/login'>jelentkezz be!</Link>
+							</p>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	)

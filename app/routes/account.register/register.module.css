@@ -3,11 +3,22 @@
 	min-height: 100dvh;
 	width: 100dvw;
 	display: grid;
+	grid-template-rows: min-content 1fr;
+}
+
+.heading {
+	display: grid;
+	justify-content: center;
+}
+
+.content {
+	display: grid;
 	place-content: center;
 }
 
 .logincard {
-	padding: var(--spacing-sm);
+	padding: var(--spacing-md);
+	border: 1px solid black;
 }
 
 h2 {
