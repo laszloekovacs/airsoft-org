@@ -36,7 +36,7 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 			<ul>
 				{loaderData &&
 					loaderData.map(attendee => (
-						<li key={attendee.userAtEvent.id}>
+						<li key={attendee.user_at_event.id}>
 							<span>{attendee.user?.name}</span>
 							<br />
 							<button onClick={processApplicationApproval}>megerosit</button>
