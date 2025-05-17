@@ -37,6 +37,7 @@ https://orm.drizzle.team/docs
 https://www.better-auth.com/docs
 https://github.com/rphlmr/react-router-hono-server
 
+https://react-icons.github.io/react-icons/
 
 ### notes
 - use viewModels and query functions
