@@ -2,6 +2,7 @@ import { Outlet, Link } from 'react-router'
 import Sitemap from '~/components/sitemap'
 import type { Route } from './+types/route'
 import { authServer } from '~/services/auth.server'
+import styles from './home.module.css'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
@@ -13,7 +14,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	const user = loaderData?.user
 
 	return (
-		<div>
+		<div className={styles.container}>
 			<div>
 				<h1>
 					<Link to='/'>Airsoft Naptár</Link>
