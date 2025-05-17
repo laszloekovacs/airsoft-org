@@ -58,6 +58,11 @@ export default function LoginPage() {
 					<Link to='/account/register'>email regisztrálás</Link>
 				</div>
 			</div>
+			<br />
+			<hr />
+			<div>
+				<Link to='/'>vissza a főoldalra</Link>
+			</div>
 		</div>
 	)
 }

@@ -76,6 +76,11 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 								<Link to='/account/login'>jelentkezz be!</Link>
 							</p>
 						</div>
+						<div className={styles.alert}>
+							<h3>figyu!</h3>
+							<p>email fiókkal való regsztrálás csak ideiglenes!</p>
+							<p>Ne használj létező email / jelszavat!</p>
+						</div>
 					</form>
 				</div>
 			</div>

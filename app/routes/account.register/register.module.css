@@ -35,3 +35,9 @@ fieldset {
 	display: grid;
 	gap: var(--spacing-sm);
 }
+
+.alert {
+	background-color: orangered;
+	padding: var(--spacing-md);
+	color: aliceblue;
+}
