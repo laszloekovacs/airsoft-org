@@ -1,16 +1,43 @@
 import { useState } from 'react'
-import { authClient } from '~/services/auth.client'
-import { authServer } from '~/services/auth.server'
-import type { Route } from './+types/route'
-import styles from './register.module.css'
 import { Link } from 'react-router'
+import { authClient } from '~/services/auth.client'
+import styles from './register.module.css'
+import { z } from 'zod'
 
-export default function AccountPage({ loaderData }: Route.ComponentProps) {
+export default function AccountPage() {
 	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [error, setError] = useState<any>({})
-	const [data, setData] = useState<any>({})
+	const [emailError, setEmailError] = useState<string>('')
 
+	const [password, setPassword] = useState('')
+	const [passwordError, setPasswordError] = useState<string>('')
+
+	const validateEmail = () => {
+		const emailValidation = z
+			.string()
+			.email({ message: 'hibás email' })
+			.safeParse(email)
+
+		if (emailValidation.success) {
+			setEmailError('')
+		} else {
+			setEmailError(emailValidation.error.format()._errors[0])
+		}
+	}
+
+	const validatePassword = () => {
+		const passwordValidation = z
+			.string()
+			.min(4, { message: 'legalább 4 karakter kell hogy legyen' })
+			.safeParse(password)
+
+		if (passwordValidation.success) {
+			setPasswordError('')
+		} else {
+			setPasswordError(passwordValidation.error.format()._errors[0])
+		}
+	}
+
+	/* handle form submission */
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 
@@ -31,10 +58,14 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 				}
 			}
 		)
-
-		setError(error)
-		setData(data)
 	}
+
+	/**
+	 * submit button is disabled when
+	 * theres an empty field
+	 * a field has an error
+	 * submitting
+	 */
 
 	return (
 		<div className={styles.container}>
@@ -53,20 +84,24 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 							<input
 								className='input'
 								type='email'
+								autoComplete='email'
 								value={email}
 								onChange={e => setEmail(e.target.value)}
-								autoComplete='email'
+								onBlur={e => validateEmail()}
 							/>
+							{emailError && <p>{emailError}</p>}
 						</fieldset>
 						<fieldset>
 							<label htmlFor='password'>jelszó</label>
 							<input
 								className='input'
 								type='password'
+								autoComplete='new-password'
 								value={password}
 								onChange={e => setPassword(e.target.value)}
-								autoComplete='new-password'
+								onBlur={e => validatePassword()}
 							/>
+							{passwordError && <p>{passwordError}</p>}
 						</fieldset>
 						<input type='submit' value='regisztrálok' />
 
@@ -86,10 +121,4 @@ export default function AccountPage({ loaderData }: Route.ComponentProps) {
 			</div>
 		</div>
 	)
-}
-
-export async function loader({ request }: Route.LoaderArgs) {
-	const sessionData = await authServer.api.getSession(request)
-	if (!sessionData) return null
-	return sessionData
 }
