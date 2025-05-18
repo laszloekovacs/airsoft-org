@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 /* Box sizing rules, also no unexpected margins and padding */
 *,
 *::before,
@@ -80,7 +80,7 @@ textarea:not([rows]) {
 }
 
 * {
-	font-family: 'Inter', sans-serif;
+	font-family: 'Work Sans', sans-serif;
 	font-optical-sizing: auto;
 }
 
@@ -93,4 +93,20 @@ fieldset {
 	--spacing-sm: 8px;
 	--spacing-md: 18px;
 	--spacing-lg: 24px;
+
+	--text-sm: 12px;
+	--text-md: 14px;
+	--text-lg: 18px;
+	--text-xl: 20px;
+}
+
+* {
+	font-size: var(--text-md);
+}
+
+h1 {
+	font-size: var(--text-xl);
+}
+h2 {
+	font-size: var(--text-lg);
 }
