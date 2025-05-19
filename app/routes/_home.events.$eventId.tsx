@@ -9,7 +9,7 @@ export const loader = async ({ params }: Route.LoaderArgs) => {
 	const event = await db
 		.select()
 		.from(eventRecord)
-		.where(eq(eventRecord.urlSlug, params.eventId))
+		.where(eq(eventRecord.slug, params.eventId))
 
 	if (!event) {
 		throw new Response('Event not found', { status: 404 })

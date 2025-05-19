@@ -1,6 +1,6 @@
 import { userAtEventTable, eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
-import type { Route } from './dashboard.event.$eventId.registration/+types/route'
+import type { Route } from './+types/dashboard.event.$eventId.register'
 import { eq } from 'drizzle-orm'
 import { user } from '~/schema/auth-schema'
 import { useActionData, useFetcher } from 'react-router'
@@ -15,7 +15,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 		.from(userAtEventTable)
 		.leftJoin(eventRecord, eq(userAtEventTable.eventId, eventRecord.id))
 		.leftJoin(user, eq(userAtEventTable.userId, user.id))
-		.where(eq(eventRecord.urlSlug, params.eventId))
+		.where(eq(eventRecord.slug, params.eventId))
 
 	return data
 }

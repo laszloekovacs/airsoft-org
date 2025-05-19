@@ -61,7 +61,7 @@ export async function action({
 	const event = await db
 		.select()
 		.from(eventRecord)
-		.where(eq(eventRecord.urlSlug, params.eventId))
+		.where(eq(eventRecord.slug, params.eventId))
 
 	// create an entry in the application
 	const result = await db.insert(userAtEventTable).values({

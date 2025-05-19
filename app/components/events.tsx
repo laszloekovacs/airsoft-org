@@ -34,7 +34,7 @@ export const EventItem = (props: {
 	const { title, date } = props.event
 	return (
 		<li>
-			<Link to={`/events/${props.event.urlSlug}`}>
+			<Link to={`/events/${props.event.slug}`}>
 				<h2>{title}</h2>
 			</Link>
 

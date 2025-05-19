@@ -60,7 +60,7 @@ export async function action({
 						const existingEvents = await db
 							.select()
 							.from(eventRecord)
-							.where(eq(eventRecord.urlSlug, slug))
+							.where(eq(eventRecord.slug, slug))
 
 						return existingEvents.length == 0
 					},
@@ -87,7 +87,7 @@ export async function action({
 			title,
 			date,
 			userId: user.id,
-			urlSlug: eventUrlSlug
+			slug: eventUrlSlug
 		})
 
 		if (result.rowCount == 0) {
