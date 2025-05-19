@@ -5,13 +5,13 @@ export default function SiteLinks() {
 		{ to: '/', label: 'főoldal' },
 		{ to: '/dashboard', label: 'szervezőoldal' },
 		{ to: '/login', label: 'belépés' },
-		{ to: '/signup', label: 'regisztráció' }
+		{ to: '/signup', label: 'regisztráció' },
 	]
 
 	return (
 		<div>
-			<h3>Oldalak</h3>
-			<ul className='flex flex-row gap-4'>
+			<h3>Airsoft naptar</h3>
+			<ul className="flex flex-row gap-4">
 				{links.map((link, index) => (
 					<li key={index}>
 						<Link to={link.to}>{link.label}</Link>
