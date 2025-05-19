@@ -19,8 +19,6 @@ export const authServer = betterAuth({
 				type: 'string[]',
 				input: false,
 				returned: true,
-				defaultValue: () => ["user"],
-				required: true,
 			}
 		}
 	},
