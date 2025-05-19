@@ -1,14 +1,13 @@
-import {
-	integer,
-	text,
-	pgTable,
-	date,
-	unique,
-	boolean,
-	pgView,
-	uuid
-} from 'drizzle-orm/pg-core'
 import { eq } from 'drizzle-orm'
+import {
+	boolean,
+	date,
+	integer,
+	pgTable,
+	pgView,
+	text,
+	unique,
+} from 'drizzle-orm/pg-core'
 import { user } from './auth-schema'
 
 export const eventRecord = pgTable('event_record', {
@@ -18,10 +17,10 @@ export const eventRecord = pgTable('event_record', {
 		.references(() => user.id, { onDelete: 'set null' }),
 	title: text('name').notNull(),
 	date: date('date').notNull(),
-	urlSlug: text('url_slug').notNull().unique(),
+	slug: text('slug').notNull().unique(),
 	createdAt: date('created_at')
 		.notNull()
-		.$default(() => new Date().toISOString())
+		.$default(() => new Date().toISOString()),
 })
 
 export const userAtEventTable = pgTable(
@@ -37,22 +36,22 @@ export const userAtEventTable = pgTable(
 		createdAt: date('created_at')
 			.notNull()
 			.$default(() => new Date().toISOString()),
-		isConfirmed: boolean('is_confirmed').notNull().default(false)
+		isConfirmed: boolean('is_confirmed').notNull().default(false),
 	},
-	table => [unique().on(table.eventId, table.userId)]
+	(table) => [unique().on(table.eventId, table.userId)]
 )
 
 /*
  * join the users details with the user at event table
  */
-export const userAtEventView = pgView('user_at_event_view').as(qb =>
+export const userAtEventView = pgView('user_at_event_view').as((qb) =>
 	qb
 		.select({
 			id: userAtEventTable.id,
 			eventId: userAtEventTable.eventId,
 			userId: user.id,
 			isConfirmed: userAtEventTable.isConfirmed,
-			userName: user.name
+			userName: user.name,
 		})
 		.from(userAtEventTable)
 		.leftJoin(user, eq(user.id, userAtEventTable.userId))
