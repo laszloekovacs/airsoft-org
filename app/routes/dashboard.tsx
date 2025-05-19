@@ -1,7 +1,7 @@
 import { Link, Outlet } from 'react-router'
 import { PageHeader } from '~/components/PageHeader'
 import { PageLayout } from '~/components/PageLayout'
-import Sitemap from '~/components/sitemap'
+import Sitemap from '~/components/SiteLinks'
 
 export default function DashboardIndex() {
 	return (

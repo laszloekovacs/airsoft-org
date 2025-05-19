@@ -1,17 +1,17 @@
 import { Link } from 'react-router'
 
-export default function Sitemap() {
+export default function SiteLinks() {
 	const links = [
 		{ to: '/', label: 'főoldal' },
 		{ to: '/dashboard', label: 'szervezőoldal' },
-		{ to: '/account/login', label: 'belépés' },
-		{ to: '/account/register', label: 'regisztráció' }
+		{ to: '/login', label: 'belépés' },
+		{ to: '/signup', label: 'regisztráció' }
 	]
 
 	return (
 		<div>
 			<h3>Oldalak</h3>
-			<ul>
+			<ul className='flex flex-row gap-4'>
 				{links.map((link, index) => (
 					<li key={index}>
 						<Link to={link.to}>{link.label}</Link>
