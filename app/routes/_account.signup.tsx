@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { authClient } from '~/services/auth.client'
-import styles from './register.module.css'
+
 import { z } from 'zod'
 
 const MIN_PASSWORD = 8
@@ -88,15 +88,15 @@ export default function AccountPage() {
 	 */
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.heading}>
+		<div>
+			<div>
 				<div>
 					<h1>Airsoft Naptár</h1>
 					<Link to='/'>vissza a főoldalra</Link>
 				</div>
 			</div>
-			<div className={styles.content}>
-				<div className={styles.logincard}>
+			<div>
+				<div>
 					<h2>Felíratkozás email fiókal</h2>
 					<form onSubmit={handleSubmit} noValidate autoComplete='off'>
 						<fieldset>
@@ -133,7 +133,7 @@ export default function AccountPage() {
 								<Link to='/account/login'>jelentkezz be!</Link>
 							</p>
 						</div>
-						<div className={styles.alert}>
+						<div>
 							<h3>figyu!</h3>
 							<p>email fiókkal való regsztrálás csak ideiglenes!</p>
 							<p>Ne használj létező email / jelszavat!</p>

@@ -1,6 +1,5 @@
 import { authClient } from '~/services/auth.client'
 import { Link, useNavigate } from 'react-router'
-import styles from './login.module.css'
 import { useState } from 'react'
 
 export default function LoginPage() {
@@ -33,8 +32,8 @@ export default function LoginPage() {
 	}
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.card}>
+		<div>
+			<div>
 				<h1>Belépés</h1>
 
 				<form
@@ -55,7 +54,7 @@ export default function LoginPage() {
 					{formError && <p>{formError}</p>}
 					<hr />
 				</form>
-				<div className={styles.socials}>
+				<div>
 					<button disabled>facebook</button>
 					<button disabled>github</button>
 					<button disabled>discord</button>
