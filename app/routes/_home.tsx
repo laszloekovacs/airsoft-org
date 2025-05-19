@@ -16,7 +16,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<HomePageContainer>
-			<HomePageHeading title='Airsoft naptar' SessionComponent={<p>login</p>} links={[]} />
+			<HomePageHeading title='Airsoft naptar' SessionComponent={<p>login</p>} links={[{label: "szervezo", to: "dashboard"}]} />
 			<Outlet />
 			<Sitemap />
 		</HomePageContainer>

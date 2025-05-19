@@ -1,26 +1,27 @@
 import React from 'react';
+import { Link } from 'react-router'
 
-interface Link {
+interface NavLinks {
     label: string;
-    href: string;
+    to: string;
 }
 
 interface HomePageHeadingProps {
     title: string;
-    links: Link[];
+    links: NavLinks[];
     SessionComponent: React.ReactNode;
 }
 
 const HomePageHeading: React.FC<HomePageHeadingProps> = ({ title, links, SessionComponent }) => (
-    <header className="flex flex-row items-center justify-between py-4">
-        <h1 className="m-0 text-2xl font-bold">{title}</h1>
+    <header className="flex flex-row items-center justify-between py-2">
+        <h1 className="m-0 text-lg font-bold">{title}</h1>
         <nav>
             <ul className="flex flex-row list-none m-0 p-0 gap-4">
                 {links.map((link) => (
-                    <li key={link.href}>
-                        <a href={link.href} className="text-blue-600 hover:underline">
+                    <li key={link.to}>
+                        <Link to={link.to} className="text-blue-600 hover:underline">
                             {link.label}
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </ul>
