@@ -6,6 +6,7 @@ export default function SiteLinks() {
 		{ to: '/dashboard', label: 'szervezőoldal' },
 		{ to: '/login', label: 'belépés' },
 		{ to: '/signup', label: 'regisztráció' },
+		{ to: '/mgmt', label: 'admin' },
 	]
 
 	return (
