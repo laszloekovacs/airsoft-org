@@ -27,18 +27,18 @@ export const EventList = (props: {
 export const EventItem = (props: {
 	event: InferSelectModel<typeof eventRecord>
 }) => {
-	const { title, date } = props.event
+	const { title, date, slug } = props.event
 	return (
 		<li>
-			<Link to={`/events/${props.event.slug}`}>
+			<Link to={`/events/${slug}`}>
 				<h2>{title}</h2>
 			</Link>
-
-			<p>id: {props.event.userId}</p>
 			<p>{date}</p>
 		</li>
-	)
+		)
 }
+
+
 
 
 const NoEvents = () => {
