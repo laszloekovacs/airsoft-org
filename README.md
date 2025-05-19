@@ -71,3 +71,10 @@ https://react-icons.github.io/react-icons/
 - form had the name mail instead of email
 - betterauth had a process env on the client
 - need to call createAuth on top level if used in client
+
+
+# pages needed
+- home template
+- main> lists events, paginates
+- event details page> shows event title, data etc.
+- event signup page> user fills in request to join event

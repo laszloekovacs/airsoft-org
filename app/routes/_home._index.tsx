@@ -1,7 +1,7 @@
 import { eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
-import { EventList } from './events'
-import type { Route } from './+types/route'
+import { EventList } from '../components/events'
+import type { Route } from './_home._index/+types/route'
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
 	const eventList = await db.select().from(eventRecord)

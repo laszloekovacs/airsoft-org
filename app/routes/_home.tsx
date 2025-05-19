@@ -3,7 +3,7 @@ import { PageHeader } from '~/components/PageHeader'
 import { PageLayout } from '~/components/PageLayout'
 import Sitemap from '~/components/sitemap'
 import { authServer } from '~/services/auth.server'
-import type { Route } from './+types/route'
+import type { Route } from './+types/_home'
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
