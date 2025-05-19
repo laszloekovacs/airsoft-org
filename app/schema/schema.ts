@@ -50,6 +50,7 @@ export const userAtEventView = pgView('user_at_event_view').as(qb =>
 		.select({
 			id: userAtEventTable.id,
 			eventId: userAtEventTable.eventId,
+			userId: user.id,
 			isConfirmed: userAtEventTable.isConfirmed,
 			userName: user.name
 		})
