@@ -10,7 +10,7 @@ export const UserTable = ({ users }: UserTableProps) => {
 	if (users.length == 0) return <NoUsers />
 
 	return (
-		<table className="min-w-full border">
+		<table className="min-w-full border font-mono">
 			<thead>
 				<tr>
 					<th className="text-left">Név</th>
