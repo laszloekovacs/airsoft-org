@@ -1,5 +1,5 @@
-import { Summary } from './summary'
-import type { Route } from './+types/route'
+import { Summary } from '../components/summary'
+import type { Route } from './dashboard._index/+types/route'
 import { eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
 

@@ -1,6 +1,6 @@
 import { userAtEventTable, eventRecord } from '~/schema/schema'
 import db from '~/services/db.server'
-import type { Route } from './+types/route'
+import type { Route } from './dashboard.event.$eventId.registration/+types/route'
 import { eq } from 'drizzle-orm'
 import { user } from '~/schema/auth-schema'
 import { useActionData, useFetcher } from 'react-router'
