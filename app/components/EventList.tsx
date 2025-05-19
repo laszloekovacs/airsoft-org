@@ -10,13 +10,9 @@ export const EventList = (props: {
 	return (
 		<div className='h-full w-full'>
 			<div>
-				<h1>Események</h1>
+				<h1 className='text-center'>Események</h1>
 
-				{eventList.length == 0 && (
-					<div className='grid place-content-center h-full w-full'>
-						<p>nincs megjeleníthető esemény</p>
-					</div>
-				)}
+				{eventList.length == 0 && <NoEvents />}
 
 				<ul>
 					{eventList.map(e => (
@@ -42,4 +38,11 @@ export const EventItem = (props: {
 			<p>{date}</p>
 		</li>
 	)
+}
+
+
+const NoEvents = () => {
+	return <div className='text-center'>
+		<p>Nincs megjeleníthető esemeny</p>
+	</div>
 }

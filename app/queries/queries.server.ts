@@ -3,7 +3,6 @@ import db from '~/services/db.server'
 
 export async function getEvents() {
 	const events = await db.select().from(eventRecord)
-
 	return events
 }
 
