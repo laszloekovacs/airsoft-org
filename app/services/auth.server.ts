@@ -17,7 +17,10 @@ export const authServer = betterAuth({
 		additionalFields: {
 			claims: {
 				type: 'string[]',
-				input: false
+				input: false,
+				returned: true,
+				defaultValue: () => ["user"],
+				required: true,
 			}
 		}
 	},
