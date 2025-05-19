@@ -13,7 +13,7 @@ export const Summary = ({ events }: { events: EventSelect[] }) => {
 			<table>
 				{events.map((item, index) => (
 					<tr key={item.id}>
-						<Link to={`/dashboard/event/${item.slug}/registration`}>
+						<Link to={`/dashboard/event/${item.slug}/register`}>
 							<td>{item.createdAt}</td>
 							<td>{item.title}</td>
 						</Link>

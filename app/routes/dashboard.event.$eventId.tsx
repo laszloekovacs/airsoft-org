@@ -6,16 +6,16 @@ export const loader = async ({ params }: { params: { eventId: string } }) => {
 	const eventData = {
 		id: params.eventId,
 		name: `Event name`,
-		description: `Description for event ${params.eventId}`
+		description: `Description for event ${params.eventId}`,
 	}
 
 	return {
-		eventData
+		eventData,
 	}
 }
 
 export default function DashboardEventsEventId({
-	loaderData
+	loaderData,
 }: Route.ComponentProps) {
 	const { id, name, description } = loaderData.eventData
 
@@ -24,23 +24,10 @@ export default function DashboardEventsEventId({
 			<h2>{name}</h2>
 			<p>{description}</p>
 
-			<TabList />
-			<div className='border p-6'>
+			<br />
+			<div className="border p-6">
 				<Outlet />
 			</div>
 		</div>
-	)
-}
-
-const TabList = () => {
-	return (
-		<ul>
-			<li>Details</li>
-			<li>Attendees</li>
-			<li>Settings</li>
-			<li>
-				<Link to='./dates'>Dates</Link>
-			</li>
-		</ul>
 	)
 }
