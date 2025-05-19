@@ -78,3 +78,7 @@ https://react-icons.github.io/react-icons/
 - main> lists events, paginates
 - event details page> shows event title, data etc.
 - event signup page> user fills in request to join event
+
+
+- there should be a view component and a component for data / actions
+- 
