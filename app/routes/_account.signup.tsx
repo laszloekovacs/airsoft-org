@@ -74,7 +74,7 @@ export default function AccountPage() {
 					}
 				},
 				onSuccess: ctx => {
-					navigate('/account/result/signup')
+					navigate('/result/signup')
 				}
 			}
 		)
