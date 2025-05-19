@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router'
-import { PageHeader } from '~/components/PageHeader'
-import { PageLayout } from '~/components/PageLayout'
+import { HomePageContainer } from '~/components/HomePageContainer'
+import HomePageHeading from '~/components/HomePageHeading'
 import Sitemap from '~/components/sitemap'
 import { authServer } from '~/services/auth.server'
 import type { Route } from './+types/_home'
@@ -15,10 +15,10 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	const user = loaderData?.user
 
 	return (
-		<PageLayout>
-			<PageHeader />
+		<HomePageContainer>
+			<HomePageHeading title='Airsoft naptar' SessionComponent={<p>login</p>} links={[]} />
 			<Outlet />
 			<Sitemap />
-		</PageLayout>
+		</HomePageContainer>
 	)
 }
