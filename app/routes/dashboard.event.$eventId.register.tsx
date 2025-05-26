@@ -13,22 +13,15 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// check for claim that he's an organizer
 	const filter = { id: userAtEventTable.id }
 
-	// retrieve relevant event information; title, date
-	const eventDetails = await db
-		.select({
-			title: eventRecord.title,
-			date: eventRecord.date,
-		})
-		.from(eventRecord)
-		.where(eq(eventRecord.slug, eventId))
-
 	// retrieve users that have applied to this event
-	const applicants = await db.select().from(userAtEventView)
+	const usersAtEvent = await db.select().from(userAtEventView)
 
-	return { eventDetails, applicants }
+	return { usersAtEvent }
 }
 
 export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
+	const { usersAtEvent } = loaderData
+
 	const fetcher = useFetcher()
 	const actionData = useActionData<{ status: "ok" | "error" }>()
 
