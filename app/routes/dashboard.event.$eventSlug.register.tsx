@@ -39,8 +39,15 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 	const fetcher = useFetcher()
 	const actionData = useActionData<{ status: "ok" | "error" }>()
 
-	function handleAccept() {
-		alert("ok")
+	// application id
+	function handleAccept(id: number) {
+		fetcher.submit(
+			{
+				intent: "accept_application",
+				id,
+			},
+			{ method: "post" },
+		)
 	}
 
 	return (
@@ -63,9 +70,11 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 export const action = async ({ request }: Route.ActionArgs) => {
 	const actionData = await request.formData()
 	const intent = actionData.get("intent")?.toString()
-	const eventId = actionData.get("id")?.toString() ?? ""
+	const id = actionData.get("id") as number
 
-	if (intent == "confirm") {
+	console.log(actionData)
+
+	if (intent == "accept_application") {
 		console.log("confirmed")
 
 		// set isConfirmed to true
@@ -73,7 +82,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 		const result = await db
 			.update(userAtEventTable)
 			.set({ isConfirmed: true })
-			.where(eq(userAtEventTable.id, Number.parseInt(eventId)))
+			.where(eq(userAtEventTable.id, id))
 
 		return { status: "ok" }
 	}

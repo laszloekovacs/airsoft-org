@@ -5,17 +5,18 @@ import type { userAtEventView } from "~/schema/schema"
  * Container for accepting users for an event
  */
 
-type UserAtEventListItem = typeof userAtEventView.$inferSelect
+type UserAtEvent = typeof userAtEventView.$inferSelect
 
 type ParticipantListContainerProps = {
-	participants: UserAtEventListItem[]
-	onAccept?: () => void
+	participants: UserAtEvent[]
+	onAccept?: (id: number) => void
 }
 
-export const ParticipantListContainer = ({
-	participants,
-	onAccept,
-}: ParticipantListContainerProps) => {
+export const ParticipantListContainer = (
+	props: ParticipantListContainerProps,
+) => {
+	const { participants, onAccept } = props
+
 	return (
 		<div>
 			<h1>Eseményre jelentkezők</h1>
@@ -23,7 +24,7 @@ export const ParticipantListContainer = ({
 			<ul>
 				{participants.map((registrationEntry) => (
 					<li key={registrationEntry.id}>
-						<ParticipantListItem onAccept={onAccept} />
+						<ParticipantListItem onAccept={onAccept} item={registrationEntry} />
 					</li>
 				))}
 			</ul>
@@ -31,16 +32,23 @@ export const ParticipantListContainer = ({
 	)
 }
 
-type ParticipantListItemProps = {
-	onAccept?: () => void
+type ParticipantListItem = {
+	item: UserAtEvent
+	onAccept?: (id: number) => void
 }
 
-export const ParticipantListItem = ({ onAccept }: ParticipantListItemProps) => {
+export const ParticipantListItem = (props: ParticipantListItem) => {
+	const { item, onAccept } = props
+	const { userName, isConfirmed } = item
+
 	return (
-		<div>
-			<Button size="sm" variant="ghost" onClick={onAccept}>
-				elfogad
-			</Button>
+		<div className="flex flex-row gap-4">
+			<p>{userName}</p>
+			{!isConfirmed && (
+				<Button size="sm" variant="ghost" onClick={() => onAccept?.(item.id)}>
+					elfogad
+				</Button>
+			)}
 		</div>
 	)
 }
