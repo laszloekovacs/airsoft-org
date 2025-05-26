@@ -1,11 +1,12 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 
 export default function Kits() {
-	const [parent, tapes] = useDragAndDrop<HTMLUListElement, string>([
-		"Kraftwerk",
-		"Duran Duran",
-		"depeche mode",
-	])
+	const [parent, tapes] = useDragAndDrop<HTMLUListElement, string>(
+		["Kraftwerk", "Duran Duran", "depeche mode"],
+		{
+			group: "tapes",
+		},
+	)
 
 	return (
 		<div>
