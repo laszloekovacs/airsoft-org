@@ -1,18 +1,1 @@
 @import "tailwindcss";
-
-
-input {
-    @apply bg-neutral-300 py-1 px-2.5 rounded-xl m-1;
-}
-
-input:focus {
-    @apply bg-neutral-400 outline-0;
-}
-
-a {
-    @apply underline;
-}
-
-input:active {
-    @apply bg-amber-600;
-}

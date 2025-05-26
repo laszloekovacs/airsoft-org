@@ -1,40 +1,41 @@
-import type { Route } from './+types/root'
+import type { Route } from "./+types/root";
 import {
 	isRouteErrorResponse,
 	Links,
 	Meta,
 	Outlet,
 	Scripts,
-	ScrollRestoration
-} from 'react-router'
-import './styles.css'
+	ScrollRestoration,
+} from "react-router";
+import "./styles.css";
 
 export function meta() {
 	return [
 		{
-			title: 'Airsoft Naptár'
+			title: "Airsoft Naptár",
 		},
 		{
-			property: 'description',
-			content: 'Magyarorszag elso szamu airsoft esemeny szervezo oldala'
+			property: "description",
+			content: "Magyarorszag elso szamu airsoft esemeny szervezo oldala",
 		},
 		{
-			property: 'og:title',
-			content: 'Airsoft Naptár'
-		}
-	]
+			property: "og:title",
+			content: "Airsoft Naptár",
+		},
+	];
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang='en'>
+		<html lang="en">
 			<head>
-				<meta charSet='utf-8' />
-				<meta name='viewport' content='width=device-width, initial-scale=1' />
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<script
 					defer
-					src='https://umami.am4.duckdns.org/script.js'
-					data-website-id='b1eb4441-ba11-4fd4-b873-408554f22640'></script>
+					src="https://umami.am4.duckdns.org/script.js"
+					data-website-id="b1eb4441-ba11-4fd4-b873-408554f22640"
+				></script>
 				<Meta />
 				<Links />
 			</head>
@@ -44,27 +45,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Scripts />
 			</body>
 		</html>
-	)
+	);
 }
 
 export default function App() {
-	return <Outlet />
+	return <Outlet />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = 'Oops!'
-	let details = 'An unexpected error occurred.'
-	let stack: string | undefined
+	let message = "Oops!";
+	let details = "An unexpected error occurred.";
+	let stack: string | undefined;
 
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? '404' : 'Error'
+		message = error.status === 404 ? "404" : "Error";
 		details =
 			error.status === 404
-				? 'The requested page could not be found.'
-				: error.statusText || details
+				? "The requested page could not be found."
+				: error.statusText || details;
 	} else if (import.meta.env.DEV && error && error instanceof Error) {
-		details = error.message
-		stack = error.stack
+		details = error.message;
+		stack = error.stack;
 	}
 
 	return (
@@ -77,5 +78,5 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 				</pre>
 			)}
 		</main>
-	)
+	);
 }
