@@ -4,7 +4,7 @@ import { z } from "zod"
 import { userAtEventTable, userAtEventView } from "~/schema/schema"
 import db from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.register"
-import { ParticipantListContainer } from "~/features/Signup/SignupList"
+import { ApplicationListContainer } from "~/features/Signup/ApplicationList"
 
 /**
  *
@@ -52,12 +52,10 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div>
-			<ParticipantListContainer
-				participants={usersAtEvent}
+			<ApplicationListContainer
+				applicants={usersAtEvent}
 				onAccept={handleAccept}
 			/>
-			<hr />
-			<pre>{JSON.stringify(usersAtEvent, null, 2)}</pre>
 		</div>
 	)
 }
