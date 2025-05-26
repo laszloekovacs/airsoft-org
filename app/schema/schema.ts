@@ -10,6 +10,9 @@ import {
 } from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 
+/**
+ * Event information
+ */
 export const eventRecord = pgTable("event_record", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 	userId: text("user_id")
@@ -23,6 +26,9 @@ export const eventRecord = pgTable("event_record", {
 		.$default(() => new Date().toISOString()),
 })
 
+/*
+ * user attendance on event many-to-many
+ */
 export const userAtEventTable = pgTable(
 	"user_at_event",
 	{
