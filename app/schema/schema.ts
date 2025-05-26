@@ -55,6 +55,7 @@ export const userAtEventView = pgView("user_at_event_view").as((qb) =>
 		.select({
 			id: userAtEventTable.id,
 			eventId: userAtEventTable.eventId,
+			slug: eventRecord.slug,
 			userId: sql`${user.id}`.as("user_id"),
 			userName: sql`${user.name}`.as("user_name"),
 			isConfirmed: userAtEventTable.isConfirmed,

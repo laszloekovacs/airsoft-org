@@ -3,5 +3,13 @@
 		"formatter": {
 			"semicolons": "asNeeded"
 		}
+	},
+
+	"linter": {
+		"rules": {
+			"suspicious": {
+				"noDoubleEquals": "off"
+			}
+		}
 	}
 }
