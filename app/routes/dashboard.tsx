@@ -1,7 +1,8 @@
-import { Link, Outlet } from 'react-router'
-import { PageHeader } from '~/components/PageHeader'
-import { DashboardLayout } from '~/components/DashboardLayout'
-import Sitemap from '~/components/SiteLinks'
+import { Link, Outlet } from "react-router"
+import { PageHeader } from "~/components/PageHeader"
+import { DashboardLayout } from "~/components/DashboardLayout"
+import Sitemap from "~/components/SiteLinks"
+import { Button } from "~/components/ui/button"
 
 export default function DashboardIndex() {
 	return (
@@ -9,11 +10,13 @@ export default function DashboardIndex() {
 			<div>
 				<PageHeader />
 				<div>
-					<Link to='/dashboard'>
+					<Link to="/dashboard">
 						<h1>Dashboard</h1>
 					</Link>
 
-					<Link to='/dashboard/event/create'>új esemény</Link>
+					<Button asChild>
+						<Link to="/dashboard/event/create">új esemény</Link>
+					</Button>
 				</div>
 			</div>
 
