@@ -55,10 +55,13 @@ export const userAtEventView = pgView("user_at_event_view").as((qb) =>
 		.select({
 			id: userAtEventTable.id,
 			eventId: userAtEventTable.eventId,
+			eventTitle: sql`${eventRecord.title}`.as("event_title"),
+			eventDate: sql`${eventRecord.date}`.as("event_date"),
 			userId: sql`${user.id}`.as("user_id"),
 			userName: sql`${user.name}`.as("user_name"),
 			isConfirmed: userAtEventTable.isConfirmed,
 		})
 		.from(userAtEventTable)
-		.leftJoin(user, eq(user.id, userAtEventTable.userId)),
+		.leftJoin(user, eq(user.id, userAtEventTable.userId))
+		.leftJoin(eventRecord, eq(eventRecord.id, userAtEventTable.eventId)),
 )
