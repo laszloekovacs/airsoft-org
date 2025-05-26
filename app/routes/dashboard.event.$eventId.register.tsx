@@ -4,7 +4,7 @@ import type { Route } from "./+types/dashboard.event.$eventId.register";
 import { eq } from "drizzle-orm";
 import { user } from "~/schema/auth-schema";
 import { useActionData, useFetcher } from "react-router";
-import { Button } from "~/components/Button";
+import { Button } from "~/components/ui/button";
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// TODO get user and check if event is his
@@ -45,7 +45,7 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 					))}
 			</ul>
 
-			<div>{actionData && actionData.status}</div>
+			<div>{actionData?.status}</div>
 
 			<div>
 				<pre>{JSON.stringify(loaderData, null, 2)}</pre>

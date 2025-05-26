@@ -4,7 +4,6 @@ import { AuthenticatedOnly, authServer } from "~/services/auth.server";
 import db from "~/services/db.server";
 import { userAtEventTable, eventRecord } from "~/schema/schema";
 import { eq } from "drizzle-orm";
-import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Button } from "~/components/ui/button";
