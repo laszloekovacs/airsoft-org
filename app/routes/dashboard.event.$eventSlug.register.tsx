@@ -4,7 +4,7 @@ import { z } from "zod"
 import { userAtEventTable, userAtEventView } from "~/schema/schema"
 import db from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.register"
-import { ParticipantListContainer } from "~/features/EventRegistrations/ParticipantList"
+import { ParticipantListContainer } from "~/features/Signup/SignupList"
 
 /**
  *

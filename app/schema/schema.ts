@@ -53,7 +53,7 @@ export const userAtEventTable = pgTable(
 export const userAtEventView = pgView("user_at_event_view").as((qb) =>
 	qb
 		.select({
-			id: userAtEventTable.id,
+			signupId: sql`${userAtEventTable.id}`.as("signup_id"),
 			eventId: userAtEventTable.eventId,
 			slug: eventRecord.slug,
 			userId: sql`${user.id}`.as("user_id"),
