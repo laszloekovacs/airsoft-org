@@ -1,4 +1,4 @@
-import { userAtEventTable, eventRecord } from "~/schema/schema"
+import { userAtEventTable, eventRecord, userAtEventView } from "~/schema/schema"
 import db from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventId.register"
 import { eq } from "drizzle-orm"
@@ -7,18 +7,25 @@ import { useActionData, useFetcher } from "react-router"
 import { Button } from "~/components/ui/button"
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
+	const { eventId } = params
+
 	// TODO get user and check if event is his
 	// check for claim that he's an organizer
 	const filter = { id: userAtEventTable.id }
 
-	const data = await db
-		.select()
-		.from(userAtEventTable)
-		.leftJoin(eventRecord, eq(userAtEventTable.eventId, eventRecord.id))
-		.leftJoin(user, eq(userAtEventTable.userId, user.id))
-		.where(eq(eventRecord.slug, params.eventId))
+	// retrieve relevant event information; title, date
+	const eventDetails = await db
+		.select({
+			title: eventRecord.title,
+			date: eventRecord.date,
+		})
+		.from(eventRecord)
+		.where(eq(eventRecord.slug, eventId))
 
-	return data
+	// retrieve users that have applied to this event
+	const applicants = await db.select().from(userAtEventView)
+
+	return { eventDetails, applicants }
 }
 
 export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
@@ -34,21 +41,7 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div>
-			<ul>
-				{loaderData?.map((attendee) => (
-					<li key={attendee.user_at_event.id}>
-						<span>{attendee.user?.name}</span>
-						<br />
-						<Button onClick={processApplicationApproval}>megerosit</Button>
-					</li>
-				))}
-			</ul>
-
-			<div>{actionData?.status}</div>
-
-			<div>
-				<pre>{JSON.stringify(loaderData, null, 2)}</pre>
-			</div>
+			<pre>{JSON.stringify(loaderData, null, 2)}</pre>
 		</div>
 	)
 }
