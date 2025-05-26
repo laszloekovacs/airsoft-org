@@ -7,6 +7,7 @@ import {
 	Scripts,
 	ScrollRestoration,
 } from "react-router";
+import "./tailwind.css";
 import "./styles.css";
 
 export function meta() {
