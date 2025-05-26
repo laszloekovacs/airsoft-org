@@ -82,3 +82,6 @@ https://react-icons.github.io/react-icons/
 
 - there should be a view component and a component for data / actions
 - 
+
+
+https://dndkit.com/
