@@ -1,18 +1,18 @@
-import db from '~/services/db.server'
-import type { Route } from './+types/_home.events.$eventId'
-import { eventRecord } from '~/schema/schema'
-import { eq } from 'drizzle-orm'
-import { z } from 'zod'
-import { Link } from 'react-router'
+import database from "~/services/db.server"
+import type { Route } from "./+types/_home.events.$eventId"
+import { eventTable } from "~/schema/schema"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
+import { Link } from "react-router"
 
 export const loader = async ({ params }: Route.LoaderArgs) => {
-	const event = await db
+	const event = await database
 		.select()
-		.from(eventRecord)
-		.where(eq(eventRecord.slug, params.eventId))
+		.from(eventTable)
+		.where(eq(eventTable.slug, params.eventId))
 
 	if (!event) {
-		throw new Response('Event not found', { status: 404 })
+		throw new Response("Event not found", { status: 404 })
 	}
 
 	return { event: event[0] }
@@ -26,7 +26,7 @@ export default function EventDetailPage({ loaderData }: Route.ComponentProps) {
 			<h1>{event.title}</h1>
 			<p>{event.date}</p>
 
-			<Link to='./apply'>Jelentkezek</Link>
+			<Link to="./apply">Jelentkezek</Link>
 		</div>
 	)
 }

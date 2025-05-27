@@ -1,28 +1,28 @@
-import { betterAuth } from 'better-auth'
-import db from './db.server'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import * as schema from '~/schema/auth-schema'
+import { betterAuth } from "better-auth"
+import database from "./db.server"
+import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import * as schema from "~/schema/auth-schema"
 
 export const authServer = betterAuth({
-	database: drizzleAdapter(db, {
-		provider: 'pg',
+	database: drizzleAdapter(database, {
+		provider: "pg",
 		schema: {
-			...schema
-		}
+			...schema,
+		},
 	}),
 	emailAndPassword: {
-		enabled: true
+		enabled: true,
 	},
 	user: {
 		additionalFields: {
 			claims: {
-				type: 'string[]',
+				type: "string[]",
 				input: false,
 				returned: true,
-			}
-		}
+			},
+		},
 	},
-	trustedOrigins: [process.env.BASE_URL!]
+	trustedOrigins: [process.env.BASE_URL!],
 })
 
 // required for better auth cli
@@ -32,7 +32,7 @@ export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)
 
 	if (sessionCookieData == null) {
-		throw new Response('Unauthorized', { status: 401 })
+		throw new Response("Unauthorized", { status: 401 })
 	} else {
 		return { ...sessionCookieData }
 	}
@@ -40,19 +40,19 @@ export const AuthenticatedOnly = async (request: Request) => {
 
 export const AuthorizedOnly = async (
 	request: Request,
-	claimsRequired: string[]
+	claimsRequired: string[],
 ) => {
 	const sessionCookieData = await authServer.api.getSession(request)
 
 	// throw if user not logged in
 	if (sessionCookieData == null) {
-		throw new Response('Unauthorized', { status: 401 })
+		throw new Response("Unauthorized", { status: 401 })
 	}
 
 	// throw error if no claim is set
 	if (claimsRequired.length == 0) {
-		throw new Response('Claims required for resource, but none set', {
-			status: 401
+		throw new Response("Claims required for resource, but none set", {
+			status: 401,
 		})
 	}
 

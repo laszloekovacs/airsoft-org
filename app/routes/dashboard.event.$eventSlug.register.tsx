@@ -2,9 +2,9 @@ import { eq } from "drizzle-orm"
 import { useActionData, useFetcher } from "react-router"
 import { z } from "zod"
 import { userAtEventTable, userAtEventView } from "~/schema/schema"
-import db from "~/services/db.server"
+import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.register"
-import { ApplicationListContainer } from "~/features/Signup/ApplicationList"
+import { ApplicationListContainer } from "~/components/ApplicationList"
 
 /**
  *
@@ -20,7 +20,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// id, and from that id i get the usersAtEvent
 
 	// retrieve users that have applied to this event
-	const usersAtEvent = await db
+	const usersAtEvent = await database
 		.select()
 		.from(userAtEventView)
 		.where(eq(userAtEventView.slug, validatedSlug))
@@ -77,7 +77,7 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
 		// set isConfirmed to true
 
-		const result = await db
+		const result = await database
 			.update(userAtEventTable)
 			.set({ isConfirmed: true })
 			.where(eq(userAtEventTable.id, id))
