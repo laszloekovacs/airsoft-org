@@ -1,7 +1,7 @@
 import { Link } from "react-router"
-import { eventTable } from "~/schema/schema"
+import { eventRecordTable } from "~/schema/schema"
 
-type EventSelect = typeof eventTable.$inferSelect
+type EventSelect = typeof eventRecordTable.$inferSelect
 
 export const Summary = ({ events }: { events: EventSelect[] }) => {
 	if (events.length == 0) {

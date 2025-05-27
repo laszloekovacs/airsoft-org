@@ -2,7 +2,7 @@ import { useFetcher } from "react-router"
 import type { Route } from "./+types/_home.events.$eventId_.apply"
 import { AuthenticatedOnly, authServer } from "~/services/auth.server"
 import database from "~/services/db.server"
-import { userAtEventTable, eventTable } from "~/schema/schema"
+import { userAtEventTable, eventRecordTable } from "~/schema/schema"
 import { eq } from "drizzle-orm"
 import { Label } from "~/components/ui/label"
 import { Checkbox } from "~/components/ui/checkbox"
@@ -65,8 +65,8 @@ export async function action({
 	// find event id from stub
 	const event = await database
 		.select()
-		.from(eventTable)
-		.where(eq(eventTable.slug, params.eventId))
+		.from(eventRecordTable)
+		.where(eq(eventRecordTable.slug, params.eventId))
 
 	// create an entry in the application
 	const result = await database.insert(userAtEventTable).values({

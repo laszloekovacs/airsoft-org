@@ -4,7 +4,7 @@ import { user } from "./auth-schema"
 /**
  * Event information table
  */
-export const eventTable = pgTable("event_record", {
+export const eventRecordTable = pgTable("event_record", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
 	userId: text("user_id")
 		.notNull()
@@ -33,7 +33,7 @@ export const userAtEventTable = pgTable(
 			.references(() => user.id, { onDelete: "set null" }),
 		eventId: integer("event_id")
 			.notNull()
-			.references(() => eventTable.id, { onDelete: "set null" }),
+			.references(() => eventRecordTable.id, { onDelete: "set null" }),
 		createdAt: date("created_at")
 			.notNull()
 			.$default(() => new Date().toISOString()),

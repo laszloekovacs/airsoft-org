@@ -1,6 +1,6 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { eq } from "drizzle-orm"
-import { eventTable, userAtEventTable } from "~/schema/schema"
+import { eventRecordTable, userAtEventTable } from "~/schema/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.assign"
 import { state } from "@formkit/drag-and-drop"
@@ -14,8 +14,8 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// get event from slug
 	const event = await database
 		.select()
-		.from(eventTable)
-		.where(eq(eventTable.slug, eventSlug))
+		.from(eventRecordTable)
+		.where(eq(eventRecordTable.slug, eventSlug))
 
 	if (event.length == 0) throw new Error()
 

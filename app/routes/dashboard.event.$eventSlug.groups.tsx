@@ -1,5 +1,5 @@
 import { eq, sql } from "drizzle-orm"
-import { eventTable } from "~/schema/schema"
+import { eventRecordTable } from "~/schema/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.groups"
 import { Input } from "~/components/ui/input"
@@ -16,8 +16,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const event = await database
 		.select()
-		.from(eventTable)
-		.where(eq(eventTable.slug, eventSlug))
+		.from(eventRecordTable)
+		.where(eq(eventRecordTable.slug, eventSlug))
 
 	// throw if not found
 	if (event.length == 0) throw new Error("nincs ilyen esemény")
@@ -72,17 +72,17 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 	if (intent == "add") {
 		await database
-			.update(eventTable)
+			.update(eventRecordTable)
 			.set({
 				groups: sql`ARRAY_APPEND(groups, ${group})`,
 			})
-			.where(eq(eventTable.slug, eventSlug))
+			.where(eq(eventRecordTable.slug, eventSlug))
 	} else if (intent == "remove") {
 		await database
-			.update(eventTable)
+			.update(eventRecordTable)
 			.set({
 				groups: sql`ARRAY_REMOVE(groups, ${group})`,
 			})
-			.where(eq(eventTable.slug, eventSlug))
+			.where(eq(eventRecordTable.slug, eventSlug))
 	}
 }
