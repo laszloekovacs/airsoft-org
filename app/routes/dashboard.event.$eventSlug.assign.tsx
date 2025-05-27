@@ -1,6 +1,6 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { eq } from "drizzle-orm"
-import { eventRecordTable, userAtEventTable } from "~/schema/schema"
+import { eventRecordTable, userAtEventTable } from "~/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.assign"
 import { state } from "@formkit/drag-and-drop"

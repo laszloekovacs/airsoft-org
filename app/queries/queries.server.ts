@@ -1,5 +1,5 @@
 import { user } from "~/schema/auth-schema"
-import { eventRecordTable } from "~/schema/schema"
+import { eventRecordTable } from "~/schema"
 import database from "~/services/db.server"
 
 export async function getEvents() {

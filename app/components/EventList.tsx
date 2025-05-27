@@ -1,6 +1,6 @@
 import type { InferSelectModel } from "drizzle-orm"
 import { Link } from "react-router"
-import { eventRecordTable } from "~/schema/schema"
+import type { eventRecordTable } from "~/schema"
 
 export const EventList = (props: {
 	eventList: Array<InferSelectModel<typeof eventRecordTable>>
