@@ -1,11 +1,11 @@
-import { Link, Outlet } from 'react-router'
-import type { Route } from './+types/dashboard.event.$eventId'
+import { Link, Outlet } from "react-router"
+import type { Route } from "./+types/dashboard.event.$eventSlug"
 
 export const loader = async ({ params }: { params: { eventId: string } }) => {
 	// Simulate fetching event data based on eventId
 	const eventData = {
 		id: params.eventId,
-		name: `Event name`,
+		name: params.eventId,
 		description: `Description for event ${params.eventId}`,
 	}
 
