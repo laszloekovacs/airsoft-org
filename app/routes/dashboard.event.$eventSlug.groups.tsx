@@ -1,5 +1,5 @@
 import { eq, sql } from "drizzle-orm"
-import { eventRecordTable } from "~/schema/schema"
+import { eventRecordTable } from "~/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.groups"
 import { Input } from "~/components/ui/input"
