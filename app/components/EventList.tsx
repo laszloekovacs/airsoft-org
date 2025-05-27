@@ -1,21 +1,21 @@
-import type { InferSelectModel } from 'drizzle-orm'
-import { Link } from 'react-router'
-import { eventRecord } from '~/schema/schema'
+import type { InferSelectModel } from "drizzle-orm"
+import { Link } from "react-router"
+import { eventTable } from "~/schema/schema"
 
 export const EventList = (props: {
-	eventList: Array<InferSelectModel<typeof eventRecord>>
+	eventList: Array<InferSelectModel<typeof eventTable>>
 }) => {
 	const { eventList } = props
 
 	return (
-		<div className='h-full w-full'>
+		<div className="h-full w-full">
 			<div>
-				<h1 className='text-center'>Események</h1>
+				<h1 className="text-center">Események</h1>
 
 				{eventList.length == 0 && <NoEvents />}
 
 				<ul>
-					{eventList.map(e => (
+					{eventList.map((e) => (
 						<EventItem key={e.id} event={e} />
 					))}
 				</ul>
@@ -25,7 +25,7 @@ export const EventList = (props: {
 }
 
 export const EventItem = (props: {
-	event: InferSelectModel<typeof eventRecord>
+	event: InferSelectModel<typeof eventTable>
 }) => {
 	const { title, date, slug } = props.event
 	return (
@@ -35,14 +35,13 @@ export const EventItem = (props: {
 			</Link>
 			<p>{date}</p>
 		</li>
-		)
+	)
 }
 
-
-
-
 const NoEvents = () => {
-	return <div className='text-center'>
-		<p>Nincs megjeleníthető esemeny</p>
-	</div>
+	return (
+		<div className="text-center">
+			<p>Nincs megjeleníthető esemeny</p>
+		</div>
+	)
 }

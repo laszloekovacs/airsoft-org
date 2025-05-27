@@ -1,14 +1,14 @@
-import { user } from '~/schema/auth-schema'
-import { eventRecord } from '~/schema/schema'
-import db from '~/services/db.server'
+import { user } from "~/schema/auth-schema"
+import { eventTable } from "~/schema/schema"
+import database from "~/services/db.server"
 
 export async function getEvents() {
-	const events = await db.select().from(eventRecord)
+	const events = await database.select().from(eventTable)
 	return events
 }
 
 export async function getUsers() {
-	const users = await db.select().from(user)
+	const users = await database.select().from(user)
 	return users
 }
 

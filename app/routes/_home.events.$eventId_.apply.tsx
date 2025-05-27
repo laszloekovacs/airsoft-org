@@ -1,21 +1,21 @@
-import { useFetcher } from "react-router";
-import type { Route } from "./+types/_home.events.$eventId_.apply";
-import { AuthenticatedOnly, authServer } from "~/services/auth.server";
-import db from "~/services/db.server";
-import { userAtEventTable, eventRecord } from "~/schema/schema";
-import { eq } from "drizzle-orm";
-import { Label } from "~/components/ui/label";
-import { Checkbox } from "~/components/ui/checkbox";
-import { Button } from "~/components/ui/button";
+import { useFetcher } from "react-router"
+import type { Route } from "./+types/_home.events.$eventId_.apply"
+import { AuthenticatedOnly, authServer } from "~/services/auth.server"
+import database from "~/services/db.server"
+import { userAtEventTable, eventTable } from "~/schema/schema"
+import { eq } from "drizzle-orm"
+import { Label } from "~/components/ui/label"
+import { Checkbox } from "~/components/ui/checkbox"
+import { Button } from "~/components/ui/button"
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-	AuthenticatedOnly(request);
+	AuthenticatedOnly(request)
 
-	return {};
-};
+	return {}
+}
 
 export default function ApplyEventPage() {
-	const fetcher = useFetcher();
+	const fetcher = useFetcher()
 
 	return (
 		<div>
@@ -34,55 +34,55 @@ export default function ApplyEventPage() {
 				</Button>
 			</fetcher.Form>
 		</div>
-	);
+	)
 }
 
 type ErrorResponse = {
-	status: "error";
-	reason: string;
-};
+	status: "error"
+	reason: string
+}
 
 type SuccessResponse = {
-	status: "success";
-	message: string;
-};
+	status: "success"
+	message: string
+}
 
-type ActionResponse = ErrorResponse | SuccessResponse;
+type ActionResponse = ErrorResponse | SuccessResponse
 
 export async function action({
 	request,
 	params,
 }: Route.ActionArgs): Promise<ActionResponse> {
-	AuthenticatedOnly(request);
-	const sessionData = await authServer.api.getSession(request);
+	AuthenticatedOnly(request)
+	const sessionData = await authServer.api.getSession(request)
 
 	if (!sessionData) {
-		throw new Error("Session not found");
+		throw new Error("Session not found")
 	}
 
-	const { user } = sessionData;
+	const { user } = sessionData
 
 	// find event id from stub
-	const event = await db
+	const event = await database
 		.select()
-		.from(eventRecord)
-		.where(eq(eventRecord.slug, params.eventId));
+		.from(eventTable)
+		.where(eq(eventTable.slug, params.eventId))
 
 	// create an entry in the application
-	const result = await db.insert(userAtEventTable).values({
+	const result = await database.insert(userAtEventTable).values({
 		userId: user.id,
 		eventId: event[0].id,
-	});
+	})
 
 	if (result.rowCount != 1) {
 		return {
 			status: "error",
 			reason: "Sikertelen jelentkezés!",
-		};
+		}
 	}
 
 	return {
 		status: "success",
 		message: "Sikeres jelentkezés!",
-	};
+	}
 }
