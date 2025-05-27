@@ -15,7 +15,10 @@ export const eventTable = pgTable("event_record", {
 	createdAt: date("created_at")
 		.notNull()
 		.$default(() => new Date().toISOString()),
-	assignments: text("groups").array().notNull(),
+	groups: text("groups")
+		.array()
+		.notNull()
+		.$default(() => []),
 })
 
 /*
@@ -34,7 +37,7 @@ export const userAtEventTable = pgTable(
 		createdAt: date("created_at")
 			.notNull()
 			.$default(() => new Date().toISOString()),
-		group: text("assignment").notNull().default(""),
+		group: text("group").notNull().default(""),
 	},
 	(table) => [unique().on(table.eventId, table.userId)],
 )
