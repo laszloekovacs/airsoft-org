@@ -1,5 +1,4 @@
-import React from 'react'
-import { Link } from 'react-router'
+import { Link } from "react-router"
 
 interface NavLinks {
 	label: string
@@ -25,9 +24,7 @@ const HomePageHeading: React.FC<HomePageHeadingProps> = ({
 			<ul className="flex flex-row list-none m-0 p-0 gap-4">
 				{links.map((link) => (
 					<li key={link.to}>
-						<Link
-							to={link.to}
-							className="text-blue-600 hover:underline">
+						<Link to={link.to} className="text-blue-600 hover:underline">
 							{link.label}
 						</Link>
 					</li>
