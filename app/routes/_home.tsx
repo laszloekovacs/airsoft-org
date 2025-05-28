@@ -1,5 +1,4 @@
 import { Outlet } from "react-router"
-import { HomePageContainer } from "~/components/HomePageContainer"
 import HomePageHeading from "~/components/HomePageHeading"
 import SiteLinks from "~/components/SiteLinks"
 import { authServer } from "~/services/auth.server"
@@ -15,7 +14,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	const user = loaderData?.user
 
 	return (
-		<HomePageContainer>
+		<div className="min-h-screen bg-background">
 			<HomePageHeading
 				title="Airsoft naptár"
 				SessionComponent={<p>login</p>}
@@ -23,6 +22,6 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 			/>
 			<Outlet />
 			<SiteLinks />
-		</HomePageContainer>
+		</div>
 	)
 }
