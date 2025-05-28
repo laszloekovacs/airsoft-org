@@ -3,7 +3,7 @@ import { Home, Users } from "lucide-react"
 
 const links = [
     {
-        name: "kezdőoldal", to: "#", icon: Home
+        name: "kezdőoldal", to: "/", icon: Home
     },
     {
         name: "felhasználók", to: "#", icon: Users
