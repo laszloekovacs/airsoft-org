@@ -16,7 +16,7 @@ const HomePageHeading: React.FC<HomePageHeadingProps> = ({
 	links,
 	SessionComponent,
 }) => (
-	<header className="flex flex-row items-center justify-between py-2">
+	<header className="w-full flex flex-row items-center justify-between p-2 border-b">
 		<Link to="/">
 			<h1 className="m-0 text-lg font-bold">{title}</h1>
 		</Link>

@@ -20,7 +20,10 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 				SessionComponent={<p>login</p>}
 				links={[{ label: "szervezo", to: "dashboard" }]}
 			/>
+
+
 			<Outlet />
+
 			<SiteLinks />
 		</div>
 	)

@@ -1,4 +1,5 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
+import { NavigationBar } from "~/components/navigation-bar"
 
 export default function Kits() {
 	const [parent, tapes] = useDragAndDrop<HTMLUListElement, string>(
@@ -10,6 +11,10 @@ export default function Kits() {
 
 	return (
 		<div>
+			<div>
+				<NavigationBar />
+			</div>
+
 			<ul ref={parent}>
 				{tapes.map((tape) => (
 					<li data-label={tape} key={tape}>
