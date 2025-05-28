@@ -28,7 +28,7 @@ export const NavigationBar = () => {
                 const Icon = link.icon
 
                 return (
-                    <NavLink to={link.to}>
+                    <NavLink to={link.to} key={link.to} className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
                         <Icon className="h-4 w-4" />
                         {link.name}
                     </NavLink>
