@@ -4,19 +4,17 @@ import { ArrowLeft } from "lucide-react"
 
 
 
-export default function DashboardEventsEventId({
+export default function DashboardEventsPage({
 	loaderData,
 }: Route.ComponentProps) {
 
-
 	return (
-		<div className="min-h-screen bg-background">
+		<div className="p-4">
 
 			<Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6">
 				<ArrowLeft className="w-4 h-4 mr-2" />
 				Vissza az eseményekhez
 			</Link>
-
 
 			<Outlet />
 		</div>
