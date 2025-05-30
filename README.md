@@ -66,6 +66,7 @@ https://react-icons.github.io/react-icons/
 - geolocation with geo URL scheme
 - ical reminder
 - console.onerror handler
+- qr code generator?
 
 
 ## mistakes were made
