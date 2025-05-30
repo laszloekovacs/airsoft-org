@@ -63,6 +63,7 @@ https://react-icons.github.io/react-icons/
 - notifications VAPID
 - mainfest file for mobile install
 - geolocation GPS
+- geolocation with geo URL scheme
 - ical reminder
 - console.onerror handler
 
