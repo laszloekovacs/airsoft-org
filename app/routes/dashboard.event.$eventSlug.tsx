@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router"
 import type { Route } from "./+types/dashboard.event.$eventSlug"
+import { ArrowLeft } from "lucide-react"
 
 export const loader = async ({ params }: { params: { eventId: string } }) => {
 	// Simulate fetching event data based on eventId
@@ -21,9 +22,12 @@ export default function DashboardEventsEventId({
 
 	return (
 		<div className="min-h-screen bg-background">
-			<div>
-				<Link to="/">Vissza az eseményekhez</Link>
-			</div>
+
+			<Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6">
+				<ArrowLeft className="w-4 h-4 mr-2" />
+				Vissza az eseményekhez
+			</Link>
+
 
 			<Outlet />
 		</div>
