@@ -20,14 +20,12 @@ export default function DashboardEventsEventId({
 	const { id, name, description } = loaderData.eventData
 
 	return (
-		<div>
-			<h2>{name}</h2>
-			<p>{description}</p>
-
-			<br />
-			<div className="border p-6">
-				<Outlet />
+		<div className="min-h-screen bg-background">
+			<div>
+				<Link to="/">Vissza az eseményekhez</Link>
 			</div>
+
+			<Outlet />
 		</div>
 	)
 }
