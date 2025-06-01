@@ -3,6 +3,9 @@ import database from "./db.server"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import * as schema from "~/schema/auth-schema"
 
+/**
+ * create better auth instance
+ */
 export const authServer = betterAuth({
 	database: drizzleAdapter(database, {
 		provider: "pg",
@@ -22,11 +25,12 @@ export const authServer = betterAuth({
 			},
 		},
 	},
-	trustedOrigins: [process.env.BASE_URL!],
+	trustedOrigins: [process.env.BETTER_AUTH_URL!],
 })
 
 // required for better auth cli
 export const auth = authServer
+
 
 export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)
