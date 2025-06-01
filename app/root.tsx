@@ -37,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 					defer
 					src="https://umami.am4.duckdns.org/script.js"
 					data-website-id="b1eb4441-ba11-4fd4-b873-408554f22640"
-				></script>
+				/>
 				<Meta />
 				<Links />
 			</head>
