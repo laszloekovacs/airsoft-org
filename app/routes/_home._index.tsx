@@ -1,4 +1,4 @@
-import { EventList } from '~/components/EventList'
+import { EventList } from '~/components/home/EventList'
 import { queries } from '~/queries/queries.server'
 import type { Route } from './+types/_home._index'
 
