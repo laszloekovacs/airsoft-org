@@ -34,7 +34,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 		<div className="min-h-screen bg-background">
 			<HomePageHeading
 				title="Airsoft naptár"
-				SessionComponent={sessionMenu}
+				sessionComponent={sessionMenu}
 				links={[{ label: "szervezo", to: "dashboard" }]}
 			/>
 

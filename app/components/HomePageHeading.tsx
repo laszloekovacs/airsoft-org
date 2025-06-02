@@ -8,13 +8,13 @@ interface NavLinks {
 interface HomePageHeadingProps {
 	title: string
 	links: NavLinks[]
-	SessionComponent: React.ReactNode
+	sessionComponent: React.ReactNode
 }
 
 const HomePageHeading: React.FC<HomePageHeadingProps> = ({
 	title,
 	links,
-	SessionComponent,
+	sessionComponent,
 }) => (
 	<header className="w-full flex flex-row items-center justify-between p-2 border-b">
 		<Link to="/">
@@ -31,7 +31,7 @@ const HomePageHeading: React.FC<HomePageHeadingProps> = ({
 				))}
 			</ul>
 		</nav>
-		<div>{SessionComponent}</div>
+		<div>{sessionComponent}</div>
 	</header>
 )
 
