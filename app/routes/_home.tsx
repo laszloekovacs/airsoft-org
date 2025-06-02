@@ -31,7 +31,7 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 	)
 
 	return (
-		<div className="min-h-screen bg-background">
+		<div className="min-h-screen bg-background grid grid-rows-[auto_1fr_auto]">
 			<HomePageHeading
 				title="Airsoft naptár"
 				sessionComponent={sessionMenu}
