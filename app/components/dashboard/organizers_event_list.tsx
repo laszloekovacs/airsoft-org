@@ -9,7 +9,18 @@ import {
 } from "~/components/ui/table"
 
 
-export const OrganizersEventList = () => {
+type PropsType = {
+    events: {
+        date: Date,
+        title: string
+    }[]
+}
+
+export const OrganizersEventList = ({ events }: PropsType) => {
+
+    if (events.length == 0) {
+        return <div><p>nincsenek általad szervezett események</p></div>
+    }
 
     return (
         <Table>

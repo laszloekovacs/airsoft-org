@@ -13,7 +13,7 @@ export const loader = async () => {
 export default function DashboardIndexPage({ loaderData }: Route.ComponentProps) {
 	return (
 		<div>
-			<OrganizersEventList />
+			<OrganizersEventList events={[]} />
 			<Summary events={loaderData} />
 		</div>
 	)
