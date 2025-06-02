@@ -42,6 +42,11 @@ export const authServer = betterAuth({
 // required for better auth cli
 export const auth = authServer
 
+/**
+ * Allow only logged in users to see page
+ * @param request route request object from loader
+ * @returns user, session data
+ */
 export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)
 
@@ -52,6 +57,12 @@ export const AuthenticatedOnly = async (request: Request) => {
 	return { ...sessionCookieData }
 }
 
+/**
+ * Allow olny users with required claims to see page
+ * @param request request object from the loader
+ * @param claimsRequired a list of strings that the user has to have in his claims array to proceed
+ * @returns session, user, required claims array
+ */
 export const AuthorizedOnly = async (
 	request: Request,
 	claimsRequired: string[],
