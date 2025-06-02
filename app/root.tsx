@@ -1,4 +1,4 @@
-import type { Route } from "./+types/root";
+import type { Route } from "./+types/root"
 import {
 	isRouteErrorResponse,
 	Links,
@@ -6,9 +6,9 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
-} from "react-router";
-import "./tailwind.css";
-import "./styles.css";
+} from "react-router"
+import "./tailwind.css"
+import "./styles.css"
 
 export function meta() {
 	return [
@@ -23,7 +23,7 @@ export function meta() {
 			property: "og:title",
 			content: "Airsoft Naptár",
 		},
-	];
+	]
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<link rel="manifest" href="app-manifest.json" />
+				<link rel="manifest" href="/app-manifest.json" />
 				<script
 					defer
 					src="https://umami.am4.duckdns.org/script.js"
@@ -47,27 +47,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Scripts />
 			</body>
 		</html>
-	);
+	)
 }
 
 export default function App() {
-	return <Outlet />;
+	return <Outlet />
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-	let message = "Oops!";
-	let details = "An unexpected error occurred.";
-	let stack: string | undefined;
+	let message = "Oops!"
+	let details = "An unexpected error occurred."
+	let stack: string | undefined
 
 	if (isRouteErrorResponse(error)) {
-		message = error.status === 404 ? "404" : "Error";
+		message = error.status === 404 ? "404" : "Error"
 		details =
 			error.status === 404
 				? "The requested page could not be found."
-				: error.statusText || details;
+				: error.statusText || details
 	} else if (import.meta.env.DEV && error && error instanceof Error) {
-		details = error.message;
-		stack = error.stack;
+		details = error.message
+		stack = error.stack
 	}
 
 	return (
@@ -80,5 +80,5 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 				</pre>
 			)}
 		</main>
-	);
+	)
 }
