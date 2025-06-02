@@ -96,7 +96,7 @@ export default function AccountPage() {
 			<div>
 				<div>
 					<h1>Airsoft Naptár</h1>
-					<Link to="/">vissza a főoldalra</Link>
+					<Link to="/" className="underline">vissza a főoldalra</Link>
 				</div>
 			</div>
 			<div className="grid place-content-center min-h-dvh">
@@ -132,13 +132,13 @@ export default function AccountPage() {
 
 						<Button type="submit">Regisztrálok</Button>
 
-						<div>
+						<div className="py-4">
 							<p>
 								<span>van már fiókod? &nbsp;</span>
-								<Link to="/account/login">jelentkezz be!</Link>
+								<Link to="/login" className="underline">jelentkezz be!</Link>
 							</p>
 						</div>
-						<div>
+						<div className="bg-amber-400">
 							<h3>figyu!</h3>
 							<p>email fiókkal való regsztrálás csak ideiglenes!</p>
 							<p>Ne használj létező email / jelszavat!</p>
