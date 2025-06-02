@@ -11,14 +11,21 @@ import {
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
 
-	return { ...sessionData }
+	if (sessionData) {
+
+		return {
+			email: sessionData.user.email,
+			image: sessionData.user.image || undefined
+		}
+	}
+
+	return {}
 }
 
 export default function HomeContainer({ loaderData }: Route.ComponentProps) {
-	const user = loaderData?.user
 
-	const sessionMenu = loaderData?.user ? (
-		<AuthenticatedSessionMenu email={loaderData.user.email} image={loaderData.user.image} />
+	const sessionMenu = loaderData?.email ? (
+		<AuthenticatedSessionMenu email={loaderData.email} image={loaderData.image} />
 	) : (
 		<UnauthenticatedSessionMenu />
 	)
