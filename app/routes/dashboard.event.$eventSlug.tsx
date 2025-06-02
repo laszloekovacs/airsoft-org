@@ -11,7 +11,7 @@ export default function DashboardEventsPage({
 	return (
 		<div className="p-4">
 
-			<Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6">
+			<Link to="/dashboard" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6">
 				<ArrowLeft className="w-4 h-4 mr-2" />
 				Vissza az eseményekhez
 			</Link>
