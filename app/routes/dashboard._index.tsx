@@ -11,9 +11,19 @@ export const loader = async () => {
 }
 
 export default function DashboardIndexPage({ loaderData }: Route.ComponentProps) {
+
+	const tempEvents = [
+		{
+			date: new Date(),
+			title: "elso",
+			slug: "2025-mikulasvaro"
+		}
+	]
+
+
 	return (
 		<div>
-			<OrganizersEventList events={[]} />
+			<OrganizersEventList events={tempEvents} />
 			<Summary events={loaderData} />
 		</div>
 	)
