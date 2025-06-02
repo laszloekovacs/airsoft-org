@@ -3,6 +3,12 @@ import database from "./db.server"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import * as schema from "~/schema/auth-schema"
 
+const { BETTER_AUTH_URL } = process.env
+
+if (typeof BETTER_AUTH_URL != "string") {
+	throw new Error("BETTER_AUTH_URL undefined or not a string")
+}
+
 /**
  * create better auth instance
  */
@@ -23,35 +29,34 @@ export const authServer = betterAuth({
 				input: false,
 				returned: true,
 			},
+			callsign: {
+				type: "string",
+				input: true,
+				returned: true,
+			},
 		},
 	},
-	trustedOrigins: [process.env.BETTER_AUTH_URL!],
+	trustedOrigins: [BETTER_AUTH_URL],
 })
 
 // required for better auth cli
 export const auth = authServer
-
 
 export const AuthenticatedOnly = async (request: Request) => {
 	const sessionCookieData = await authServer.api.getSession(request)
 
 	if (sessionCookieData == null) {
 		throw new Response("Unauthorized", { status: 401 })
-	} else {
-		return { ...sessionCookieData }
 	}
+
+	return { ...sessionCookieData }
 }
 
 export const AuthorizedOnly = async (
 	request: Request,
 	claimsRequired: string[],
 ) => {
-	const sessionCookieData = await authServer.api.getSession(request)
-
-	// throw if user not logged in
-	if (sessionCookieData == null) {
-		throw new Response("Unauthorized", { status: 401 })
-	}
+	const sessionCookieData = await AuthenticatedOnly(request)
 
 	// throw error if no claim is set
 	if (claimsRequired.length == 0) {
@@ -60,10 +65,13 @@ export const AuthorizedOnly = async (
 		})
 	}
 
-	// get claims from users session data
-	// check if session data claims include required claims
-	// throw if user has no claim to resource
-	// return user data if authorized, and the list of claims
+	const { claims } = sessionCookieData.user
+
+	// check if users claims has all required claims
+	const hasAllClaims = claimsRequired.every((claim) => claims.includes(claim))
+	if (!hasAllClaims) {
+		throw new Response("Forbidden: missing required claims", { status: 403 })
+	}
 
 	return { ...sessionCookieData, claimsRequired }
 }
