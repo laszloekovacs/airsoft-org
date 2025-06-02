@@ -1,6 +1,17 @@
 import { Link, Outlet } from "react-router"
 import Sitemap from "~/components/SiteLinks"
 import { Button } from "~/components/ui/button"
+import type { Route } from "./+types/dashboard"
+import { AuthorizedOnly } from "~/services/auth.server"
+
+
+export async function loader({ request }: Route.LoaderArgs) {
+	await AuthorizedOnly(request, ["organizer"])
+
+
+}
+
+
 
 export default function DashboardIndex() {
 	return (
