@@ -6,7 +6,7 @@ import type { Route } from "./+types/_home"
 import {
 	AuthenticatedSessionMenu,
 	UnauthenticatedSessionMenu,
-} from "~/components/mgmt/home/SessionMenu"
+} from "~/components/home/SessionMenu"
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)

@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { Link } from "react-router"
 import { Button } from "~/components/ui/button"
 
 export const AuthenticatedSessionMenu = ({ email, image }: { email: string, image?: string | undefined }) => {
@@ -19,6 +20,8 @@ export const AuthenticatedSessionMenu = ({ email, image }: { email: string, imag
 
 export const UnauthenticatedSessionMenu = () => {
     return (
-        <p>login</p>
+        <Button asChild>
+            <Link to="/login">Bejelentkezés</Link>
+        </Button>
     )
 }
