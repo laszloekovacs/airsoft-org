@@ -1,4 +1,3 @@
-import { Summary } from "../components/summary"
 import type { Route } from "./+types/dashboard._index"
 import { eventRecordTable } from "~/schema"
 import database from "~/services/db.server"
@@ -7,24 +6,17 @@ import { OrganizersEventList } from "~/components/dashboard/organizers_event_lis
 export const loader = async () => {
 	const events = await database.select().from(eventRecordTable)
 
-	return events
+	return { events }
 }
 
-export default function DashboardIndexPage({ loaderData }: Route.ComponentProps) {
-
-	const tempEvents = [
-		{
-			date: new Date(),
-			title: "elso",
-			slug: "2025-mikulasvaro"
-		}
-	]
-
+export default function DashboardIndexPage({
+	loaderData,
+}: Route.ComponentProps) {
+	const { events } = loaderData
 
 	return (
 		<div>
-			<OrganizersEventList events={tempEvents} />
-			<Summary events={loaderData} />
+			<OrganizersEventList events={events} />
 		</div>
 	)
 }
