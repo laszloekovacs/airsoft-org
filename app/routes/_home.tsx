@@ -14,7 +14,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 	if (sessionData) {
 
 		return {
-			email: sessionData.user.email,
+			name: sessionData.user.callsign ?? sessionData.user.email,
 			image: sessionData.user.image || undefined
 		}
 	}
@@ -24,8 +24,8 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
-	const sessionMenu = loaderData?.email ? (
-		<AuthenticatedSessionMenu email={loaderData.email} image={loaderData.image} />
+	const sessionMenu = loaderData?.name ? (
+		<AuthenticatedSessionMenu email={loaderData.name} image={loaderData.image} />
 	) : (
 		<UnauthenticatedSessionMenu />
 	)
