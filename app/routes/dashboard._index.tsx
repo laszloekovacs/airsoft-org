@@ -15,7 +15,7 @@ export default function DashboardIndexPage({
 	const { events } = loaderData
 
 	return (
-		<div>
+		<div className="p-4">
 			<OrganizersEventList events={events} />
 		</div>
 	)
