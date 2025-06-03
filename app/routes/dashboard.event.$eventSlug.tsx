@@ -1,7 +1,7 @@
 import { Link, Outlet } from "react-router"
 import type { Route } from "./+types/dashboard.event.$eventSlug"
 import { ArrowLeft } from "lucide-react"
-
+import { NavigationBar } from "~/components/navigation-bar"
 
 
 export default function DashboardEventsPage({
@@ -15,7 +15,7 @@ export default function DashboardEventsPage({
 				<ArrowLeft className="w-4 h-4 mr-2" />
 				Vissza az eseményekhez
 			</Link>
-
+			<NavigationBar />
 			<Outlet />
 		</div>
 	)

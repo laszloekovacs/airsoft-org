@@ -23,7 +23,7 @@ type Props = {
 
 export const NavigationBar = () => {
     return (
-        <nav className="flex flex-wrap gap-2">
+        <nav className="flex flex-wrap gap-2 py-4">
             {links.map((link) => {
                 const Icon = link.icon
 
