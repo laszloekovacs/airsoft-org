@@ -33,11 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="manifest" href="/app-manifest.json" />
-				<script
-					defer
-					src="https://umami.am4.duckdns.org/script.js"
-					data-website-id="b1eb4441-ba11-4fd4-b873-408554f22640"
-				/>
+				<script defer src="https://umami.am4.duckdns.org/script.js" data-website-id="4a09d28a-18cd-452f-9d4d-2cf0368dc380" />
 				<Meta />
 				<Links />
 			</head>
