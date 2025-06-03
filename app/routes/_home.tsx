@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
 import HomePageHeading from "~/components/HomePageHeading"
-import SiteLinks from "~/components/SiteLinks"
+import SiteLinks from "~/components/site-links"
 import { authServer } from "~/services/auth.server"
 import type { Route } from "./+types/_home"
 import {

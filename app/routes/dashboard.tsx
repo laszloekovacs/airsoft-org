@@ -1,5 +1,5 @@
 import { Link, Outlet } from "react-router"
-import Sitemap from "~/components/SiteLinks"
+import SiteLinks from "~/components/site-links"
 import { Button } from "~/components/ui/button"
 import type { Route } from "./+types/dashboard"
 import { AuthorizedOnly } from "~/services/auth.server"
@@ -29,7 +29,7 @@ export default function DashboardIndex({ loaderData }: Route.ComponentProps) {
 			/>
 
 			<Outlet />
-			<Sitemap />
+			<SiteLinks />
 		</div>
 	)
 }

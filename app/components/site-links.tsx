@@ -10,7 +10,7 @@ export default function SiteLinks() {
 	]
 
 	return (
-		<div>
+		<div className="px-4 py-8">
 			<h3>Airsoft naptár</h3>
 			<ul className="flex flex-row gap-4 flex-wrap">
 				{links.map((link) => (
