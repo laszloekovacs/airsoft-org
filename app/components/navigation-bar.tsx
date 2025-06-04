@@ -21,7 +21,7 @@ type Props = {
 }
 
 
-export const NavigationBar = () => {
+export const NavigationBar = ({ links }: Props) => {
     return (
         <nav className="flex flex-wrap gap-2 py-4">
             {links.map((link) => {

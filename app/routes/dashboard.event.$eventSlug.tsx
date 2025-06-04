@@ -15,8 +15,8 @@ export default function DashboardEventsPage({
 				<ArrowLeft className="w-4 h-4 mr-2" />
 				Vissza az eseményekhez
 			</Link>
-			<NavigationBar />
 			<Outlet />
 		</div>
 	)
 }
+
