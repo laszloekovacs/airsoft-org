@@ -10,7 +10,7 @@ export const EventList = (props: {
 	return (
 		<div className="h-full w-full">
 			<div>
-				<h1 className="text-center">Események</h1>
+				<h1 className="text-center text-xl font-bold">Események</h1>
 
 				{eventList.length == 0 && <NoEvents />}
 
@@ -29,11 +29,11 @@ export const EventItem = (props: {
 }) => {
 	const { title, date, slug } = props.event
 	return (
-		<li>
-			<Link to={`/events/${slug}`}>
-				<h2>{title}</h2>
-			</Link>
+		<li className="flex flex-row gap-2 py-3">
 			<p>{date}</p>
+			<Link to={`/events/${slug}`}>
+				<h2 className="font-semibold">{title}</h2>
+			</Link>
 		</li>
 	)
 }

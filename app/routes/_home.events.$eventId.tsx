@@ -42,8 +42,8 @@ export default function EventDetailPage({ loaderData }: Route.ComponentProps) {
 		<div>
 
 
-			<h1>{event.title}</h1>
-			<p>{event.date}</p>
+			<h1 className="text-2xl mb-2">{event.title}</h1>
+			<p className="mb-4">{event.date}</p>
 
 
 

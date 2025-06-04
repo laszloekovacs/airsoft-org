@@ -34,19 +34,27 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div className="min-h-screen bg-background grid grid-rows-[auto_1fr_auto]">
+
+
 			<HomePageHeading
 				title="Airsoft naptár"
 				sessionComponent={sessionMenu}
-				links={[{ label: "szervezo", to: "dashboard" }]}
+				links={[]}
 			/>
 
-			<Outlet />
+			<div className="container">
+				<div className="max-w-4xl mx-auto">
 
-			<div>
+					<Outlet />
+				</div>
+			</div>
+
+			<div className="max-w-6xl">
 
 				<SiteLinks />
 				<Button variant="outline" onClick={() => { authClient.signOut() }}>logout</Button>
 			</div>
+
 		</div>
 	)
 }
