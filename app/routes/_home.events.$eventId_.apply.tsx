@@ -1,4 +1,4 @@
-import { useFetcher } from "react-router"
+import { redirect, useActionData, useFetcher } from "react-router"
 import type { Route } from "./+types/_home.events.$eventId_.apply"
 import { AuthenticatedOnly, authServer } from "~/services/auth.server"
 import database from "~/services/db.server"
@@ -16,6 +16,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 export default function ApplyEventPage() {
 	const fetcher = useFetcher()
+
 
 	return (
 		<div>
@@ -37,22 +38,10 @@ export default function ApplyEventPage() {
 	)
 }
 
-type ErrorResponse = {
-	status: "error"
-	reason: string
-}
-
-type SuccessResponse = {
-	status: "success"
-	message: string
-}
-
-type ActionResponse = ErrorResponse | SuccessResponse
-
 export async function action({
 	request,
 	params,
-}: Route.ActionArgs): Promise<ActionResponse> {
+}: Route.ActionArgs) {
 	AuthenticatedOnly(request)
 	const sessionData = await authServer.api.getSession(request)
 
@@ -74,15 +63,6 @@ export async function action({
 		eventId: event[0].id,
 	})
 
-	if (result.rowCount != 1) {
-		return {
-			status: "error",
-			reason: "Sikertelen jelentkezés!",
-		}
-	}
-
-	return {
-		status: "success",
-		message: "Sikeres jelentkezés!",
-	}
+	// go back to Event Page
+	return redirect("/")
 }
