@@ -9,7 +9,7 @@ export const EventList = (props: {
 
 	return (
 		<div className="h-full w-full">
-			<div className="max-w-4xl mx-auto">
+			<div className="max-w-4xl mx-auto p-4">
 				<h1 className="text-center text-xl font-bold">Események</h1>
 
 				{eventList.length == 0 && <NoEvents />}
