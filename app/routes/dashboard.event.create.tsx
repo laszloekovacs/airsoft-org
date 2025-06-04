@@ -140,11 +140,11 @@ export default function DashboardEventCreate() {
 	}
 
 	return (
-		<div>
-			<h2>Új esemény létrehozása</h2>
+		<div className="max-w-3xl mx-auto">
+			<h2 className="text-xl mb-4">Új esemény létrehozása</h2>
 
 			<fetcher.Form method="post" onSubmit={handleSubmit}>
-				<div>
+				<div className="flex flex-col gap-4">
 					<Label>
 						<span>esemény neve</span>
 						<Input type="text" name="title" id="title" />
