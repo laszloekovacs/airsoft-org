@@ -7,6 +7,8 @@ import {
 	AuthenticatedSessionMenu,
 	UnauthenticatedSessionMenu,
 } from "~/components/home/SessionMenu"
+import { Button } from "~/components/ui/button"
+import { authClient } from "~/services/auth.client"
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)
@@ -40,7 +42,12 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 
 			<Outlet />
 
-			<SiteLinks />
+			<div>
+
+				<SiteLinks />
+				<Button variant="outline" onClick={() => { authClient.signOut() }}>logout</Button>
+			</div>
 		</div>
 	)
 }
+
