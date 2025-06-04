@@ -42,12 +42,9 @@ export default function HomeContainer({ loaderData }: Route.ComponentProps) {
 				links={[]}
 			/>
 
-			<div className="container">
-				<div className="max-w-4xl mx-auto">
 
-					<Outlet />
-				</div>
-			</div>
+			<Outlet />
+
 
 			<div className="max-w-6xl">
 
