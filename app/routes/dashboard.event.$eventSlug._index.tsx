@@ -55,6 +55,7 @@ export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
 
 	return (
 		<div>
+			<h1>csapatok</h1>
 			<ul ref={unasignedRef} className="bg-red-200 min-h-18">
 				{attendeeList.map((item) => (
 					<li key={item.id}>
