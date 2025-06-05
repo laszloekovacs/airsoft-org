@@ -10,13 +10,13 @@ const links = [
     }
 ]
 
-type Icon = typeof Home
+
 
 type Props = {
     links: {
         name: string
         to: string
-        icon: Icon
+        icon: React.ReactNode
     }[]
 }
 
@@ -25,11 +25,11 @@ export const NavigationBar = ({ links }: Props) => {
     return (
         <nav className="flex flex-wrap gap-2 py-4">
             {links.map((link) => {
-                const Icon = link.icon
-
                 return (
                     <NavLink to={link.to} key={link.to} className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                        <Icon className="h-4 w-4" />
+                        <div className="w-4 h-4">
+                            {link.icon}
+                        </div>
                         {link.name}
                     </NavLink>
                 )

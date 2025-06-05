@@ -1,5 +1,7 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { NavigationBar } from "~/components/navigation-bar"
+import { Home, User } from "lucide-react"
+
 
 export default function Kits() {
 	const [parent, tapes] = useDragAndDrop<HTMLUListElement, string>(
@@ -12,7 +14,18 @@ export default function Kits() {
 	return (
 		<div>
 			<div>
-				<NavigationBar />
+				<NavigationBar links={[
+					{
+						name: "játékosos",
+						icon: <Home />,
+						to: "."
+					},
+					{
+						name: "csapatok",
+						icon: <User />,
+						to: "groups"
+					}
+				]} />
 			</div>
 
 			<ul ref={parent}>
