@@ -27,7 +27,7 @@ export const NavigationBar = ({ links }: Props) => {
             {links.map((link) => {
                 return (
                     <NavLink to={link.to} key={link.to} className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-                        <div className="w-4 h-4">
+                        <div className="mr-0.5">
                             {link.icon}
                         </div>
                         {link.name}

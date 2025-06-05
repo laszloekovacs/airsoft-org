@@ -2,6 +2,9 @@ import { Link, Outlet } from "react-router"
 import type { Route } from "./+types/dashboard.event.$eventSlug"
 import { ArrowLeft } from "lucide-react"
 import { NavigationBar } from "~/components/navigation-bar"
+import { Home, Group } from "lucide-react"
+
+const editorLinks = []
 
 
 export default function DashboardEventsPage({
@@ -15,6 +18,20 @@ export default function DashboardEventsPage({
 				<ArrowLeft className="w-4 h-4 mr-2" />
 				Vissza az eseményekhez
 			</Link>
+
+			<NavigationBar links={[
+				{
+					name: "játékosok",
+					to: ".",
+					icon: <Home className="h-4 h-4" />
+				},
+				{
+					name: "csoportok",
+					to: "./groups",
+					icon: <Group className="w-4 h-4" />
+				}
+			]} />
+
 			<Outlet />
 		</div>
 	)
