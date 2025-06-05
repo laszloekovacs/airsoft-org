@@ -35,15 +35,18 @@ export default function EditEventGroupsPage({
 		<div>
 			<h1>Csoportok</h1>
 
-			<Form method="post">
+
+
+			<Form method="post" className="max-w-xl flex flex-col gap-2">
 				<Input type="text" name="group" />
 				<Input type="hidden" name="intent" value="add" />
 				<Button type="submit">hozzáad</Button>
 			</Form>
 
+
 			<ul>
 				{groups.map((group) => (
-					<li key={group} className="flex flex-row gap-4">
+					<li key={group} className="flex flex-col gap-2">
 						<p>{group}</p>
 
 						<Form method="post">
