@@ -88,3 +88,9 @@ https://react-icons.github.io/react-icons/
 
 https://dndkit.com/
 https://drag-and-drop.formkit.com/
+
+
+database with postgis (and pg vector ) enabled
+postgis/postgis:17-master
+
+SELECT * FROM pg_available_extensions WHERE name IN ('postgis', 'vector');
