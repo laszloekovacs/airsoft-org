@@ -12,4 +12,7 @@ export default defineConfig({
 	dbCredentials: {
 		url: DATABASE_URL,
 	},
+	extensionsFilters: ["postgis"],
+	schemaFilter: ["public"],
+	tablesFilter: ["*"],
 })
