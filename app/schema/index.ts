@@ -25,6 +25,7 @@ export const eventRecordTable = pgTable("event_record", {
 	endDate: date("end_date"),
 
 	description: text(),
+
 	// approx location, eg: debrecen
 	locationSummary: text(),
 
@@ -87,3 +88,27 @@ export const factionInfoTable = pgTable(
 	/* teams have to be unique to every event */
 	(table) => [unique().on(table.name, table.eventId)],
 )
+
+/**
+ * Locations or map details for the event
+ */
+
+export const siteInformation = pgTable("site_information", {
+	id: integer().primaryKey().generatedAlwaysAsIdentity(),
+	createdAt: date("created_at")
+		.notNull()
+		.$default(() => new Date().toISOString()),
+
+	// name information
+	name: text(),
+	alias: text(),
+
+	// vanilla address data
+	address1: text(),
+	address2: text(),
+	city: text(),
+	state: text(),
+	zip: text(),
+
+	// geolocation
+})
