@@ -15,6 +15,10 @@ export const eventRecordTable = pgTable("event_record", {
 	createdAt: date("created_at")
 		.notNull()
 		.$default(() => new Date().toISOString()),
+
+	//	startDate: date("start_date").notNull(),
+	//	endDate: date("end_date"),
+	// description: text()
 })
 
 /*
@@ -33,47 +37,26 @@ export const userAtEventTable = pgTable(
 		createdAt: date("created_at")
 			.notNull()
 			.$default(() => new Date().toISOString()),
+		factionId: integer("faction_id").references(() => factionInfoTable.id, {
+			onDelete: "set null",
+		}),
 	},
 	/* user allowed only once to apply for a single event */
 	(table) => [unique().on(table.eventId, table.userId)],
 )
 
 /**
- * scenario at an event day. there can be multiple scenarios in one event day
- */
-export const scenarioInfoTable = pgTable("scenario_info", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	eventId: integer("event_id").notNull().references(() => eventRecordTable.id, {onDelete: "cascade"}),
-	title: text().notNull()
-}, 
-	(table) => [unique().on(table.eventId, table.title)]
-)
-
-/**
- * Description of a faction in a scenario
+ * Description of a faction at an event
  */
 export const factionInfoTable = pgTable(
 	"faction_info",
 	{
 		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		scenarioId: integer("scenario_id").references(()=> scenarioInfoTable.id, {onDelete: "cascade"}),
-		title: text().notNull()
+		eventId: integer("id").references(() => eventRecordTable.id, {
+			onDelete: "cascade",
+		}),
+		name: text().notNull(),
+		desciption: text(),
 	},
-	/* factions are uniqe inside one game */
-	(table) => [unique().on(table.eventId, table.title)]
-)
-
-/**
- * associate applicants to roles in a scenario
- */
-export const userFactionInScenarioTable = pgTable(
-	"user_faction_in_scenario",
-	{
-		id: integer().primaryKey().generatedAlwaysAsIdentity(),
-		scenarioId: integer().references(()=> scenarioInfoTable.id, {onDelete: "cascade"}),
-		factionId: integer().references(()=> factionInfoTable.id, {onDelete:"cascade"}),
-		userAtEventId: integer().references(()=> userAtEventTable.id, {onDelete: "cascade"}),
-		title: text().notNull()
-	},
-	(table) => [unique().on(table.factionId, table.userAtEventId)]
+	(table) => [unique().on(table.name, table.eventId)],
 )
