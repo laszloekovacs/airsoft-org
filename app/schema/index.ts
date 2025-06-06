@@ -6,23 +6,32 @@ import { user } from "./auth-schema"
  */
 export const eventRecordTable = pgTable("event_record", {
 	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => user.id, { onDelete: "set null" }),
-	title: text("name").notNull(),
-	date: date("date").notNull(),
-	slug: text("slug").notNull().unique(),
 	createdAt: date("created_at")
 		.notNull()
 		.$default(() => new Date().toISOString()),
 
-	// event metadata?
-	//	startDate: date("start_date").notNull(),
-	//	endDate: date("end_date"),
-	// description: text()
-	// location_summary: text()
-	// expected_participants: integer().notNull().default(0),
-	// social_links: text().array()
+	// persons user id who created the event
+	ownerId: text("owner_id")
+		.notNull()
+		.references(() => user.id, { onDelete: "set null" }),
+	title: text("name").notNull(),
+
+	// generated url
+	slug: text("slug").notNull().unique(),
+
+	// start date and optional end date for multi day event
+	startDate: date("start_date").notNull(),
+	endDate: date("end_date"),
+
+	description: text(),
+	// approx location, eg: debrecen
+	location_summary: text(),
+
+	expected_participants: integer(),
+	min_participants: integer(),
+
+	// array of links to fb, x, discord etc.
+	social_links: text().array(),
 })
 
 /*
