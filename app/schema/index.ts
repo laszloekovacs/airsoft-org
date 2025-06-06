@@ -102,7 +102,7 @@ export const factionInfoTable = pgTable(
 
 const geoPoint = customType<{ data: string }>({
 	dataType() {
-		return "geography(Point, 4326)"
+		return "point"
 	},
 })
 
