@@ -21,7 +21,8 @@ export const eventRecordTable = pgTable("event_record", {
 	//	endDate: date("end_date"),
 	// description: text()
 	// location_summary: text()
-	// expected_participants: integer().notNull().default(0)
+	// expected_participants: integer().notNull().default(0),
+	// social_links: text().array()
 })
 
 /*
