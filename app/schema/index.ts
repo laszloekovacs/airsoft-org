@@ -1,4 +1,11 @@
-import { date, integer, pgTable, text, unique } from "drizzle-orm/pg-core"
+import {
+	customType,
+	date,
+	integer,
+	pgTable,
+	text,
+	unique,
+} from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 
 /**
@@ -93,6 +100,12 @@ export const factionInfoTable = pgTable(
  * Locations or map details for the event
  */
 
+const geoPoint = customType<{ data: string }>({
+	dataType() {
+		return "geography(Point, 4326)"
+	},
+})
+
 export const siteInformation = pgTable("site_information", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity(),
 	createdAt: date("created_at")
@@ -110,5 +123,6 @@ export const siteInformation = pgTable("site_information", {
 	state: text(),
 	zip: text(),
 
-	// geolocation
+	// gps coordinates
+	geolocation: geoPoint("location"),
 })
