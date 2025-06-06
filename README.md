@@ -93,4 +93,9 @@ https://drag-and-drop.formkit.com/
 database with postgis (and pg vector ) enabled
 postgis/postgis:17-master
 
+SELECT * FROM pg_extension
 SELECT * FROM pg_available_extensions WHERE name IN ('postgis', 'vector');
+
+enable extension
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS vector;
