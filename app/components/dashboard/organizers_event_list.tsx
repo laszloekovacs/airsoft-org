@@ -11,7 +11,7 @@ import {
 
 type PropsType = {
     events: {
-        date: string
+        startDate: string
         title: string
         slug: string
     }[]
@@ -48,7 +48,7 @@ export const OrganizersEventList = ({ events }: PropsType) => {
                         className="cursor-pointer"
                         onClick={() => handleRowClick(event.slug)}>
                         <TableCell className="text-left">
-                            {event.date}
+                            {event.startDate}
                         </TableCell>
                         <TableCell>
                             {event.title}

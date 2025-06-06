@@ -87,7 +87,7 @@ export async function action({
 		const { title, date, eventUrlSlug } = parseResult.data
 		const result = await database.insert(eventRecordTable).values({
 			title,
-			date,
+			startDate: date,
 			userId: user.id,
 			slug: eventUrlSlug,
 		})
