@@ -10,13 +10,14 @@ export const eventRecordTable = pgTable("event_record", {
 		.notNull()
 		.$default(() => new Date().toISOString()),
 
-	// persons user id who created the event
+	// user id who created the event
 	ownerId: text("owner_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "set null" }),
-	title: text("name").notNull(),
 
-	// generated url
+	title: text("title").notNull(),
+
+	// generated url. date + title sanitized
 	slug: text("slug").notNull().unique(),
 
 	// start date and optional end date for multi day event
@@ -25,13 +26,15 @@ export const eventRecordTable = pgTable("event_record", {
 
 	description: text(),
 	// approx location, eg: debrecen
-	location_summary: text(),
+	locationSummary: text(),
 
-	expected_participants: integer(),
-	min_participants: integer(),
+	// organizers expectation
+	expectedParticipants: integer(),
+	maximumParticipants: integer(),
+	minimumParticipants: integer(),
 
 	// array of links to fb, x, discord etc.
-	social_links: text().array(),
+	socialLinks: text("socials").array(),
 })
 
 /*
@@ -41,15 +44,22 @@ export const userAtEventTable = pgTable(
 	"user_at_event",
 	{
 		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		userId: text("user_id")
-			.notNull()
-			.references(() => user.id, { onDelete: "set null" }),
-		eventId: integer("event_id")
-			.notNull()
-			.references(() => eventRecordTable.id, { onDelete: "set null" }),
 		createdAt: date("created_at")
 			.notNull()
 			.$default(() => new Date().toISOString()),
+
+		// if user deletes himself, it should display as "deleted user"
+		userId: text("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "no action" }),
+
+		// if the event is deleted, delete the applications too, tho the
+		// user should be notified of it
+		eventId: integer("event_id")
+			.notNull()
+			.references(() => eventRecordTable.id, { onDelete: "cascade" }),
+
+		// null means the player is in the waiting list.
 		factionId: integer("faction_id").references(() => factionInfoTable.id, {
 			onDelete: "set null",
 		}),
@@ -65,13 +75,15 @@ export const factionInfoTable = pgTable(
 	"faction_info",
 	{
 		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		eventId: integer("id").references(() => eventRecordTable.id, {
+		eventId: integer("event_id").references(() => eventRecordTable.id, {
 			onDelete: "cascade",
 		}),
 		name: text().notNull(),
 		desciption: text(),
-		expected_participants: integer().notNull().default(0),
+
+		// intent how many players should be in here
+		expectedParticipants: integer("expected_participants"),
 	},
-	/* teams have to be unique for every event */
+	/* teams have to be unique to every event */
 	(table) => [unique().on(table.name, table.eventId)],
 )
