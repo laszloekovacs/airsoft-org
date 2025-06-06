@@ -16,9 +16,11 @@ export const eventRecordTable = pgTable("event_record", {
 		.notNull()
 		.$default(() => new Date().toISOString()),
 
+	// event metadata?
 	//	startDate: date("start_date").notNull(),
 	//	endDate: date("end_date"),
 	// description: text()
+	// expected_participants: integer().notNull().default(0)
 })
 
 /*
@@ -57,6 +59,8 @@ export const factionInfoTable = pgTable(
 		}),
 		name: text().notNull(),
 		desciption: text(),
+		expected_participants: integer().notNull().default(0),
 	},
+	/* teams have to be unique for every event */
 	(table) => [unique().on(table.name, table.eventId)],
 )
