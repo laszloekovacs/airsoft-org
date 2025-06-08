@@ -2,6 +2,12 @@ import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
 
+export const eventState = t.pgEnum("event_state", [
+	"draft",
+	"publised",
+	"cancelled",
+])
+
 /**
  * Event information table
  */
@@ -23,8 +29,14 @@ export const eventRecordTable = t.pgTable(
 		// freeform tags. eg: milsim, free, practice
 		tags: t.text().array(),
 
-		// visibility: public, private
-		//visibility: t.pgEnum("visibility", ["public", "private"]),
+		// header image url
+		image: t.text(),
+
+		// by default it is a public game and advertised.
+		isPrivate: t.boolean().notNull().default(false),
+
+		// allow user to edit event before publishing
+		eventState: eventState(),
 
 		// user id who created the event. on deletion the event should survive the users deletion
 		// for record keeping
@@ -160,8 +172,10 @@ export const factionInfoTable = t.pgTable(
 				onDelete: "cascade",
 			}),
 
+		// name and description with potional image
 		name: t.text().notNull(),
 		description: t.text(),
+		image: t.text(),
 
 		// intent how many players should be in here
 		expectedParticipants: t.integer(),
@@ -189,9 +203,12 @@ export const siteInformation = t.pgTable(
 			.$defaultFn(() => /* @__PURE__ */ new Date())
 			.notNull(),
 
-		// name information
+		// name, splash image and description
 		name: t.text().notNull(),
 		alias: t.text(),
+
+		description: t.text(),
+		image: t.text(),
 
 		// vanilla address data
 		city: t.text().notNull(),
