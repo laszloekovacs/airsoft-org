@@ -10,15 +10,12 @@ export const eventRecordTable = t.pgTable(
 	{
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
-			.timestamp()
+			.timestamp({ withTimezone: true })
 			.$defaultFn(() => /* @__PURE__ */ new Date())
 			.notNull(),
 
-		// soft deletion
-		deletedAd: t
-			.timestamp()
-			.$defaultFn(() => /* @__PURE__ */ new Date())
-			.notNull(),
+		// support for soft deletion
+		deletedAd: t.timestamp({ withTimezone: true }),
 
 		// user id who created the event
 		ownerId: t
@@ -39,10 +36,10 @@ export const eventRecordTable = t.pgTable(
 		// markdown or string form of description
 		description: t.text(),
 
-		// text description of approx location, eg: debrecen
+		// text description of approx location, eg: Debrecen
 		locationSummary: t.text().notNull(),
 
-		// location if registered site is used
+		// detailed location information
 		location: t.integer().references(() => siteInformation.id, {
 			onDelete: "set null",
 		}),
@@ -52,10 +49,11 @@ export const eventRecordTable = t.pgTable(
 		maximumParticipants: t.integer(),
 		minimumParticipants: t.integer(),
 
-		// array of links to fb, x, discord etc.
+		// array of links to fb, x, discord etc or even phone number.
 		socials: t.text("socials").array(),
 	},
 	(table) => [
+		t.check("valid_slug_format", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
 		t.check(
 			"end_date_is_later_than_start_date",
 			sql`${table.endDate} > ${table.startDate}`,
@@ -87,7 +85,7 @@ export const userAtEventTable = t.pgTable(
 	{
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
-			.timestamp()
+			.timestamp({ withTimezone: true })
 			.$defaultFn(() => /* @__PURE__ */ new Date())
 			.notNull(),
 
@@ -121,9 +119,12 @@ export const factionInfoTable = t.pgTable(
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 
 		// remove if the event is deleted
-		eventId: t.integer().references(() => eventRecordTable.id, {
-			onDelete: "cascade",
-		}),
+		eventId: t
+			.integer()
+			.notNull()
+			.references(() => eventRecordTable.id, {
+				onDelete: "cascade",
+			}),
 
 		name: t.text().notNull(),
 		description: t.text(),
@@ -145,25 +146,36 @@ export const factionInfoTable = t.pgTable(
  * Locations or map details for the event
  */
 
-export const siteInformation = t.pgTable("site_information", {
-	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-	createdAt: t
-		.timestamp()
-		.$defaultFn(() => /* @__PURE__ */ new Date())
-		.notNull(),
+export const siteInformation = t.pgTable(
+	"site_information",
+	{
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+		createdAt: t
+			.timestamp({ withTimezone: true })
+			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.notNull(),
 
-	// name information
-	name: t.text(),
-	alias: t.text(),
+		// name information
+		name: t.text().notNull(),
+		alias: t.text(),
 
-	// vanilla address data
-	address1: t.text(),
-	address2: t.text(),
-	city: t.text(),
-	state: t.text(),
-	zip: t.text(),
+		// vanilla address data
+		country: t
+			.text()
+			.notNull()
+			.$default(() => "Magyarország"),
+		address1: t.text().notNull(),
+		address2: t.text(),
+		city: t.text(),
+		state: t.text(),
+		zip: t.text(),
 
-	// gps coordinates
-	longitude: t.integer(),
-	latitude: t.integer(),
-})
+		// gps coordinates
+		longitude: t.doublePrecision(),
+		latitude: t.doublePrecision(),
+	},
+	(table) => [
+		t.check("valid_latitude", sql`${table.latitude} BETWEEN -90 AND 90`),
+		t.check("valid_longitude", sql`${table.longitude} BETWEEN -180 AND 180`),
+	],
+)
