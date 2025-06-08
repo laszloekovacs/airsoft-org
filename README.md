@@ -99,3 +99,8 @@ SELECT * FROM pg_available_extensions WHERE name IN ('postgis', 'vector');
 enable extension
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS vector;
+
+
+// change search locale
+CREATE TEXT SEARCH CONFIGURATION hungarian_simple (COPY = simple);
+ALTER TEXT SEARCH CONFIGURATION hungarian_simple ALTER MAPPING FOR asciiword, word WITH hungarian;

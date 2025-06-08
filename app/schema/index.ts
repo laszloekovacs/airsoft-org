@@ -384,3 +384,11 @@ export const createTriggerToUpdateSearchVector = () => sql`
 	CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
 	ON post FOR EACH ROW EXECUTE FUNCTION update_search_vector();
 `
+
+/** searching is done with tsquery
+ WHERE er.search_vector @@ to_tsquery('hungarian', query_text)
+ AND er.deletedAt is NULL
+ AND er.startDate >= CURRENT_DATE
+
+  
+ */
