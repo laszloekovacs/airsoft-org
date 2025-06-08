@@ -8,18 +8,26 @@ import { sql } from "drizzle-orm"
 export const eventRecordTable = t.pgTable(
 	"event_record",
 	{
-		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
 			.timestamp({ withTimezone: true })
-			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.$defaultFn(() => /* @__PURE__ */ sql`now()`)
 			.notNull(),
 
 		// support for soft deletion
 		deletedAt: t.timestamp({ withTimezone: true }),
 
+		// TODO: make this auto
 		updatedAt: t.timestamp({ withTimezone: true }),
 
-		// user id who created the event
+		// freeform tags. eg: milsim, free, practice
+		tags: t.text().array(),
+
+		// visibility: public, private
+		//visibility: t.pgEnum("visibility", ["public", "private"]),
+
+		// user id who created the event. on deletion the event should survive the users deletion
+		// for record keeping
 		ownerId: t
 			.text()
 			.notNull()
@@ -34,6 +42,9 @@ export const eventRecordTable = t.pgTable(
 		// event schedule times are stored in a timetable
 		startDate: t.date().notNull(),
 		endDate: t.date(),
+
+		// optional signup deadline, no checks on this
+		signupDeadline: t.timestamp({ withTimezone: true }),
 
 		// markdown or string form of description
 		description: t.text(),
@@ -55,6 +66,9 @@ export const eventRecordTable = t.pgTable(
 		socials: t.text("socials").array(),
 	},
 	(table) => [
+		// should be tomorrow at least
+		t.check("event_starts_in_the_future", sql`${table.startDate} > now()`),
+
 		t.check(
 			"end_date_is_later_than_start_date",
 			sql`${table.endDate} > ${table.startDate} OR ${table.endDate} IS NULL`,
@@ -90,6 +104,7 @@ export const eventRecordTable = t.pgTable(
 			sql`${table.maximumParticipants} IS NULL OR ${table.maximumParticipants} > 0`,
 		),
 		t.check("valid_slug", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
+		t.check("slug_is_long_enough", sql`${table.slug} LENGTH BETWEEN 7 AND 256`),
 		t.index("idx_event_location").on(table.location),
 	],
 )
@@ -100,10 +115,12 @@ export const eventRecordTable = t.pgTable(
 export const userAtEventTable = t.pgTable(
 	"user_at_event",
 	{
-		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+
+		// time the user applied to the event
 		createdAt: t
 			.timestamp({ withTimezone: true })
-			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.$defaultFn(() => /* @__PURE__ */ sql`now()`)
 			.notNull(),
 
 		// if user deletes himself, it should display as "deleted user"
@@ -133,7 +150,7 @@ export const userAtEventTable = t.pgTable(
 export const factionInfoTable = t.pgTable(
 	"faction_info",
 	{
-		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
 		// remove if the event is deleted
 		eventId: t
