@@ -32,7 +32,6 @@ export const eventRecordTable = t.pgTable(
 		// support for soft deletion
 		deletedAt: t.timestamp({ withTimezone: true }),
 
-		// TODO: make this auto
 		updatedAt: t
 			.timestamp({ withTimezone: true })
 			.notNull()
