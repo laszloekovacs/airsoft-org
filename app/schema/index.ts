@@ -135,11 +135,7 @@ export const eventRecordTable = t.pgTable(
 			"valid_slug",
 			sql`${table.slug} ~ '^[a-z0-9-]+$' AND LENGTH(${table.slug}) BETWEEN 3 AND 50`,
 		),
-		//sql`${table.slug} ~ '^[a-z0-9-]+$' AND LENGTH(${table.slug}) BETWEEN 3 AND 50`,
-		//t.check("slug_is_long_enough", sql`${table.slug} LENGTH BETWEEN 7 AND 256`),
-		t
-			.index("idx_event_location")
-			.on(table.location),
+		t.index("idx_event_location").on(table.location),
 	],
 )
 
