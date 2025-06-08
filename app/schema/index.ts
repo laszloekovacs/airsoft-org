@@ -15,7 +15,9 @@ export const eventRecordTable = t.pgTable(
 			.notNull(),
 
 		// support for soft deletion
-		deletedAd: t.timestamp({ withTimezone: true }),
+		deletedAt: t.timestamp({ withTimezone: true }),
+
+		updatedAt: t.timestamp({ withTimezone: true }),
 
 		// user id who created the event
 		ownerId: t
