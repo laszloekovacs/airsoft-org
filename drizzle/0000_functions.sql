@@ -20,6 +20,7 @@ RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+-- triggers update when event is inserted or updated
 CREATE OR REPLACE TRIGGER tsvectorupdate 
 BEFORE INSERT OR UPDATE 
 ON event_record 
