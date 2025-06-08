@@ -4,12 +4,13 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bunx --bun vite",
-		"drizzle-kit-push": "bunx drizzle-kit push",
 		"better-auth-generate": "bunx @better-auth/cli generate --config ./app/services/auth.server.ts --output ./app/schema/auth-schema.ts",
 		"build": "react-router build",
 		"start": "bun ./build/server/index.js",
 		"test": "bun test",
 		"dbml": "bun ./misc/dbmlgen.ts",
+		"drizzle-kit-push": "bun drizzle-kit push",
+		"drizzle-kit-migrate": "bun drizzle-kit migrate",
 		"studio": "bunx drizzle-kit studio"
 	},
 	"dependencies": {
