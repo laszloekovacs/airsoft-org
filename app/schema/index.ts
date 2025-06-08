@@ -131,7 +131,7 @@ export const eventRecordTable = t.pgTable(
 			sql`${table.maximumParticipants} IS NULL OR ${table.maximumParticipants} > 0`,
 		),
 		t.check("valid_slug", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
-		t.check("slug_is_long_enough", sql`${table.slug} LENGTH BETWEEN 7 AND 256`),
+		//t.check("slug_is_long_enough", sql`${table.slug} LENGTH BETWEEN 7 AND 256`),
 		t.index("idx_event_location").on(table.location),
 	],
 )
@@ -305,7 +305,7 @@ export const serviceFeeRecord = t.pgTable(
 		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
 
 		label: t.text().notNull(),
-		ammount: t.text().notNull(),
+		ammount: t.integer().notNull(),
 		currency: t
 			.text()
 			.notNull()
