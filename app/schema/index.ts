@@ -78,8 +78,6 @@ export const eventRecordTable = t.pgTable(
 		// optional display price info, no checks. null means not provided, 0 = free
 		displayPrice: t.integer(),
 
-		// pricing table
-
 		// text description of approx location, eg: Debrecen
 		locationSummary: t.text().notNull(),
 
