@@ -182,7 +182,8 @@ export const siteInformation = t.pgTable(
 		address1: t.text().notNull(),
 		address2: t.text(),
 		state: t.text(),
-		// international support, hidden from users if not default
+
+		// international support, hidden from users if default
 		country: t
 			.text()
 			.notNull()
