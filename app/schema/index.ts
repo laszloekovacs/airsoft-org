@@ -364,3 +364,23 @@ export const timelineTable = t.pgTable("timeline", {
 	// if some parts are on a different day than the main event, it's helpfull to show full date. Sould this be automated?
 	displayLongDateTime: t.boolean().notNull().default(false),
 })
+
+/**
+ * database functionality, should be moved to somewhere else. also create migration script
+ */
+
+export const createUpdateSearchVector = () => sql`
+	CREATE FUNCTION update_search_vector() RETURNS trigger AS $$
+		BEGIN
+			NEW.search_vector := 
+				setweigth(to_tsvector('hungarian', COALESCE(NEW.title, '')), 'A') ||
+				setweight(to_tsvector('hungarian', COALESCE(NEW.description, '')), 'B') ||
+				setweight(to_tsvector('hungarian', array_to_string(COALESCE(NEW.tags, '{}'), ' ')), 'C');
+		END
+	$$ LANGUAGE plpgsql;
+`
+
+export const createTriggerToUpdateSearchVector = () => sql`
+	CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
+	ON post FOR EACH ROW EXECUTE FUNCTION update_search_vector();
+`
