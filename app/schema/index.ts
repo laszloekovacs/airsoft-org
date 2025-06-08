@@ -36,7 +36,9 @@ export const eventRecordTable = t.pgTable(
 		isPrivate: t.boolean().notNull().default(false),
 
 		// allow user to edit event before publishing
-		eventState: eventState(),
+		eventState: eventState()
+			.notNull()
+			.$default(() => "draft"),
 
 		// user id who created the event. on deletion the event should survive the users deletion
 		// for record keeping
