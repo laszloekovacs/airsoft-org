@@ -177,22 +177,48 @@ export const siteInformation = t.pgTable(
 		alias: t.text(),
 
 		// vanilla address data
+		city: t.text().notNull(),
+		zip: t.text().notNull(),
+		address1: t.text().notNull(),
+		address2: t.text(),
+		state: t.text(),
+		// international support, hidden from users if not default
 		country: t
 			.text()
 			.notNull()
 			.$default(() => "Magyarország"),
-		address1: t.text().notNull(),
-		address2: t.text(),
-		city: t.text(),
-		state: t.text(),
-		zip: t.text(),
 
-		// gps coordinates
+		// optional GPS Coordinates in a PostGIS Point form
+		coordinates: t.customType({
+			dataType() {
+				return "geometry(POINT, 4326)"
+			},
+		})(),
+
 		longitude: t.doublePrecision(),
 		latitude: t.doublePrecision(),
 	},
 	(table) => [
-		t.check("valid_latitude", sql`${table.latitude} BETWEEN -90 AND 90`),
-		t.check("valid_longitude", sql`${table.longitude} BETWEEN -180 AND 180`),
+		// Ensure the geometry is a valid Point or NULL
+		t.check(
+			"valid_point_or_null",
+			sql`
+        ${table.coordinates} IS NULL OR
+        ST_GeometryType(${table.coordinates}) = 'ST_Point'
+      `,
+		),
+		// Ensure valid coordinates when not NULL
+		t.check(
+			"valid_coordinates_or_null",
+			sql`
+        ${table.coordinates} IS NULL OR
+        (ST_X(${table.coordinates}) BETWEEN -180 AND 180 AND
+         ST_Y(${table.coordinates}) BETWEEN -90 AND 90)
+      `,
+		),
+		// Create a GIST index for spatial queries
+		t
+			.index("idx_site_coordinates")
+			.using("GIST", table.coordinates),
 	],
 )
