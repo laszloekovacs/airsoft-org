@@ -55,27 +55,42 @@ export const eventRecordTable = t.pgTable(
 		socials: t.text("socials").array(),
 	},
 	(table) => [
-		t.check("valid_slug_format", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
 		t.check(
 			"end_date_is_later_than_start_date",
-			sql`${table.endDate} > ${table.startDate}`,
+			sql`${table.endDate} > ${table.startDate} OR ${table.endDate} IS NULL`,
 		),
 		t.check(
 			"min_participants_are_less_than_max",
-			sql`${table.minimumParticipants} < ${table.maximumParticipants}`,
+			sql`
+        ${table.minimumParticipants} IS NULL OR
+        ${table.maximumParticipants} IS NULL OR
+        ${table.minimumParticipants} < ${table.maximumParticipants}
+      `,
+		),
+		t.check(
+			"expected_within_bounds",
+			sql`
+        ${table.minimumParticipants} IS NULL OR
+        ${table.maximumParticipants} IS NULL OR
+        ${table.expectedParticipants} IS NULL OR
+        ${table.expectedParticipants} >= ${table.minimumParticipants} AND
+        ${table.expectedParticipants} <= ${table.maximumParticipants}
+      `,
 		),
 		t.check(
 			"expected_is_positive_number",
-			sql`${table.expectedParticipants} > 0`,
+			sql`${table.expectedParticipants} IS NULL OR ${table.expectedParticipants} > 0`,
 		),
 		t.check(
 			"minimum_is_positive_number",
-			sql`${table.minimumParticipants} > 0`,
+			sql`${table.minimumParticipants} IS NULL OR ${table.minimumParticipants} > 0`,
 		),
 		t.check(
 			"maximum_is_positive_number",
-			sql`${table.maximumParticipants} > 0`,
+			sql`${table.maximumParticipants} IS NULL OR ${table.maximumParticipants} > 0`,
 		),
+		t.check("valid_slug", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
+		t.index("idx_event_location").on(table.location),
 	],
 )
 
