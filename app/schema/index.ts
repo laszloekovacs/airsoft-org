@@ -1,8 +1,6 @@
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
-import { integer } from "drizzle-orm/gel-core"
-import { Currency } from "lucide-react"
 
 export const eventState = t.pgEnum("event_state", [
 	"draft",
