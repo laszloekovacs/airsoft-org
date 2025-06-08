@@ -217,8 +217,10 @@ export const siteInformation = t.pgTable(
       `,
 		),
 		// Create a GIST index for spatial queries
+		// apparently it takes a lot of time, concurrently is recommended. see gis doc
 		t
 			.index("idx_site_coordinates")
-			.using("GIST", table.coordinates),
+			.using("GIST", table.coordinates)
+			.concurrently(),
 	],
 )
