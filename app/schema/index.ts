@@ -136,6 +136,7 @@ export const eventRecordTable = t.pgTable(
 			sql`${table.slug} ~ '^[a-z0-9-]+$' AND LENGTH(${table.slug}) BETWEEN 3 AND 50`,
 		),
 		t.index("idx_event_location").on(table.location),
+		t.index("idx_event_start_date").on(table.startDate),
 	],
 )
 
