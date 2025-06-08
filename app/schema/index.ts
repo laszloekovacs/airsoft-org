@@ -2,18 +2,24 @@ import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
 
-export const eventState = t.pgEnum("event_state", [
+export const eventStateEnum = t.pgEnum("event_state", [
 	"draft",
 	"publised",
 	"cancelled",
 ])
 
-export const signupState = t.pgEnum("signup_state", [
+export const signupStateEnum = t.pgEnum("signup_state", [
 	"pending",
 	"waitlisted",
 	"assigned",
 	"rejected",
 ])
+
+const tsvector = t.customType<{ data: boolean }>({
+	dataType() {
+		return "tsvector"
+	},
+})
 
 /**
  * Event information table
@@ -41,7 +47,11 @@ export const eventRecordTable = t.pgTable(
 		image: t.text(),
 
 		// freeform tags. eg: milsim, free, practice
-		tags: t.text().array(),
+		tags: t
+			.text()
+			.array()
+			.notNull()
+			.$default(() => sql`{}`),
 
 		// markdown or string form of description
 		description: t.text(),
@@ -50,7 +60,7 @@ export const eventRecordTable = t.pgTable(
 		isPrivate: t.boolean().notNull().default(false),
 
 		// allow user to edit event before publishing
-		eventState: eventState()
+		eventState: eventStateEnum()
 			.notNull()
 			.$default(() => "draft"),
 
@@ -90,9 +100,18 @@ export const eventRecordTable = t.pgTable(
 		minimumParticipants: t.integer(),
 
 		// array of links to fb, x, discord etc or even phone number.
-		socials: t.text("socials").array(),
+		socials: t
+			.text("socials")
+			.array()
+			.notNull()
+			.$default(() => sql`{}`),
+
+		// postgres built in tsvector for search
+		searchVector: tsvector(),
 	},
 	(table) => [
+		t.index("idx_event_search_vector").using("gin", table.searchVector),
+
 		t.check(
 			"event_starts_at_least_tomorrow",
 			sql`${table.startDate} >= (CURRENT_DATE + INTERVAL '1 day')`,
@@ -155,7 +174,7 @@ export const userAtEventTable = t.pgTable(
 			.notNull(),
 
 		// user has signed up to the event, represents the decision of the organizer
-		signupState: signupState(),
+		signupState: signupStateEnum(),
 		// the reason given by the organizer
 		rejectionReason: t.text(),
 
