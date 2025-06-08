@@ -26,11 +26,16 @@ export const eventRecordTable = t.pgTable(
 		// TODO: make this auto
 		updatedAt: t.timestamp({ withTimezone: true }),
 
-		// freeform tags. eg: milsim, free, practice
-		tags: t.text().array(),
+		title: t.text().notNull(),
 
 		// header image url
 		image: t.text(),
+
+		// freeform tags. eg: milsim, free, practice
+		tags: t.text().array(),
+
+		// markdown or string form of description
+		description: t.text(),
 
 		// by default it is a public game and advertised.
 		isPrivate: t.boolean().notNull().default(false),
@@ -47,8 +52,6 @@ export const eventRecordTable = t.pgTable(
 			.notNull()
 			.references(() => user.id, { onDelete: "set null" }),
 
-		title: t.text().notNull(),
-
 		// generated url. date + title sanitized (eg: 2025-mikulasvaro)
 		slug: t.text().notNull().unique(),
 
@@ -59,9 +62,6 @@ export const eventRecordTable = t.pgTable(
 
 		// optional signup deadline, no checks on this
 		signupDeadline: t.timestamp({ withTimezone: true }),
-
-		// markdown or string form of description
-		description: t.text(),
 
 		// text description of approx location, eg: Debrecen
 		locationSummary: t.text().notNull(),
