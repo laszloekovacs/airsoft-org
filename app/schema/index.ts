@@ -1,11 +1,20 @@
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
+import { integer } from "drizzle-orm/gel-core"
+import { Currency } from "lucide-react"
 
 export const eventState = t.pgEnum("event_state", [
 	"draft",
 	"publised",
 	"cancelled",
+])
+
+export const signupState = t.pgEnum("signup_state", [
+	"pending",
+	"waitlisted",
+	"assigned",
+	"rejected",
 ])
 
 /**
@@ -17,14 +26,17 @@ export const eventRecordTable = t.pgTable(
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
 			.timestamp({ withTimezone: true })
-			.$defaultFn(() => /* @__PURE__ */ sql`now()`)
+			.$defaultFn(() => sql`now()`)
 			.notNull(),
 
 		// support for soft deletion
 		deletedAt: t.timestamp({ withTimezone: true }),
 
 		// TODO: make this auto
-		updatedAt: t.timestamp({ withTimezone: true }),
+		updatedAt: t
+			.timestamp({ withTimezone: true })
+			.notNull()
+			.$onUpdate(() => sql`now()`),
 
 		title: t.text().notNull(),
 
@@ -63,11 +75,16 @@ export const eventRecordTable = t.pgTable(
 		// optional signup deadline, no checks on this
 		signupDeadline: t.timestamp({ withTimezone: true }),
 
+		// optional display price info, no checks. null means not provided, 0 = free
+		displayPrice: t.integer(),
+
+		// pricing table
+
 		// text description of approx location, eg: Debrecen
 		locationSummary: t.text().notNull(),
 
 		// detailed location information
-		location: t.integer().references(() => siteInformation.id, {
+		location: t.integer().references(() => siteInformationTable.id, {
 			onDelete: "set null",
 		}),
 
@@ -80,9 +97,10 @@ export const eventRecordTable = t.pgTable(
 		socials: t.text("socials").array(),
 	},
 	(table) => [
-		// should be tomorrow at least
-		t.check("event_starts_in_the_future", sql`${table.startDate} > now()`),
-
+		t.check(
+			"event_starts_at_least_tomorrow",
+			sql`${table.startDate} >= (CURRENT_DATE + INTERVAL '1 day')`,
+		),
 		t.check(
 			"end_date_is_later_than_start_date",
 			sql`${table.endDate} > ${table.startDate} OR ${table.endDate} IS NULL`,
@@ -90,20 +108,20 @@ export const eventRecordTable = t.pgTable(
 		t.check(
 			"min_participants_are_less_than_max",
 			sql`
-        ${table.minimumParticipants} IS NULL OR
-        ${table.maximumParticipants} IS NULL OR
-        ${table.minimumParticipants} < ${table.maximumParticipants}
-      `,
+		${table.minimumParticipants} IS NULL OR
+		${table.maximumParticipants} IS NULL OR
+		${table.minimumParticipants} < ${table.maximumParticipants}
+	  `,
 		),
 		t.check(
 			"expected_within_bounds",
 			sql`
-        ${table.minimumParticipants} IS NULL OR
-        ${table.maximumParticipants} IS NULL OR
-        ${table.expectedParticipants} IS NULL OR
-        ${table.expectedParticipants} >= ${table.minimumParticipants} AND
-        ${table.expectedParticipants} <= ${table.maximumParticipants}
-      `,
+		${table.minimumParticipants} IS NULL OR
+		${table.maximumParticipants} IS NULL OR
+		${table.expectedParticipants} IS NULL OR
+		${table.expectedParticipants} >= ${table.minimumParticipants} AND
+		${table.expectedParticipants} <= ${table.maximumParticipants}
+	  `,
 		),
 		t.check(
 			"expected_is_positive_number",
@@ -134,8 +152,17 @@ export const userAtEventTable = t.pgTable(
 		// time the user applied to the event
 		createdAt: t
 			.timestamp({ withTimezone: true })
-			.$defaultFn(() => /* @__PURE__ */ sql`now()`)
+			.$defaultFn(() => sql`now()`)
 			.notNull(),
+
+		// user has signed up to the event, represents the decision of the organizer
+		signupState: signupState(),
+		// the reason given by the organizer
+		rejectionReason: t.text(),
+
+		// is this application cancelled by the user? if so why?
+		isCancelled: t.boolean().default(false),
+		cancellationReason: t.text(),
 
 		// if user deletes himself, it should display as "deleted user"
 		userId: t
@@ -187,7 +214,7 @@ export const factionInfoTable = t.pgTable(
 		t.unique().on(table.name, table.eventId),
 		t.check(
 			"expected_participants_should_be_positive",
-			sql`${table.expectedParticipants} > 0`,
+			sql`${table.expectedParticipants} IS NULL OR ${table.expectedParticipants} > 0`,
 		),
 	],
 )
@@ -196,13 +223,13 @@ export const factionInfoTable = t.pgTable(
  * Locations or map details for the event
  */
 
-export const siteInformation = t.pgTable(
+export const siteInformationTable = t.pgTable(
 	"site_information",
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
 			.timestamp({ withTimezone: true })
-			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.$defaultFn(() => sql`now()`)
 			.notNull(),
 
 		// name, splash image and description
@@ -259,5 +286,36 @@ export const siteInformation = t.pgTable(
 			.index("idx_site_coordinates")
 			.using("GIST", table.coordinates)
 			.concurrently(),
+	],
+)
+
+/**
+ * prices table. eg: entry fee, rental gear, welcome drink etc.
+ */
+export const serviceFeeRecord = t.pgTable(
+	"service_fee",
+	{
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+
+		// reference to the event, deletes when event gets removed
+		eventId: t
+			.integer()
+			.notNull()
+			.references(() => eventRecordTable.id, {
+				onDelete: "cascade",
+			}),
+
+		// allows for price change notification
+		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
+
+		label: t.text().notNull(),
+		ammount: t.text().notNull(),
+		currency: t
+			.text()
+			.notNull()
+			.$default(() => "HUF"),
+	},
+	(table) => [
+		t.check("ammount_must_be_positive_or_zero", sql`${table.ammount} >= 0`),
 	],
 )
