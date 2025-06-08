@@ -236,6 +236,7 @@ export const siteInformationTable = t.pgTable(
 		name: t.text().notNull(),
 		alias: t.text(),
 
+		// optional description and splash image
 		description: t.text(),
 		image: t.text(),
 
@@ -319,3 +320,29 @@ export const serviceFeeRecord = t.pgTable(
 		t.check("ammount_must_be_positive_or_zero", sql`${table.ammount} >= 0`),
 	],
 )
+
+/**
+ * timeline of the event: eg: breakfast, orientation, play, end
+ */
+export const timelineTable = t.pgTable("timeline", {
+	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+
+	// reference to the event, deletes when event gets removed
+	eventId: t
+		.integer()
+		.notNull()
+		.references(() => eventRecordTable.id, {
+			onDelete: "cascade",
+		}),
+
+	// allows for notification on change
+	updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
+
+	// description and timestamp of planned ativities: eg: opening: 9:00am,
+	// there should be no check: eg: people could gather for a bus 2 hours before start.
+	label: t.text().notNull(),
+	timestamp: t.timestamp().notNull(),
+
+	// if some parts are on a different day than the main event, it's helpfull to show full date. Sould this be automated?
+	displayLongDateTime: t.boolean().notNull().default(false),
+})
