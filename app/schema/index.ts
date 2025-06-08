@@ -1,128 +1,169 @@
-import {
-	customType,
-	date,
-	integer,
-	pgTable,
-	text,
-	unique,
-} from "drizzle-orm/pg-core"
+import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
+import { sql } from "drizzle-orm"
 
 /**
  * Event information table
  */
-export const eventRecordTable = pgTable("event_record", {
-	id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-	createdAt: date("created_at")
-		.notNull()
-		.$default(() => new Date().toISOString()),
+export const eventRecordTable = t.pgTable(
+	"event_record",
+	{
+		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		createdAt: t
+			.timestamp()
+			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.notNull(),
 
-	// user id who created the event
-	ownerId: text("owner_id")
-		.notNull()
-		.references(() => user.id, { onDelete: "set null" }),
+		// soft deletion
+		deletedAd: t
+			.timestamp()
+			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.notNull(),
 
-	title: text("title").notNull(),
+		// user id who created the event
+		ownerId: t
+			.text()
+			.notNull()
+			.references(() => user.id, { onDelete: "set null" }),
 
-	// generated url. date + title sanitized
-	slug: text("slug").notNull().unique(),
+		title: t.text().notNull(),
 
-	// start date and optional end date for multi day event
-	startDate: date("start_date").notNull(),
-	endDate: date("end_date"),
+		// generated url. date + title sanitized (eg: 2025-mikulasvaro)
+		slug: t.text().notNull().unique(),
 
-	description: text(),
+		// start date and optional end date for multi day event
+		// event schedule times are stored in a timetable
+		startDate: t.date().notNull(),
+		endDate: t.date(),
 
-	// approx location, eg: debrecen
-	locationSummary: text(),
+		// markdown or string form of description
+		description: t.text(),
 
-	// organizers expectation
-	expectedParticipants: integer(),
-	maximumParticipants: integer(),
-	minimumParticipants: integer(),
+		// text description of approx location, eg: debrecen
+		locationSummary: t.text().notNull(),
 
-	// array of links to fb, x, discord etc.
-	socialLinks: text("socials").array(),
-})
+		// location if registered site is used
+		location: t.integer().references(() => siteInformation.id, {
+			onDelete: "set null",
+		}),
+
+		// organizers expectation
+		expectedParticipants: t.integer(),
+		maximumParticipants: t.integer(),
+		minimumParticipants: t.integer(),
+
+		// array of links to fb, x, discord etc.
+		socials: t.text("socials").array(),
+	},
+	(table) => [
+		t.check(
+			"end_date_is_later_than_start_date",
+			sql`${table.endDate} > ${table.startDate}`,
+		),
+		t.check(
+			"min_participants_are_less_than_max",
+			sql`${table.minimumParticipants} < ${table.maximumParticipants}`,
+		),
+		t.check(
+			"expected_is_positive_number",
+			sql`${table.expectedParticipants} > 0`,
+		),
+		t.check(
+			"minimum_is_positive_number",
+			sql`${table.minimumParticipants} > 0`,
+		),
+		t.check(
+			"maximum_is_positive_number",
+			sql`${table.maximumParticipants} > 0`,
+		),
+	],
+)
 
 /*
  * user attendance on event many-to-many associative table
  */
-export const userAtEventTable = pgTable(
+export const userAtEventTable = t.pgTable(
 	"user_at_event",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		createdAt: date("created_at")
-			.notNull()
-			.$default(() => new Date().toISOString()),
+		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+		createdAt: t
+			.timestamp()
+			.$defaultFn(() => /* @__PURE__ */ new Date())
+			.notNull(),
 
 		// if user deletes himself, it should display as "deleted user"
-		userId: text("user_id")
+		userId: t
+			.text()
 			.notNull()
-			.references(() => user.id, { onDelete: "no action" }),
+			.references(() => user.id, { onDelete: "set null" }),
 
-		// if the event is deleted, delete the applications too, tho the
-		// user should be notified of it
-		eventId: integer("event_id")
+		// if the event is deleted, delete the applications too
+		eventId: t
+			.integer()
 			.notNull()
 			.references(() => eventRecordTable.id, { onDelete: "cascade" }),
 
 		// null means the player is in the waiting list.
-		factionId: integer("faction_id").references(() => factionInfoTable.id, {
+		factionId: t.integer("faction_id").references(() => factionInfoTable.id, {
 			onDelete: "set null",
 		}),
 	},
 	/* user allowed only once to apply for a single event */
-	(table) => [unique().on(table.eventId, table.userId)],
+	(table) => [t.unique().on(table.eventId, table.userId)],
 )
 
 /**
  * Description of a faction at an event
  */
-export const factionInfoTable = pgTable(
+export const factionInfoTable = t.pgTable(
 	"faction_info",
 	{
-		id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-		eventId: integer("event_id").references(() => eventRecordTable.id, {
+		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+
+		// remove if the event is deleted
+		eventId: t.integer().references(() => eventRecordTable.id, {
 			onDelete: "cascade",
 		}),
-		name: text().notNull(),
-		desciption: text(),
+
+		name: t.text().notNull(),
+		description: t.text(),
 
 		// intent how many players should be in here
-		expectedParticipants: integer("expected_participants"),
+		expectedParticipants: t.integer(),
 	},
 	/* teams have to be unique to every event */
-	(table) => [unique().on(table.name, table.eventId)],
+	(table) => [
+		t.unique().on(table.name, table.eventId),
+		t.check(
+			"expected_participants_should_be_positive",
+			sql`${table.expectedParticipants} > 0`,
+		),
+	],
 )
 
 /**
  * Locations or map details for the event
  */
 
-const geoPoint = customType<{ data: string }>({
-	dataType() {
-		return "point"
-	},
-})
-
-export const siteInformation = pgTable("site_information", {
-	id: integer().primaryKey().generatedAlwaysAsIdentity(),
-	createdAt: date("created_at")
-		.notNull()
-		.$default(() => new Date().toISOString()),
+export const siteInformation = t.pgTable("site_information", {
+	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+	createdAt: t
+		.timestamp()
+		.$defaultFn(() => /* @__PURE__ */ new Date())
+		.notNull(),
 
 	// name information
-	name: text(),
-	alias: text(),
+	name: t.text(),
+	alias: t.text(),
 
 	// vanilla address data
-	address1: text(),
-	address2: text(),
-	city: text(),
-	state: text(),
-	zip: text(),
+	address1: t.text(),
+	address2: t.text(),
+	city: t.text(),
+	state: t.text(),
+	zip: t.text(),
 
 	// gps coordinates
-	geolocation: geoPoint("location"),
+	longitude: t.integer(),
+	latitude: t.integer(),
 })
