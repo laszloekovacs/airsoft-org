@@ -73,7 +73,8 @@ export const eventRecordTable = t.pgTable(
 		signupDeadline: t.timestamp({ withTimezone: true }),
 
 		// optional display price info, no checks. null means not provided, 0 = free
-		displayPrice: t.integer(),
+		displayPrice: t.numeric({ precision: 10, scale: 2 }),
+		displayPriceCurrency: t.text().default("HUF").notNull(),
 
 		// text description of approx location, eg: Debrecen
 		locationSummary: t.text().notNull(),
