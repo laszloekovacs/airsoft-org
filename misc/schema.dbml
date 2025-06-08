@@ -1,21 +1,122 @@
-table eventRecord {
-  id integer [pk, not null]
-  user_id text [not null]
-  name text [not null]
-  date date [not null]
-  url_slug text [not null, unique]
-  created_at date [not null]
+enum event_state {
+  draft
+  publised
+  cancelled
 }
 
-table userAtEvent {
+enum signup_state {
+  pending
+  waitlisted
+  assigned
+  rejected
+}
+
+table event_record {
   id integer [pk, not null]
-  user_id text [not null]
-  event_id integer [not null]
-  created_at date [not null]
-  is_confirmed boolean [not null, default: false]
+  createdAt "timestamp with time zone" [not null]
+  deletedAt "timestamp with time zone"
+  updatedAt "timestamp with time zone" [not null]
+  title text [not null]
+  image text
+  tags text[]
+  description text
+  isPrivate boolean [not null, default: false]
+  eventState event_state [not null]
+  ownerId text [not null]
+  slug text [not null, unique]
+  startDate date [not null]
+  endDate date
+  signupDeadline "timestamp with time zone"
+  displayPrice integer
+  locationSummary text [not null]
+  location integer
+  expectedParticipants integer
+  maximumParticipants integer
+  minimumParticipants integer
+  socials text[]
 
   indexes {
-    (event_id, user_id) [name: 'userAtEvent_event_id_user_id_unique', unique]
+    
+    
+    
+    
+    
+    
+    
+    
+    location [name: 'idx_event_location']
+  }
+}
+
+table faction_info {
+  id integer [pk, not null]
+  eventId integer [not null]
+  name text [not null]
+  description text
+  image text
+  expectedParticipants integer
+
+  indexes {
+    (name, eventId) [name: 'faction_info_name_eventId_unique', unique]
+    
+  }
+}
+
+table service_fee {
+  id integer [pk, not null]
+  eventId integer [not null]
+  updatedAt "timestamp with time zone"
+  label text [not null]
+  ammount integer [not null]
+  currency text [not null]
+}
+
+table site_information {
+  id integer [pk, not null]
+  createdAt "timestamp with time zone" [not null]
+  name text [not null]
+  alias text
+  description text
+  image text
+  city text [not null]
+  zip text [not null]
+  address1 text [not null]
+  address2 text
+  state text
+  country text [not null]
+  coordinates "geometry(POINT, 4326)"
+  longitude "double precision"
+  latitude "double precision"
+
+  indexes {
+    
+    
+    coordinates [name: 'idx_site_coordinates']
+  }
+}
+
+table timeline {
+  id integer [pk, not null]
+  eventId integer [not null]
+  updatedAt "timestamp with time zone"
+  label text [not null]
+  timestamp timestamp [not null]
+  displayLongDateTime boolean [not null, default: false]
+}
+
+table user_at_event {
+  id integer [pk, not null]
+  createdAt "timestamp with time zone" [not null]
+  signupState signup_state
+  rejectionReason text
+  isCancelled boolean [default: false]
+  cancellationReason text
+  userId text [not null]
+  eventId integer [not null]
+  faction_id integer
+
+  indexes {
+    (eventId, userId) [name: 'user_at_event_eventId_userId_unique', unique]
   }
 }
 
@@ -54,6 +155,8 @@ table user {
   image text
   created_at timestamp [not null]
   updated_at timestamp [not null]
+  claims text[]
+  callsign text
 }
 
 table verification {
