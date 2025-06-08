@@ -107,7 +107,7 @@ export const eventRecordTable = t.pgTable(
 			.$default(() => sql`{}`),
 
 		// postgres built in tsvector for search
-		searchVector: tsvector(),
+		searchVector: tsvector("search_vector"),
 	},
 	(table) => [
 		t.index("idx_event_search_vector").using("gin", table.searchVector),
@@ -382,7 +382,7 @@ export const createUpdateSearchVector = () => sql`
 
 export const createTriggerToUpdateSearchVector = () => sql`
 	CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
-	ON post FOR EACH ROW EXECUTE FUNCTION update_search_vector();
+	ON event_record FOR EACH ROW EXECUTE FUNCTION update_search_vector();
 `
 
 /** searching is done with tsquery
