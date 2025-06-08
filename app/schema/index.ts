@@ -130,9 +130,15 @@ export const eventRecordTable = t.pgTable(
 			"maximum_is_positive_number",
 			sql`${table.maximumParticipants} IS NULL OR ${table.maximumParticipants} > 0`,
 		),
-		t.check("valid_slug", sql`${table.slug} ~ '^[a-z0-9-]+$'`),
+		t.check(
+			"valid_slug",
+			sql`${table.slug} ~ '^[a-z0-9-]+$' AND LENGTH(${table.slug}) BETWEEN 3 AND 50`,
+		),
+		//sql`${table.slug} ~ '^[a-z0-9-]+$' AND LENGTH(${table.slug}) BETWEEN 3 AND 50`,
 		//t.check("slug_is_long_enough", sql`${table.slug} LENGTH BETWEEN 7 AND 256`),
-		t.index("idx_event_location").on(table.location),
+		t
+			.index("idx_event_location")
+			.on(table.location),
 	],
 )
 
