@@ -1,6 +1,6 @@
 {
-  "id": "e5027288-297c-4568-9bd3-e74d39ff840b",
-  "prevId": "c65ec58f-1c26-4166-a562-4526431eb9ef",
+  "id": "b8be9f97-b3f1-4eea-9a8e-66baeb963d33",
+  "prevId": "e70bf970-f087-497c-97a3-4a73c56dee34",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -14,15 +14,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "event_record_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "createdAt": {
@@ -179,9 +179,9 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "with": {},
           "method": "gin",
-          "with": {}
+          "concurrently": false
         },
         "idx_event_location": {
           "name": "idx_event_location",
@@ -194,9 +194,9 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "with": {},
           "method": "btree",
-          "with": {}
+          "concurrently": false
         },
         "idx_event_start_date": {
           "name": "idx_event_start_date",
@@ -209,47 +209,47 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "with": {},
           "method": "btree",
-          "with": {}
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "event_record_ownerId_user_id_fk": {
           "name": "event_record_ownerId_user_id_fk",
           "tableFrom": "event_record",
-          "tableTo": "user",
           "columnsFrom": [
             "ownerId"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "set null"
         },
         "event_record_location_site_information_id_fk": {
           "name": "event_record_location_site_information_id_fk",
           "tableFrom": "event_record",
-          "tableTo": "site_information",
           "columnsFrom": [
             "location"
           ],
+          "tableTo": "site_information",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "event_record_slug_unique": {
           "name": "event_record_slug_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "slug"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -299,15 +299,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "faction_info_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "eventId": {
@@ -346,26 +346,26 @@
         "faction_info_eventId_event_record_id_fk": {
           "name": "faction_info_eventId_event_record_id_fk",
           "tableFrom": "faction_info",
-          "tableTo": "event_record",
           "columnsFrom": [
             "eventId"
           ],
+          "tableTo": "event_record",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "faction_info_name_eventId_unique": {
           "name": "faction_info_name_eventId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "name",
             "eventId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -387,15 +387,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "service_fee_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "eventId": {
@@ -434,15 +434,15 @@
         "service_fee_eventId_event_record_id_fk": {
           "name": "service_fee_eventId_event_record_id_fk",
           "tableFrom": "service_fee",
-          "tableTo": "event_record",
           "columnsFrom": [
             "eventId"
           ],
+          "tableTo": "event_record",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -466,15 +466,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "site_information_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "createdAt": {
@@ -545,7 +545,7 @@
         },
         "coordinates": {
           "name": "coordinates",
-          "type": "geometry(POINT, 4326)",
+          "type": "point",
           "primaryKey": false,
           "notNull": false
         },
@@ -562,37 +562,12 @@
           "notNull": false
         }
       },
-      "indexes": {
-        "idx_site_coordinates": {
-          "name": "idx_site_coordinates",
-          "columns": [
-            {
-              "expression": "coordinates",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": true,
-          "method": "GIST",
-          "with": {}
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "checkConstraints": {
-        "valid_point_or_null": {
-          "name": "valid_point_or_null",
-          "value": "\n        \"site_information\".\"coordinates\" IS NULL OR\n        ST_GeometryType(\"site_information\".\"coordinates\") = 'ST_Point'\n      "
-        },
-        "valid_coordinates_or_null": {
-          "name": "valid_coordinates_or_null",
-          "value": "\n        \"site_information\".\"coordinates\" IS NULL OR\n        (ST_X(\"site_information\".\"coordinates\") BETWEEN -180 AND 180 AND\n         ST_Y(\"site_information\".\"coordinates\") BETWEEN -90 AND 90)\n      "
-        }
-      },
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "public.timeline": {
@@ -605,15 +580,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "timeline_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "eventId": {
@@ -653,15 +628,15 @@
         "timeline_eventId_event_record_id_fk": {
           "name": "timeline_eventId_event_record_id_fk",
           "tableFrom": "timeline",
-          "tableTo": "event_record",
           "columnsFrom": [
             "eventId"
           ],
+          "tableTo": "event_record",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -680,15 +655,15 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
             "name": "user_at_event_id_seq",
-            "schema": "public",
             "increment": "1",
-            "startWith": "1",
             "minValue": "1",
             "maxValue": "2147483647",
+            "startWith": "1",
             "cache": "1",
-            "cycle": false
+            "cycle": false,
+            "schema": "public",
+            "type": "always"
           }
         },
         "createdAt": {
@@ -747,52 +722,52 @@
         "user_at_event_userId_user_id_fk": {
           "name": "user_at_event_userId_user_id_fk",
           "tableFrom": "user_at_event",
-          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "set null"
         },
         "user_at_event_eventId_event_record_id_fk": {
           "name": "user_at_event_eventId_event_record_id_fk",
           "tableFrom": "user_at_event",
-          "tableTo": "event_record",
           "columnsFrom": [
             "eventId"
           ],
+          "tableTo": "event_record",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         },
         "user_at_event_faction_id_faction_info_id_fk": {
           "name": "user_at_event_faction_id_faction_info_id_fk",
           "tableFrom": "user_at_event",
-          "tableTo": "faction_info",
           "columnsFrom": [
             "faction_id"
           ],
+          "tableTo": "faction_info",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_at_event_eventId_userId_unique": {
           "name": "user_at_event_eventId_userId_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "eventId",
             "userId"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -887,15 +862,15 @@
         "account_user_id_user_id_fk": {
           "name": "account_user_id_user_id_fk",
           "tableFrom": "account",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -962,25 +937,25 @@
         "session_user_id_user_id_fk": {
           "name": "session_user_id_user_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "session_token_unique": {
           "name": "session_token_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "token"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -1052,10 +1027,10 @@
       "uniqueConstraints": {
         "user_email_unique": {
           "name": "user_email_unique",
-          "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
+          ],
+          "nullsNotDistinct": false
         }
       },
       "policies": {},
@@ -1134,10 +1109,10 @@
     }
   },
   "schemas": {},
+  "views": {},
   "sequences": {},
   "roles": {},
   "policies": {},
-  "views": {},
   "_meta": {
     "columns": {},
     "schemas": {},

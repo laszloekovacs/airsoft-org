@@ -15,12 +15,6 @@ export const signupStateEnum = t.pgEnum("signup_state", [
 	"rejected",
 ])
 
-const tsvector = t.customType<{ data: boolean }>({
-	dataType() {
-		return "tsvector"
-	},
-})
-
 /**
  * Event information table
  */
@@ -107,7 +101,11 @@ export const eventRecordTable = t.pgTable(
 			.$default(() => sql`{}`),
 
 		// postgres built in tsvector for search
-		searchVector: tsvector("search_vector"),
+		searchVector: t.customType({
+			dataType() {
+				return "tsvector"
+			},
+		})("search_vector"),
 	},
 	(table) => [
 		t.index("idx_event_search_vector").using("gin", table.searchVector),
@@ -241,72 +239,44 @@ export const factionInfoTable = t.pgTable(
  * Locations or map details for the event
  */
 
-export const siteInformationTable = t.pgTable(
-	"site_information",
-	{
-		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-		createdAt: t
-			.timestamp({ withTimezone: true })
-			.$defaultFn(() => sql`now()`)
-			.notNull(),
+export const siteInformationTable = t.pgTable("site_information", {
+	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+	createdAt: t
+		.timestamp({ withTimezone: true })
+		.$defaultFn(() => sql`now()`)
+		.notNull(),
 
-		// name, splash image and description
-		name: t.text().notNull(),
-		alias: t.text(),
+	// name, splash image and description
+	name: t.text().notNull(),
+	alias: t.text(),
 
-		// optional description and splash image
-		description: t.text(),
-		image: t.text(),
+	// optional description and splash image
+	description: t.text(),
+	image: t.text(),
 
-		// vanilla address data
-		city: t.text().notNull(),
-		zip: t.text().notNull(),
-		address1: t.text().notNull(),
-		address2: t.text(),
-		state: t.text(),
+	// vanilla address data
+	city: t.text().notNull(),
+	zip: t.text().notNull(),
+	address1: t.text().notNull(),
+	address2: t.text(),
+	state: t.text(),
 
-		// international support, hidden from users if default
-		country: t
-			.text()
-			.notNull()
-			.$default(() => "Magyarország"),
+	// international support, hidden from users if default
+	country: t
+		.text()
+		.notNull()
+		.$default(() => "Magyarország"),
 
-		// optional GPS Coordinates in a PostGIS Point form
-		coordinates: t.customType({
-			dataType() {
-				return "geometry(POINT, 4326)"
-			},
-		})(),
+	// optional GPS Coordinates in a point form
+	coordinates: t.customType({
+		dataType() {
+			return "point"
+		},
+	})(),
 
-		longitude: t.doublePrecision(),
-		latitude: t.doublePrecision(),
-	},
-	(table) => [
-		// Ensure the geometry is a valid Point or NULL
-		t.check(
-			"valid_point_or_null",
-			sql`
-        ${table.coordinates} IS NULL OR
-        ST_GeometryType(${table.coordinates}) = 'ST_Point'
-      `,
-		),
-		// Ensure valid coordinates when not NULL
-		t.check(
-			"valid_coordinates_or_null",
-			sql`
-        ${table.coordinates} IS NULL OR
-        (ST_X(${table.coordinates}) BETWEEN -180 AND 180 AND
-         ST_Y(${table.coordinates}) BETWEEN -90 AND 90)
-      `,
-		),
-		// Create a GIST index for spatial queries
-		// apparently it takes a lot of time, concurrently is recommended. see gis doc
-		t
-			.index("idx_site_coordinates")
-			.using("GIST", table.coordinates)
-			.concurrently(),
-	],
-)
+	longitude: t.doublePrecision(),
+	latitude: t.doublePrecision(),
+})
 
 /**
  * prices table. eg: entry fee, rental gear, welcome drink etc.
@@ -364,31 +334,3 @@ export const timelineTable = t.pgTable("timeline", {
 	// if some parts are on a different day than the main event, it's helpfull to show full date. Sould this be automated?
 	displayLongDateTime: t.boolean().notNull().default(false),
 })
-
-/**
- * database functionality, should be moved to somewhere else. also create migration script
- */
-
-export const createUpdateSearchVector = () => sql`
-	CREATE FUNCTION update_search_vector() RETURNS trigger AS $$
-		BEGIN
-			NEW.search_vector := 
-				setweigth(to_tsvector('hungarian', COALESCE(NEW.title, '')), 'A') ||
-				setweight(to_tsvector('hungarian', COALESCE(NEW.description, '')), 'B') ||
-				setweight(to_tsvector('hungarian', array_to_string(COALESCE(NEW.tags, '{}'), ' ')), 'C');
-		END
-	$$ LANGUAGE plpgsql;
-`
-
-export const createTriggerToUpdateSearchVector = () => sql`
-	CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE
-	ON event_record FOR EACH ROW EXECUTE FUNCTION update_search_vector();
-`
-
-/** searching is done with tsquery
- WHERE er.search_vector @@ to_tsquery('hungarian', query_text)
- AND er.deletedAt is NULL
- AND er.startDate >= CURRENT_DATE
-
-  
- */
