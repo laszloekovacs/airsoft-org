@@ -104,3 +104,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 // change search locale
 CREATE TEXT SEARCH CONFIGURATION hungarian_simple (COPY = simple);
 ALTER TEXT SEARCH CONFIGURATION hungarian_simple ALTER MAPPING FOR asciiword, word WITH hungarian;
+
+
+// seaweed
+https://github.com/seaweedfs/seaweedfs/wiki/Docker-Compose-for-S3
