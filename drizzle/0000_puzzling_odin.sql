@@ -80,18 +80,9 @@ CREATE TABLE "site_information" (
 	"address2" text,
 	"state" text,
 	"country" text NOT NULL,
-	"coordinates" geometry(POINT, 4326),
+	"coordinates" "point",
 	"longitude" double precision,
-	"latitude" double precision,
-	CONSTRAINT "valid_point_or_null" CHECK (
-        "site_information"."coordinates" IS NULL OR
-        ST_GeometryType("site_information"."coordinates") = 'ST_Point'
-      ),
-	CONSTRAINT "valid_coordinates_or_null" CHECK (
-        "site_information"."coordinates" IS NULL OR
-        (ST_X("site_information"."coordinates") BETWEEN -180 AND 180 AND
-         ST_Y("site_information"."coordinates") BETWEEN -90 AND 90)
-      )
+	"latitude" double precision
 );
 --> statement-breakpoint
 CREATE TABLE "timeline" (
@@ -178,5 +169,4 @@ ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "idx_event_search_vector" ON "event_record" USING gin ("search_vector");--> statement-breakpoint
 CREATE INDEX "idx_event_location" ON "event_record" USING btree ("location");--> statement-breakpoint
-CREATE INDEX "idx_event_start_date" ON "event_record" USING btree ("startDate");--> statement-breakpoint
-CREATE INDEX CONCURRENTLY "idx_site_coordinates" ON "site_information" USING GIST ("coordinates");
+CREATE INDEX "idx_event_start_date" ON "event_record" USING btree ("startDate");
