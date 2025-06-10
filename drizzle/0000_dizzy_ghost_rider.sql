@@ -1,5 +1,4 @@
 CREATE TYPE "public"."event_state" AS ENUM('draft', 'publised', 'cancelled');--> statement-breakpoint
-CREATE TYPE "public"."signup_state" AS ENUM('pending', 'waitlisted', 'assigned', 'rejected');--> statement-breakpoint
 CREATE TABLE "event_record" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "event_record_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"createdAt" timestamp with time zone NOT NULL,
@@ -10,8 +9,11 @@ CREATE TABLE "event_record" (
 	"tags" text[] NOT NULL,
 	"description" text,
 	"isPrivate" boolean DEFAULT false NOT NULL,
+	"isOffsite" boolean DEFAULT false NOT NULL,
+	"offsiteLink" text,
 	"eventState" "event_state" NOT NULL,
 	"ownerId" text NOT NULL,
+	"organizers" integer[] NOT NULL,
 	"slug" text NOT NULL,
 	"startDate" date NOT NULL,
 	"endDate" date,
@@ -97,8 +99,7 @@ CREATE TABLE "timeline" (
 CREATE TABLE "user_at_event" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "user_at_event_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"createdAt" timestamp with time zone NOT NULL,
-	"signupState" "signup_state",
-	"rejectionReason" text,
+	"isRejected" boolean DEFAULT false,
 	"isCancelled" boolean DEFAULT false,
 	"cancellationReason" text,
 	"userId" text NOT NULL,

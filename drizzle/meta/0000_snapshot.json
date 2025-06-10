@@ -1,5 +1,5 @@
 {
-  "id": "e70bf970-f087-497c-97a3-4a73c56dee34",
+  "id": "5c9c7d7f-c945-4ac7-9fba-10288eb55b15",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -74,6 +74,19 @@
           "notNull": true,
           "default": false
         },
+        "isOffsite": {
+          "name": "isOffsite",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "offsiteLink": {
+          "name": "offsiteLink",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "eventState": {
           "name": "eventState",
           "type": "event_state",
@@ -84,6 +97,12 @@
         "ownerId": {
           "name": "ownerId",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizers": {
+          "name": "organizers",
+          "type": "integer[]",
           "primaryKey": false,
           "notNull": true
         },
@@ -672,18 +691,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "signupState": {
-          "name": "signupState",
-          "type": "signup_state",
-          "typeSchema": "public",
+        "isRejected": {
+          "name": "isRejected",
+          "type": "boolean",
           "primaryKey": false,
-          "notNull": false
-        },
-        "rejectionReason": {
-          "name": "rejectionReason",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": false
         },
         "isCancelled": {
           "name": "isCancelled",
@@ -1095,16 +1108,6 @@
         "draft",
         "publised",
         "cancelled"
-      ]
-    },
-    "public.signup_state": {
-      "name": "signup_state",
-      "schema": "public",
-      "values": [
-        "pending",
-        "waitlisted",
-        "assigned",
-        "rejected"
       ]
     }
   },

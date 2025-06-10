@@ -8,13 +8,6 @@ export const eventStateEnum = t.pgEnum("event_state", [
 	"cancelled",
 ])
 
-export const signupStateEnum = t.pgEnum("signup_state", [
-	"pending",
-	"waitlisted",
-	"assigned",
-	"rejected",
-])
-
 /**
  * Event information table
  */
@@ -53,6 +46,10 @@ export const eventRecordTable = t.pgTable(
 		// by default it is a public game and advertised.
 		isPrivate: t.boolean().notNull().default(false),
 
+		// game is organized somewhere else, link to that page
+		isOffsite: t.boolean().default(false).notNull(),
+		offsiteLink: t.text(),
+
 		// allow user to edit event before publishing
 		eventState: eventStateEnum()
 			.notNull()
@@ -64,6 +61,9 @@ export const eventRecordTable = t.pgTable(
 			.text()
 			.notNull()
 			.references(() => user.id, { onDelete: "set null" }),
+
+		// other people helping the organizing, list of id's
+		organizers: t.integer().array().notNull(),
 
 		// generated url. date + title sanitized (eg: 2025-mikulasvaro)
 		slug: t.text().notNull().unique(),
@@ -171,13 +171,12 @@ export const userAtEventTable = t.pgTable(
 			.$defaultFn(() => sql`now()`)
 			.notNull(),
 
-		// user has signed up to the event, represents the decision of the organizer
-		signupState: signupStateEnum(),
-		// the reason given by the organizer
-		rejectionReason: t.text(),
+		// organizer rejected the user
+		isRejected: t.boolean().default(false),
 
-		// is this application cancelled by the user? if so why?
+		// player withdrew his application
 		isCancelled: t.boolean().default(false),
+
 		cancellationReason: t.text(),
 
 		// if user deletes himself, it should display as "deleted user"
