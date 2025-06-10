@@ -20,22 +20,23 @@ export default function LoginPage() {
 			password: z.string()
 		}).safeParse(formObject)
 
-		if (credentials.success) {
-			const { email, password } = credentials.data
-
-			const authResult = await authClient.signIn.email({
-				email, password
-			})
-
-			if (!authResult.error) {
-				navigate("/")
-			}
-
-			setFormError("error loggin in")
-		} else {
-			setFormError("badly formatted form data")
+		if (!credentials.success) {
+			setFormError(credentials.error.format()._errors[0])
+			return
 		}
+
+		const { email, password } = credentials.data
+		const authResult = await authClient.signIn.email({
+			email, password
+		})
+
+		if (!authResult.error) {
+			navigate("/")
+		}
+
+		setFormError(authResult.error?.message || "error logging in")
 	}
+
 
 	return (
 		<div className="max-w-lg mx-auto flex flex-col justify-center min-h-dvh">
