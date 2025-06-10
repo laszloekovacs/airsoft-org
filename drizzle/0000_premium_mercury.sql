@@ -64,7 +64,7 @@ CREATE TABLE "service_fee" (
 	"eventId" integer NOT NULL,
 	"updatedAt" timestamp with time zone,
 	"label" text NOT NULL,
-	"ammount" integer NOT NULL,
+	"ammount" numeric(10, 2) NOT NULL,
 	"currency" text NOT NULL,
 	CONSTRAINT "ammount_must_be_positive_or_zero" CHECK ("service_fee"."ammount" >= 0)
 );
@@ -82,7 +82,6 @@ CREATE TABLE "site_information" (
 	"address2" text,
 	"state" text,
 	"country" text NOT NULL,
-	"coordinates" "point",
 	"longitude" double precision,
 	"latitude" double precision
 );
