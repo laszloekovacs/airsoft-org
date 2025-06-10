@@ -1,28 +1,42 @@
-import { s3, write, S3Client } from "bun"
+import { useEffect, useState } from "react"
+import type { Route } from "./+types/s3"
+
 
 export const loader = async () => {
+    const key = process.env.CHIBI_API_KEY!
 
-    const s3file = new S3Client({
-        accessKeyId: "some_access_key1",
-        secretAccessKey: "some_secret_key1",
-        bucket: "my-bucket",
-        // Make sure to use the correct endpoint URL
-        // It might not be localhost in production!
-        endpoint: "http://airsoft-seaweedfs-ltepq7-632862-188-36-71-179.traefik.me",
-        virtualHostedStyle: true,
-    });
-
-
-    await s3file.write("test.txt", Buffer.from("hello world"))
-
-    return { status: "ok" }
+    return { key }
 }
 
-export default function S3Page() {
+export default function S3Page({ loaderData }: Route.ComponentProps) {
+    const { key } = loaderData
+    const [result, setResult] = useState<null>()
+    const [pending, setPending] = useState(true)
+
+    useEffect(() => {
+        const headers = new Headers()
+        headers.append("apiKey", key)
+        setPending(true)
+        fetch("https://chibi.am4.duckdns.org/api/admin/files", {
+            method: "GET",
+            headers
+        })
+            .then(res => res.json())
+            .then(data => setResult(data))
+            .catch(() => setResult(null))
+            .finally(() => setPending(false))
+
+    }, [key])
+
 
     return (
         <div>
             <p>seems to work </p>
+            <pre>{key}</pre>
+
+            {!pending && (<pre>{
+                JSON.stringify(result, null, 2)
+            }</pre>)}
         </div>
     )
 }
