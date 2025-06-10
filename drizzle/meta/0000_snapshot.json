@@ -1,5 +1,5 @@
 {
-  "id": "5c9c7d7f-c945-4ac7-9fba-10288eb55b15",
+  "id": "5cd65f6a-d3e5-46d8-b805-5ac4dc728739",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -437,7 +437,7 @@
         },
         "ammount": {
           "name": "ammount",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
@@ -561,12 +561,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "coordinates": {
-          "name": "coordinates",
-          "type": "point",
-          "primaryKey": false,
-          "notNull": false
         },
         "longitude": {
           "name": "longitude",

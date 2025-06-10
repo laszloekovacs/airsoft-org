@@ -266,13 +266,6 @@ export const siteInformationTable = t.pgTable("site_information", {
 		.notNull()
 		.$default(() => "Magyarország"),
 
-	// optional GPS Coordinates in a point form
-	coordinates: t.customType({
-		dataType() {
-			return "point"
-		},
-	})(),
-
 	longitude: t.doublePrecision(),
 	latitude: t.doublePrecision(),
 })
@@ -297,7 +290,7 @@ export const serviceFeeRecord = t.pgTable(
 		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
 
 		label: t.text().notNull(),
-		ammount: t.integer().notNull(),
+		ammount: t.numeric({ precision: 10, scale: 2 }).notNull(),
 		currency: t
 			.text()
 			.notNull()
