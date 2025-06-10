@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth"
 import database from "./db.server"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import * as schema from "~/schema/auth-schema"
+import { sql } from "drizzle-orm"
 
 const { BETTER_AUTH_URL } = process.env
 
@@ -28,6 +29,8 @@ export const authServer = betterAuth({
 				type: "string[]",
 				input: false,
 				returned: true,
+				required: true,
+				defaultValue: [],
 			},
 			callsign: {
 				type: "string",
