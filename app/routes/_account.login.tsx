@@ -2,38 +2,43 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import { Input } from "~/components/ui/input"
 import { authClient } from "~/services/auth.client"
+import { z } from "zod"
+
 
 export default function LoginPage() {
 	const navigate = useNavigate()
-	const [formError, setFormError] = useState<string>("")
+	const [formError, setFormError] = useState<string | null>(null)
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		console.log("logging in")
+
 		const formData = new FormData(event.currentTarget)
+		const formObject = Object.fromEntries(formData)
 
-		const email = formData.get("email")?.toString()
-		const password = formData.get("password")?.toString()
+		const credentials = z.object({
+			email: z.string().email(),
+			password: z.string()
+		}).safeParse(formObject)
 
-		console.log(email, password)
+		if (credentials.success) {
+			const { email, password } = credentials.data
 
-		if (!email || !password) {
-			setFormError("hibás email vagy jelszó")
-			return
-		}
+			const authResult = await authClient.signIn.email({
+				email, password
+			})
 
-		const { data, error } = await authClient.signIn.email({ email, password })
+			if (!authResult.error) {
+				navigate("/")
+			}
 
-		console.log(error, data)
-		if (error?.status) {
-			setFormError(error.statusText)
+			setFormError("error loggin in")
 		} else {
-			navigate("/")
+			setFormError("badly formatted form data")
 		}
 	}
 
 	return (
-		<div className="max-w-lg mx-auto flex flex-col justify-center min-h-screen">
+		<div className="max-w-lg mx-auto flex flex-col justify-center min-h-dvh">
 			<h1 className="text-xl">Belépés</h1>
 			<Link to="/" className="underline">vissza a főoldalra</Link>
 			<br />
@@ -49,7 +54,7 @@ export default function LoginPage() {
 				</fieldset>
 				<Input type="submit" value="Belépés" data-umami-event="login" />
 
-				{formError && <p>{formError}</p>}
+				{formError && <p className="text-red-800 py-2">{formError}</p>}
 				<hr />
 			</form>
 
