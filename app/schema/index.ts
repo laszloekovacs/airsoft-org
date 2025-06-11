@@ -106,6 +106,9 @@ export const eventRecordTable = t.pgTable(
 	(table) => [
 		// postgres built in tsvector for search
 		// https://orm.drizzle.team/docs/guides/postgresql-full-text-search
+		// check causes error, array needs to be immutable?
+		// possibly index the title only, ranking can be done during query
+		/*
 		t
 			.index("search_index")
 			.using(
@@ -115,7 +118,7 @@ export const eventRecordTable = t.pgTable(
           			setweight(to_tsvector('hungarian', array_to_string(${table.tags}, ' ')), 'B')
       			)`,
 			),
-
+*/
 		t.check(
 			"event_starts_at_least_tomorrow",
 			sql`${table.startDate} >= (CURRENT_DATE + INTERVAL '1 day')`,
@@ -284,8 +287,8 @@ export const siteInformationTable = t.pgTable(
 			sql`
 				${table.location} IS NULL OR
 				(
-					abs(point_x(${table.location})) <= 90 AND
-					abs(point_y(${table.location})) <= 180
+					abs(${table.location}[0]) <= 90 AND
+					abs(${table.location}[1]) <= 180
 				)
 			`,
 		),
