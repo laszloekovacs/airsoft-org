@@ -111,8 +111,8 @@ export const eventRecordTable = t.pgTable(
 			.using(
 				"gin",
 				sql`(
-          			setweight(to_tsvector('english', ${table.title}), 'A') ||
-          			setweight(to_tsvector('english', array_to_string(${table.tags})), 'B')
+          			setweight(to_tsvector('hungarian', ${table.title}), 'A') ||
+          			setweight(to_tsvector('hungarian', array_to_string(${table.tags}, ' ')), 'B')
       			)`,
 			),
 
@@ -284,8 +284,8 @@ export const siteInformationTable = t.pgTable(
 			sql`
 				${table.location} IS NULL OR
 				(
-					abs(${table.location}.x) <= 90 AND
-					abs(${table.location}.y) <= 180
+					abs(point_x(${table.location})) <= 90 AND
+					abs(point_y(${table.location})) <= 180
 				)
 			`,
 		),
