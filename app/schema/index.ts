@@ -238,37 +238,53 @@ export const factionInfoTable = t.pgTable(
  * Locations or map details for the event
  */
 
-export const siteInformationTable = t.pgTable("site_information", {
-	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
-	createdAt: t
-		.timestamp({ withTimezone: true })
-		.$defaultFn(() => sql`now()`)
-		.notNull(),
+export const siteInformationTable = t.pgTable(
+	"site_information",
+	{
+		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+		createdAt: t
+			.timestamp({ withTimezone: true })
+			.$defaultFn(() => sql`now()`)
+			.notNull(),
 
-	// name, splash image and description
-	name: t.text().notNull(),
-	alias: t.text(),
+		// name, splash image and description
+		name: t.text().notNull(),
+		alias: t.text(),
 
-	// optional description and splash image
-	description: t.text(),
-	image: t.text(),
+		// optional description and splash image
+		description: t.text(),
+		image: t.text(),
 
-	// vanilla address data
-	city: t.text().notNull(),
-	zip: t.text().notNull(),
-	address1: t.text().notNull(),
-	address2: t.text(),
-	state: t.text(),
+		// vanilla address data
+		city: t.text().notNull(),
+		zip: t.text().notNull(),
+		address1: t.text().notNull(),
+		address2: t.text(),
+		state: t.text(),
 
-	// international support, hidden from users if default
-	country: t
-		.text()
-		.notNull()
-		.$default(() => "Magyarország"),
+		// international support, hidden from users if default
+		country: t
+			.text()
+			.notNull()
+			.$default(() => "Magyarország"),
 
-	longitude: t.doublePrecision(),
-	latitude: t.doublePrecision(),
-})
+		// gps coordinates
+		// https://orm.drizzle.team/docs/guides/point-datatype-psql
+		location: t.point("location", { mode: "xy" }),
+	},
+	(table) => [
+		t.check(
+			"coordinates_must_be_valid_lat_long",
+			sql`
+				${table.location} IS NULL OR
+				(
+					abs(${table.location}.x) <= 90 AND
+					abs(${table.location}.y) <= 180
+				)
+			`,
+		),
+	],
+)
 
 /**
  * prices table. eg: entry fee, rental gear, welcome drink etc.
