@@ -1,6 +1,7 @@
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
+import slugify from "slugify"
 
 export const eventStateEnum = t.pgEnum("event_state", [
 	"draft",
@@ -66,7 +67,9 @@ export const eventRecordTable = t.pgTable(
 		organizers: t.integer().array().notNull(),
 
 		// generated url. date + title sanitized (eg: 2025-mikulasvaro)
+		// sould not change when title changes not to corrupt already shared links
 		slug: t.text().notNull().unique(),
+		//.$defaultFn(() => slugify(`${Date.now}-${this.title}`)),
 
 		// start date and optional end date for multi day event
 		// event schedule times are stored in a timetable
