@@ -99,16 +99,19 @@ export const eventRecordTable = t.pgTable(
 			.array()
 			.notNull()
 			.$default(() => sql`{}`),
-
-		// postgres built in tsvector for search
-		searchVector: t.customType({
-			dataType() {
-				return "tsvector"
-			},
-		})("search_vector"),
 	},
 	(table) => [
-		t.index("idx_event_search_vector").using("gin", table.searchVector),
+		// postgres built in tsvector for search
+		// https://orm.drizzle.team/docs/guides/postgresql-full-text-search
+		t
+			.index("search_index")
+			.using(
+				"gin",
+				sql`(
+          			setweight(to_tsvector('english', ${table.title}), 'A') ||
+          			setweight(to_tsvector('english', array_to_string(${table.tags})), 'B')
+      			)`,
+			),
 
 		t.check(
 			"event_starts_at_least_tomorrow",
