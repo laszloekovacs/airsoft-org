@@ -88,8 +88,10 @@ export async function action({
 		const result = await database.insert(eventRecordTable).values({
 			title,
 			startDate: date,
-			userId: user.id,
 			slug: eventUrlSlug,
+			locationSummary: "debrecen",
+			organizers: [],
+			ownerId: user.id,
 		})
 
 		if (result.rowCount == 0) {

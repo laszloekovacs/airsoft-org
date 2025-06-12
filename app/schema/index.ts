@@ -35,11 +35,7 @@ export const eventRecordTable = t.pgTable(
 		image: t.text(),
 
 		// freeform tags. eg: milsim, free, practice
-		tags: t
-			.text()
-			.array()
-			.notNull()
-			.$default(() => sql`{}`),
+		tags: t.text().array().notNull().default(sql`ARRAY[]::text[]`),
 
 		// markdown or string form of description
 		description: t.text(),
@@ -97,11 +93,7 @@ export const eventRecordTable = t.pgTable(
 		minimumParticipants: t.integer(),
 
 		// array of links to fb, x, discord etc or even phone number.
-		socials: t
-			.text("socials")
-			.array()
-			.notNull()
-			.$default(() => sql`{}`),
+		socials: t.text("socials").array().notNull().default(sql`ARRAY[]::text[]`),
 	},
 	(table) => [
 		// postgres built in tsvector for search

@@ -29,6 +29,11 @@ export default function DashboardEventsPage({
 					name: "csoportok",
 					to: "./groups",
 					icon: <Group className="w-4 h-4" />
+				},
+				{
+					name: "borítókép",
+					to: "./coverimage",
+					icon: <Group className="w-4 h-4" />
 				}
 			]} />
 
