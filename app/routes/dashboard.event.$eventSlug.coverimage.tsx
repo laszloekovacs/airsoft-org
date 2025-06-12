@@ -14,7 +14,7 @@ export default function CoverImageSelectPage() {
 
             <fetcher.Form method="POST" encType="multipart/form-data">
                 <Input type="file" accept="image" name="image" />
-
+                <Input type="submit" name="submit" value="upload" />
             </fetcher.Form>
         </div>
     )
@@ -33,4 +33,10 @@ export const action = async ({ request }: Route.ActionArgs) => {
     console.log("file uploaded", file.name)
 
     // store it in public/uploads/year/month/user-uuid
+    const now = new Date()
+    const username = "mike"
+
+    const basePath = `/public/uploads/${now.getFullYear()}/${now.getMonth()}/${username}-uuid`
+
+    await Bun.write(basePath, file)
 }
