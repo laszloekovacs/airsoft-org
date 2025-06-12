@@ -31,4 +31,6 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
     // file is now a File or Blob object
     console.log("file uploaded", file.name)
+
+    // store it in public/uploads/year/month/user-uuid
 }
