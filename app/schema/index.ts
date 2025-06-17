@@ -82,7 +82,7 @@ export const eventRecordTable = t.pgTable(
 		locationSummary: t.text().notNull(),
 
 		// detailed location information
-		location: t.integer().references(() => siteInformationTable.id, {
+		location: t.integer().references(() => siteInfoTable.id, {
 			onDelete: "set null",
 		}),
 
@@ -238,14 +238,19 @@ export const factionInfoTable = t.pgTable(
  * Locations or map details for the event
  */
 
-export const siteInformationTable = t.pgTable(
-	"site_information",
+export const siteInfoTable = t.pgTable(
+	"site_info",
 	{
-		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
 			.timestamp({ withTimezone: true })
 			.$defaultFn(() => sql`now()`)
 			.notNull(),
+
+		// owner, if deleted the site gets purged too
+		ownerId: t
+			.integer("owner_id")
+			.references(() => user.id, { onDelete: "cascade" }),
 
 		// name, splash image and description
 		name: t.text().notNull(),
