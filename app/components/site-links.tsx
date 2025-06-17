@@ -7,6 +7,7 @@ export default function SiteLinks() {
 		{ to: "/login", label: "belépés" },
 		{ to: "/signup", label: "regisztráció" },
 		{ to: "/mgmt", label: "admin" },
+		{ to: "/locations", label: "pályák" }
 	]
 
 	return (
