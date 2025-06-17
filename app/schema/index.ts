@@ -4,8 +4,7 @@ import { sql } from "drizzle-orm"
 
 export const eventStateEnum = t.pgEnum("event_state", [
 	"draft",
-	"publised",
-	"cancelled",
+	"published",
 ])
 
 /**
@@ -55,11 +54,10 @@ export const eventRecordTable = t.pgTable(
 		// for record keeping
 		ownerId: t
 			.text()
-			.notNull()
 			.references(() => user.id, { onDelete: "set null" }),
 
-		// other people helping the organizing, list of id's
-		organizers: t.integer().array().notNull(),
+		// other people helping the organizing, list of id's, user id is string
+		organizers: t.text().array().notNull(),
 
 		// generated url. date + title sanitized (eg: 2025-mikulasvaro)
 		// sould not change when title changes not to corrupt already shared links
@@ -109,7 +107,9 @@ export const eventRecordTable = t.pgTable(
           			setweight(to_tsvector('hungarian', array_to_string(${table.tags}, ' ')), 'B')
       			)`,
 			),
+   
 */
+// check current date is with timezone? different check logic?
 		t.check(
 			"event_starts_at_least_tomorrow",
 			sql`${table.startDate} >= (CURRENT_DATE + INTERVAL '1 day')`,
@@ -311,7 +311,7 @@ export const serviceFeeRecord = t.pgTable(
 		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
 
 		label: t.text().notNull(),
-		ammount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+		amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
 		currency: t
 			.text()
 			.notNull()
