@@ -275,7 +275,7 @@ export const siteInfoTable = t.pgTable(
 
 		// gps coordinates
 		// https://orm.drizzle.team/docs/guides/point-datatype-psql
-		location: t.point("location", { mode: "xy" }),
+		location: t.point("location", { mode: "latlon" }),
 	},
 	(table) => [
 		t.check(
@@ -318,7 +318,7 @@ export const serviceFeeRecord = t.pgTable(
 			.$default(() => "HUF"),
 	},
 	(table) => [
-		t.check("ammount_must_be_positive_or_zero", sql`${table.ammount} >= 0`),
+		t.check("ammount_must_be_positive_or_zero", sql`${table.amount} >= 0`),
 	],
 )
 
