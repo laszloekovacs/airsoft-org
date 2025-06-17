@@ -89,7 +89,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 		z.object({
 			intent: z.literal("create"),
 			faction: z.string(),
-			eventId: z.string(),
+			eventId: z.coerce.number(),
 		}),
 		z.object({ intent: z.literal("remove"), factionId: z.string() }),
 	])
@@ -102,7 +102,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 		case "create":
 			queryResult = await database.insert(factionInfoTable).values({
 				name: action.faction,
-				eventId: Number.parseInt(action.eventId),
+				eventId: action.eventId,
 			})
 
 			// failed to create
