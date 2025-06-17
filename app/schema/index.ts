@@ -1,7 +1,6 @@
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
-import slugify from "slugify"
 
 export const eventStateEnum = t.pgEnum("event_state", [
 	"draft",
@@ -207,7 +206,7 @@ export const userAtEventTable = t.pgTable(
 export const factionInfoTable = t.pgTable(
 	"faction_info",
 	{
-		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
+		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 
 		// remove if the event is deleted
 		eventId: t

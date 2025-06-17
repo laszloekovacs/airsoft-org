@@ -4,8 +4,9 @@ import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.factions"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
-import { Form } from "react-router"
-import { number, z } from "zod"
+import { Form, useActionData } from "react-router"
+import { z } from "zod"
+import { useEffect, useRef } from "react"
 
 /**
  * Create groups for players to be assigned to
@@ -35,22 +36,40 @@ export default function EditEventGroupsPage({
 	loaderData,
 }: Route.ComponentProps) {
 	const { event, factions } = loaderData
+	const data = useActionData()
+	const formRef = useRef<HTMLFormElement | null>(null)
+
+	useEffect(() => {
+
+		// clear form on success
+		if (data && data.status == "success") {
+			formRef.current?.reset()
+		}
+	}, [data])
+
 
 	return (
 		<div>
 			<h1>Csoportok</h1>
 
-			<Form method="post" className="max-w-xl flex flex-col gap-2">
+			<Form method="post" className="max-w-xl flex flex-col gap-2" ref={formRef}>
 				<Input type="hidden" name="eventId" value={event.id} />
 				<Input type="hidden" name="intent" value="create" />
 				<Input type="text" name="faction" />
 				<Button type="submit">hozzáad</Button>
 			</Form>
 
+			{data && data.status == "failure" && <p>csapat létrehozása sikertelen</p>}
+
 			<ul>
 				{factions.map((faction) => (
 					<li key={faction.id}>
 						<p>{faction.name}</p>
+						<Form method="post">
+							<Input type="hidden" name="factionId" value={faction.id} />
+							<Input type="hidden" name="intent" value="remove" />
+							<Button type="submit">törlés</Button>
+						</Form>
 					</li>
 				))}
 			</ul>
@@ -68,7 +87,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 			faction: z.string(),
 			eventId: z.string(),
 		}),
-		z.object({ intent: z.literal("remove"), index: z.number() }),
+		z.object({ intent: z.literal("remove"), factionId: z.string() }),
 	])
 
 	const action = actionSchema.parse(formObj)
@@ -82,9 +101,17 @@ export async function action({ params, request }: Route.ActionArgs) {
 				eventId: Number.parseInt(action.eventId),
 			})
 
+			// failed to create
+			if (queryResult.rowCount == 0) {
+				return {
+					status: "failed",
+				}
+			}
+
 			break
 
 		case "remove":
+			queryResult = await database.delete(factionInfoTable).where(eq(factionInfoTable.id, Number.parseInt(action.factionId)))
 			break
 
 		default:
