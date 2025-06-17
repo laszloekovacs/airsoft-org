@@ -28,6 +28,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 		.select()
 		.from(factionInfoTable)
 		.where(eq(factionInfoTable.eventId, event[0].id))
+		.orderBy(factionInfoTable.name)
 
 	return { event: event[0], factions }
 }
@@ -40,19 +41,21 @@ export default function EditEventGroupsPage({
 	const formRef = useRef<HTMLFormElement | null>(null)
 
 	useEffect(() => {
-
 		// clear form on success
 		if (data && data.status == "success") {
 			formRef.current?.reset()
 		}
 	}, [data])
 
-
 	return (
 		<div>
 			<h1>Csoportok</h1>
 
-			<Form method="post" className="max-w-xl flex flex-col gap-2" ref={formRef}>
+			<Form
+				method="post"
+				className="max-w-xl flex flex-col gap-2"
+				ref={formRef}
+			>
 				<Input type="hidden" name="eventId" value={event.id} />
 				<Input type="hidden" name="intent" value="create" />
 				<Input type="text" name="faction" />
@@ -62,6 +65,7 @@ export default function EditEventGroupsPage({
 			{data && data.status == "failure" && <p>csapat létrehozása sikertelen</p>}
 
 			<ul>
+				{/* move this to its own components */}
 				{factions.map((faction) => (
 					<li key={faction.id}>
 						<p>{faction.name}</p>
@@ -111,7 +115,9 @@ export async function action({ params, request }: Route.ActionArgs) {
 			break
 
 		case "remove":
-			queryResult = await database.delete(factionInfoTable).where(eq(factionInfoTable.id, Number.parseInt(action.factionId)))
+			queryResult = await database
+				.delete(factionInfoTable)
+				.where(eq(factionInfoTable.id, Number.parseInt(action.factionId)))
 			break
 
 		default:
