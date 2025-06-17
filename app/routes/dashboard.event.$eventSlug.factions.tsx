@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button"
 import { Form, useActionData } from "react-router"
 import { z } from "zod"
 import { useEffect, useRef } from "react"
+import { FactionCard } from "~/components/dashboard/faction-card"
 
 /**
  * Create groups for players to be assigned to
@@ -67,14 +68,7 @@ export default function EditEventGroupsPage({
 			<ul>
 				{/* move this to its own components */}
 				{factions.map((faction) => (
-					<li key={faction.id}>
-						<p>{faction.name}</p>
-						<Form method="post">
-							<Input type="hidden" name="factionId" value={faction.id} />
-							<Input type="hidden" name="intent" value="remove" />
-							<Button type="submit">törlés</Button>
-						</Form>
-					</li>
+					<FactionCard key={faction.id} {...faction} />
 				))}
 			</ul>
 		</div>
