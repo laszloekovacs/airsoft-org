@@ -249,7 +249,7 @@ export const siteInfoTable = t.pgTable(
 
 		// owner, if deleted the site gets purged too
 		ownerId: t
-			.integer("owner_id")
+			.text("owner_id")
 			.references(() => user.id, { onDelete: "cascade" }),
 
 		// name, splash image and description
