@@ -27,7 +27,7 @@ export default function DashboardEventsPage({
 				},
 				{
 					name: "csoportok",
-					to: "./groups",
+					to: "./factions",
 					icon: <Group className="w-4 h-4" />
 				},
 				{
