@@ -1,6 +1,7 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { NavigationBar } from "~/components/navigation-bar"
 import { Home, User } from "lucide-react"
+import SearchContainer from "~/components/home/Search"
 
 
 export default function Kits() {
@@ -35,6 +36,11 @@ export default function Kits() {
 					</li>
 				))}
 			</ul>
+
+
+			<div>
+				<SearchContainer />
+			</div>
 		</div>
 	)
 }
