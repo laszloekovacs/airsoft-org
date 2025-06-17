@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router"
 import type { Route } from "./+types/dashboard.event.$eventSlug"
 
 import { NavigationBar } from "~/components/navigation-bar"
-import { Home, Group, ArrowLeft, Braces } from "lucide-react"
+import { Home, Group, ArrowLeft, Braces, Clock, Image } from "lucide-react"
 
 
 
@@ -34,13 +34,18 @@ export default function DashboardEventsPage({
 					{
 						name: "borítókép",
 						to: "./coverimage",
-						icon: <Group className="w-4 h-4" />,
+						icon: <Image className="w-4 h-4" />,
 					},
 					{
 						name: "metaadatok",
 						to: "./metadata",
 						icon: <Braces className="w-4 h-4" />,
 					},
+					{
+						name: "időpontok",
+						to: "./timetable",
+						icon: <Clock className="w-4 h-4" />
+					}
 				]}
 			/>
 
