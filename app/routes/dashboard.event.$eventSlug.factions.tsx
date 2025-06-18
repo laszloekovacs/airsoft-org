@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { eventRecordTable, factionInfoTable } from "~/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.factions"
@@ -38,7 +38,7 @@ export default function EditEventFactionsPage({
 }: Route.ComponentProps) {
 	const { factions } = loaderData
 	const data = useActionData<ActionResult>()
-	const formRef = useRef<HTMLFormElement | null>(null)
+	const formRef = useRef<HTMLFormElement>(null)
 
 	useEffect(() => {
 		// clear form on success
@@ -73,8 +73,8 @@ export default function EditEventFactionsPage({
 }
 
 export async function action({ params, request }: Route.ActionArgs) {
-	const formData = await request.formData()
-	const formObj = Object.fromEntries(formData)
+
+	const formObj = Object.fromEntries(await request.formData())
 
 	const createSchema = z.object({
 		intent: z.literal("create"),
@@ -120,35 +120,44 @@ const createFaction = async (
 	eventSlug: string,
 	name: string,
 ): Promise<ActionResult> => {
-	// check if event getting edited is owned by user; event exists
-	const [event] = await database
-		.select()
-		.from(eventRecordTable)
-		.where(eq(eventRecordTable.slug, eventSlug))
 
-	if (!event) throw data("nincs ilyen esemény", { status: 404 })
+	const result = await database.transaction(async (tx) => {
 
-	// check if user is the owner of the event
-	if (event.ownerId != userId)
-		throw data("nincs jogosultságod az esemény szerkesztéséhez", {
-			status: 403,
-		})
+		// check if event getting edited is owned by user; event exists
+		const [event] = await tx
+			.select()
+			.from(eventRecordTable)
+			.where(and(eq(eventRecordTable.slug, eventSlug), eq(eventRecordTable.ownerId, userId)))
 
-	try {
-		// insert new faction
-		const [faction] = await database
-			.insert(factionInfoTable)
-			.values({ eventId: event.id, name })
-			.returning()
-	} catch (error: unknown) {
-		console.log(error)
-		// TODO: check what the error code is for duplicates, return actionResult otherwise rethrow to handle in errorboundary
-		// error {code, detail}
-	}
+		if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
-	return {
-		ok: true,
-	}
+		try {
+			// insert new faction
+			const [faction] = await tx
+				.insert(factionInfoTable)
+				.values({ eventId: event.id, name })
+				.returning()
+		} catch (error: unknown) {
+			console.log(error)
+			// TODO: check what the error code is for duplicates, return actionResult otherwise rethrow to handle in errorboundary
+			// error {code, detail} 23505
+
+			if (typeof error == "object" && error != null && "code" in error && "detail" in error) {
+				if (error.code == 23505) {
+					return {
+						ok: false,
+						reason: "már létezik ilyen nevű csoport"
+					}
+				}
+			}
+
+			// handle it in the errorboundary
+			throw error
+		}
+
+		// end of transaction
+	})
+	return result as ActionResult
 }
 
 const removeFaction = async (
