@@ -1,37 +1,38 @@
 import { Form, useActionData, type ActionFunctionArgs } from "react-router";
-import { z } from "zod/v4";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import type { Route } from "./+types/dashboard.event.$eventSlug.timetable"
+import { getZodConstraint, parseWithZod } from "@conform-to/zod/v4"
+import { z } from "zod/v4";
+import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 
 
 const schema = z.object({
     label: z.string().min(3).max(128),
-    timestamp: z.string()
+    timestamp: z.iso.datetime()
 })
 
+// TODO: move this to services?
+z.config(z.locales.hu())
 
 export default function TimetablePage() {
-
     const lastResult = useActionData<typeof action>()
-    console.log(lastResult)
-
-    const flattened = lastResult && !lastResult?.success ? z.prettifyError(lastResult.error) : null;
-    console.log(flattened)
+    const [form, fields] = useForm({ lastResult, constraint: getZodConstraint(schema) })
 
     return (
         <div>
             <h1>Dátumok és időpontok</h1>
 
-            <Form method="post" >
+            <Form method="post" {...getFormProps(form)}>
+                <div>{form.errors}</div>
 
                 <label>date</label>
-                <Input type="text" name="timestamp" />
-
+                <Input {...getInputProps(fields.timestamp, { type: "datetime-local" })} />
+                <div>{fields.timestamp.errors}</div>
 
                 <label>label</label>
-                <Input type="text" name="label" />
-
+                <Input {...getInputProps(fields.timestamp, { type: "text" })} />
+                <div>{fields.label.errors}</div>
 
                 <Button type="submit">rogzit</Button>
             </Form>
@@ -44,8 +45,8 @@ export default function TimetablePage() {
 export async function action({ request }: Route.ActionArgs) {
 
     const formData = await request.formData()
-    const submission = schema.safeParse(Object.fromEntries(formData))
+    const submission = parseWithZod(formData, { schema })
 
 
-    return submission
+    return submission.reply()
 }
