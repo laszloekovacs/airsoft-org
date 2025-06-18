@@ -18,7 +18,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 		.from(eventRecordTable)
 		.where(eq(eventRecordTable.slug, eventSlug))
 
-	// throw if not found
+	// throw if event not found
 	if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
 	// return the factions for this event, can be zero length
@@ -31,7 +31,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { event, factions }
 }
 
-type ActionResult = { ok: true } | { ok: false; reason?: string }
+// TODO: move this somewhere global
+type ActionResult = { ok: boolean; reason?: string }
 
 export default function EditEventFactionsPage({
 	loaderData,
@@ -56,7 +57,6 @@ export default function EditEventFactionsPage({
 				className="max-w-xl flex flex-col gap-2"
 				ref={formRef}
 			>
-				<Input type="hidden" name="eventId" value={event.id} />
 				<Input type="hidden" name="intent" value="create" />
 				<Input type="text" name="faction" />
 				<Button type="submit">hozzáad</Button>
@@ -99,7 +99,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 		return {
 			ok: false,
 			reason: action.error.errors.flat().toString(),
-		}
+		} as ActionResult
 	}
 
 	// check for credentials, get user
@@ -108,42 +108,47 @@ export async function action({ params, request }: Route.ActionArgs) {
 	if (action.data.intent == "create")
 		return await createFaction(
 			user.id,
-			action.data.eventId,
+			params.eventSlug,
 			action.data.faction,
 		)
+
 	if (action.data.intent == "remove")
 		return await removeFaction(user.id, action.data.factionId)
 
 	return {
-		ok: true,
-	}
+		ok: false,
+		reason: "unhandled intent in action"
+	} as ActionResult
 }
 
 const createFaction = async (
 	userId: string,
-	eventId: number,
+	eventSlug: string,
 	name: string,
 ): Promise<ActionResult> => {
+
 	// check if event getting edited is owned by user; event exists
 	const [event] = await database
 		.select()
 		.from(eventRecordTable)
-		.where(eq(eventRecordTable.id, eventId))
+		.where(eq(eventRecordTable.slug, eventSlug))
+
 	if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
 	// check if user is the owner of the event
 	if (event.ownerId != userId)
-		throw data("nincs jogosultságod esemény szerkesztéséhez", { status: 403 })
+		throw data("nincs jogosultságod az esemény szerkesztéséhez", { status: 403 })
 
 	try {
 		// insert new faction
 		const [faction] = await database
 			.insert(factionInfoTable)
-			.values({ eventId, name })
+			.values({ eventId: event.id, name })
 			.returning()
 	} catch (error: unknown) {
 		console.log(error)
 		// TODO: check what the error code is for duplicates, return actionResult otherwise rethrow to handle in errorboundary
+		// error {code, detail}
 	}
 
 	return {
@@ -158,5 +163,5 @@ const removeFaction = async (
 	return {
 		ok: false,
 		reason: "not implemented yet",
-	}
+	} as ActionResult
 }
