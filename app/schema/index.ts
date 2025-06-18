@@ -2,10 +2,7 @@ import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { sql } from "drizzle-orm"
 
-export const eventStateEnum = t.pgEnum("event_state", [
-	"draft",
-	"published",
-])
+export const eventStateEnum = t.pgEnum("event_state", ["draft", "published"])
 
 /**
  * Event information table
@@ -52,9 +49,7 @@ export const eventRecordTable = t.pgTable(
 
 		// user id who created the event. on deletion the event should survive the users deletion
 		// for record keeping
-		ownerId: t
-			.text()
-			.references(() => user.id, { onDelete: "set null" }),
+		ownerId: t.text().references(() => user.id, { onDelete: "set null" }),
 
 		// other people helping the organizing, list of id's, user id is string
 		organizers: t.text().array().notNull(),
@@ -109,7 +104,7 @@ export const eventRecordTable = t.pgTable(
 			),
    
 */
-// check current date is with timezone? different check logic?
+		// check current date is with timezone? different check logic?
 		t.check(
 			"event_starts_at_least_tomorrow",
 			sql`${table.startDate} >= (CURRENT_DATE + INTERVAL '1 day')`,
@@ -242,6 +237,7 @@ export const siteInfoTable = t.pgTable(
 	"site_info",
 	{
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
+
 		createdAt: t
 			.timestamp({ withTimezone: true })
 			.$defaultFn(() => sql`now()`)
@@ -275,7 +271,7 @@ export const siteInfoTable = t.pgTable(
 
 		// gps coordinates
 		// https://orm.drizzle.team/docs/guides/point-datatype-psql
-		location: t.point("location", { mode: "latlon" }),
+		location: t.point("location", { mode: "tuple" }),
 	},
 	(table) => [
 		t.check(
@@ -299,6 +295,9 @@ export const serviceFeeRecord = t.pgTable(
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
+		// allows for price change notification
+		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
+
 		// reference to the event, deletes when event gets removed
 		eventId: t
 			.integer()
@@ -306,9 +305,6 @@ export const serviceFeeRecord = t.pgTable(
 			.references(() => eventRecordTable.id, {
 				onDelete: "cascade",
 			}),
-
-		// allows for price change notification
-		updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
 
 		label: t.text().notNull(),
 		amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
@@ -328,6 +324,9 @@ export const serviceFeeRecord = t.pgTable(
 export const timelineTable = t.pgTable("timeline", {
 	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
+	// allows for notification on change
+	updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
+
 	// reference to the event, deletes when event gets removed
 	eventId: t
 		.integer()
@@ -335,9 +334,6 @@ export const timelineTable = t.pgTable("timeline", {
 		.references(() => eventRecordTable.id, {
 			onDelete: "cascade",
 		}),
-
-	// allows for notification on change
-	updatedAt: t.timestamp({ withTimezone: true }).$onUpdate(() => sql`now()`),
 
 	// description and timestamp of planned ativities: eg: opening: 9:00am,
 	// there should be no check: eg: people could gather for a bus 2 hours before start.
