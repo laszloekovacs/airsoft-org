@@ -1,9 +1,8 @@
-import { eq, sql } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { eventRecordTable, factionInfoTable } from "~/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.factions"
 import { Input } from "~/components/ui/input"
-import { Button } from "~/components/ui/button"
 import { data, Form, useActionData } from "react-router"
 import { z } from "zod"
 import { useEffect, useRef } from "react"
@@ -48,8 +47,6 @@ export default function EditEventFactionsPage({
 		}
 	}, [data])
 
-
-
 	return (
 		<div>
 			<h1>Csoportok</h1>
@@ -61,12 +58,10 @@ export default function EditEventFactionsPage({
 			>
 				<Input type="hidden" name="intent" value="create" />
 				<Input type="text" name="faction" />
-				<Button type="submit">hozzáad</Button>
+				<input type="submit" name="submit" value="hozzáad" />
 			</Form>
 
 			{data?.reason && <p>{data.reason}</p>}
-
-
 
 			<ul>
 				{factions.map((faction) => (
@@ -84,7 +79,6 @@ export async function action({ params, request }: Route.ActionArgs) {
 	const createSchema = z.object({
 		intent: z.literal("create"),
 		faction: z.string().trim().min(3, "név túl rövid").max(50),
-		eventId: z.coerce.number(),
 	})
 
 	const removeSchema = z.object({
@@ -102,7 +96,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 	if (!action.success) {
 		return {
 			ok: false,
-			reason: action.error.errors.flat().toString(),
+			reason: action.error.toString(),
 		} as ActionResult
 	}
 
@@ -110,18 +104,14 @@ export async function action({ params, request }: Route.ActionArgs) {
 	const { user } = await AuthorizedOnly(request, ["organizer"])
 
 	if (action.data.intent == "create")
-		return await createFaction(
-			user.id,
-			params.eventSlug,
-			action.data.faction,
-		)
+		return await createFaction(user.id, params.eventSlug, action.data.faction)
 
 	if (action.data.intent == "remove")
 		return await removeFaction(user.id, action.data.factionId)
 
 	return {
 		ok: false,
-		reason: "unhandled intent in action"
+		reason: "unhandled intent in action",
 	} as ActionResult
 }
 
@@ -130,7 +120,6 @@ const createFaction = async (
 	eventSlug: string,
 	name: string,
 ): Promise<ActionResult> => {
-	console.log("inserting...")
 	// check if event getting edited is owned by user; event exists
 	const [event] = await database
 		.select()
@@ -141,7 +130,9 @@ const createFaction = async (
 
 	// check if user is the owner of the event
 	if (event.ownerId != userId)
-		throw data("nincs jogosultságod az esemény szerkesztéséhez", { status: 403 })
+		throw data("nincs jogosultságod az esemény szerkesztéséhez", {
+			status: 403,
+		})
 
 	try {
 		// insert new faction
@@ -155,7 +146,6 @@ const createFaction = async (
 		// error {code, detail}
 	}
 
-	console.log("inserted...")
 	return {
 		ok: true,
 	}
