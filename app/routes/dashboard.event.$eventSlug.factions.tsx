@@ -37,7 +37,7 @@ type ActionResult = { ok: boolean; reason?: string }
 export default function EditEventFactionsPage({
 	loaderData,
 }: Route.ComponentProps) {
-	const { event, factions } = loaderData
+	const { factions } = loaderData
 	const data = useActionData<ActionResult>()
 	const formRef = useRef<HTMLFormElement | null>(null)
 
@@ -47,6 +47,8 @@ export default function EditEventFactionsPage({
 			formRef.current?.reset()
 		}
 	}, [data])
+
+
 
 	return (
 		<div>
@@ -62,7 +64,9 @@ export default function EditEventFactionsPage({
 				<Button type="submit">hozzáad</Button>
 			</Form>
 
-			{data && data.ok == false && <p>csapat létrehozása sikertelen</p>}
+			{data?.reason && <p>{data.reason}</p>}
+
+
 
 			<ul>
 				{factions.map((faction) => (
@@ -126,7 +130,7 @@ const createFaction = async (
 	eventSlug: string,
 	name: string,
 ): Promise<ActionResult> => {
-
+	console.log("inserting...")
 	// check if event getting edited is owned by user; event exists
 	const [event] = await database
 		.select()
@@ -151,6 +155,7 @@ const createFaction = async (
 		// error {code, detail}
 	}
 
+	console.log("inserted...")
 	return {
 		ok: true,
 	}

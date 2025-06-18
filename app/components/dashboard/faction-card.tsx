@@ -11,7 +11,7 @@ export const FactionCard = (props: FactionCardProps) => {
     const { name, description, expectedParticipants, image } = props
 
     return (
-        <div className="p-4 flex flex-row space-x-4">
+        <li className="p-4 flex flex-row space-x-4">
             <div className="flex flex-row">
                 {image && <img src={image ?? undefined} alt={name} />}
                 <p>{name}</p>
@@ -24,6 +24,6 @@ export const FactionCard = (props: FactionCardProps) => {
 
                 <Ellipsis className="w-4 h-4" />
             </div>
-        </div>
+        </li>
     )
 }
