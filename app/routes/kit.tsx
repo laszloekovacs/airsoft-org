@@ -1,3 +1,5 @@
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { NavigationBar } from "~/components/navigation-bar"
 import { Home, User } from "lucide-react"
@@ -39,8 +41,35 @@ export default function Kits() {
 
 
 			<div>
-				<SearchContainer />
+				<Example />
 			</div>
 		</div>
+	)
+}
+
+
+
+function Example() {
+	return (
+		<Menu>
+			<MenuButton>My account</MenuButton>
+			<MenuItems anchor="bottom">
+				<MenuItem>
+					<a className="block data-focus:bg-blue-100" href="/settings">
+						Settings
+					</a>
+				</MenuItem>
+				<MenuItem>
+					<a className="block data-focus:bg-blue-100" href="/support">
+						Support
+					</a>
+				</MenuItem>
+				<MenuItem>
+					<a className="block data-focus:bg-blue-100" href="/license">
+						License
+					</a>
+				</MenuItem>
+			</MenuItems>
+		</Menu>
 	)
 }
