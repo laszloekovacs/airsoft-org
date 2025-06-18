@@ -205,19 +205,18 @@ export const factionInfoTable = t.pgTable(
 
 		// remove if the event is deleted
 		eventId: t
-			.integer()
+			.integer("event_id")
 			.notNull()
 			.references(() => eventRecordTable.id, {
 				onDelete: "cascade",
 			}),
 
 		// name and description with potional image
-		name: t.text().notNull(),
-		description: t.text(),
-		image: t.text(),
+		name: t.text("name").notNull(),
+		description: t.text("description"),
 
 		// intent how many players should be in here
-		expectedParticipants: t.integer(),
+		expectedParticipants: t.integer("expected_paricipants"),
 	},
 	/* teams have to be unique to every event */
 	(table) => [
