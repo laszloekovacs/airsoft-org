@@ -8,8 +8,7 @@ import { data, Form, useActionData } from "react-router"
 import { z } from "zod"
 import { useEffect, useRef } from "react"
 import { FactionCard } from "~/components/dashboard/faction-card"
-
-
+import { AuthorizedOnly } from "~/services/auth.server"
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const { eventSlug } = params
@@ -32,8 +31,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { event, factions }
 }
 
-type ActionResult = | { ok: true } | { ok: false, reason?: string }
-
+type ActionResult = { ok: true } | { ok: false; reason?: string }
 
 export default function EditEventFactionsPage({
 	loaderData,
@@ -41,8 +39,6 @@ export default function EditEventFactionsPage({
 	const { event, factions } = loaderData
 	const data = useActionData<ActionResult>()
 	const formRef = useRef<HTMLFormElement | null>(null)
-
-	/* TODO check user credentials */
 
 	useEffect(() => {
 		// clear form on success
@@ -77,9 +73,6 @@ export default function EditEventFactionsPage({
 	)
 }
 
-
-
-
 export async function action({ params, request }: Route.ActionArgs) {
 	const formData = await request.formData()
 	const formObj = Object.fromEntries(formData)
@@ -87,25 +80,83 @@ export async function action({ params, request }: Route.ActionArgs) {
 	const createSchema = z.object({
 		intent: z.literal("create"),
 		faction: z.string().trim().min(3, "név túl rövid").max(50),
-		eventId: z.coerce.number()
+		eventId: z.coerce.number(),
 	})
 
 	const removeSchema = z.object({
 		intent: z.literal("remove"),
-		factionId: z.coerce.number()
+		factionId: z.coerce.number(),
 	})
 
 	const actionSchema = z.discriminatedUnion("intent", [
-		createSchema, removeSchema
+		createSchema,
+		removeSchema,
 	])
 
-	const action = actionSchema.parse(formObj)
+	const action = actionSchema.safeParse(formObj)
 
-	//	if(action.intent == "create") return createFaction(action)
-	//	if(action.intent == "remove") return removeFaction(action)
+	if (!action.success) {
+		return {
+			ok: false,
+			reason: action.error.errors.flat().toString(),
+		}
+	}
 
+	// check for credentials, get user
+	const { user } = await AuthorizedOnly(request, ["organizer"])
+
+	if (action.data.intent == "create")
+		return await createFaction(
+			user.id,
+			action.data.eventId,
+			action.data.faction,
+		)
+	if (action.data.intent == "remove")
+		return await removeFaction(user.id, action.data.factionId)
 
 	return {
 		ok: true,
+	}
+}
+
+const createFaction = async (
+	userId: string,
+	eventId: number,
+	name: string,
+): Promise<ActionResult> => {
+	// check if event getting edited is owned by user; event exists
+	const [event] = await database
+		.select()
+		.from(eventRecordTable)
+		.where(eq(eventRecordTable.id, eventId))
+	if (!event) throw data("nincs ilyen esemény", { status: 404 })
+
+	// check if user is the owner of the event
+	if (event.ownerId != userId)
+		throw data("nincs jogosultságod esemény szerkesztéséhez", { status: 403 })
+
+	try {
+		// insert new faction
+		const [faction] = await database
+			.insert(factionInfoTable)
+			.values({ eventId, name })
+			.returning()
+	} catch (error: unknown) {
+		console.log(error)
+		// TODO: check what the error code is for duplicates, return actionResult otherwise rethrow to handle in errorboundary
+	}
+
+	return {
+		ok: true,
+	}
+}
+
+const removeFaction = async (
+	userId: string,
+	factionId: number,
+): Promise<ActionResult> => {
+	return {
+		ok: false,
+		reason: "not implemented yet",
 	}
 }
