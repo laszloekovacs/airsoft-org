@@ -4,46 +4,49 @@ import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.factions"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
-import { Form, useActionData } from "react-router"
+import { data, Form, useActionData } from "react-router"
 import { z } from "zod"
 import { useEffect, useRef } from "react"
 import { FactionCard } from "~/components/dashboard/faction-card"
 
-/**
- * Create groups for players to be assigned to
- */
+
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const { eventSlug } = params
 
-	const event = await database
+	const [event] = await database
 		.select()
 		.from(eventRecordTable)
 		.where(eq(eventRecordTable.slug, eventSlug))
 
 	// throw if not found
-	if (event.length == 0) throw new Error("nincs ilyen esemény")
+	if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
 	// return the factions for this event, can be zero length
 	const factions = await database
 		.select()
 		.from(factionInfoTable)
-		.where(eq(factionInfoTable.eventId, event[0].id))
+		.where(eq(factionInfoTable.eventId, event.id))
 		.orderBy(factionInfoTable.name)
 
-	return { event: event[0], factions }
+	return { event, factions }
 }
 
-export default function EditEventGroupsPage({
+type ActionResult = | { ok: true } | { ok: false, reason?: string }
+
+
+export default function EditEventFactionsPage({
 	loaderData,
 }: Route.ComponentProps) {
 	const { event, factions } = loaderData
-	const data = useActionData()
+	const data = useActionData<ActionResult>()
 	const formRef = useRef<HTMLFormElement | null>(null)
+
+	/* TODO check user credentials */
 
 	useEffect(() => {
 		// clear form on success
-		if (data && data.status == "success") {
+		if (data && data.ok == true) {
 			formRef.current?.reset()
 		}
 	}, [data])
@@ -63,10 +66,9 @@ export default function EditEventGroupsPage({
 				<Button type="submit">hozzáad</Button>
 			</Form>
 
-			{data && data.status == "failure" && <p>csapat létrehozása sikertelen</p>}
+			{data && data.ok == false && <p>csapat létrehozása sikertelen</p>}
 
 			<ul>
-				{/* move this to its own components */}
 				{factions.map((faction) => (
 					<FactionCard key={faction.id} {...faction} />
 				))}
@@ -75,50 +77,35 @@ export default function EditEventGroupsPage({
 	)
 }
 
+
+
+
 export async function action({ params, request }: Route.ActionArgs) {
 	const formData = await request.formData()
 	const formObj = Object.fromEntries(formData)
 
+	const createSchema = z.object({
+		intent: z.literal("create"),
+		faction: z.string().trim().min(3, "név túl rövid").max(50),
+		eventId: z.coerce.number()
+	})
+
+	const removeSchema = z.object({
+		intent: z.literal("remove"),
+		factionId: z.coerce.number()
+	})
+
 	const actionSchema = z.discriminatedUnion("intent", [
-		z.object({
-			intent: z.literal("create"),
-			faction: z.string(),
-			eventId: z.coerce.number(),
-		}),
-		z.object({ intent: z.literal("remove"), factionId: z.string() }),
+		createSchema, removeSchema
 	])
 
 	const action = actionSchema.parse(formObj)
 
-	let queryResult = null
+	//	if(action.intent == "create") return createFaction(action)
+	//	if(action.intent == "remove") return removeFaction(action)
 
-	switch (action.intent) {
-		case "create":
-			queryResult = await database.insert(factionInfoTable).values({
-				name: action.faction,
-				eventId: action.eventId,
-			})
-
-			// failed to create
-			if (queryResult.rowCount == 0) {
-				return {
-					status: "failed",
-				}
-			}
-
-			break
-
-		case "remove":
-			queryResult = await database
-				.delete(factionInfoTable)
-				.where(eq(factionInfoTable.id, Number.parseInt(action.factionId)))
-			break
-
-		default:
-			throw new Error("unexpected intent")
-	}
 
 	return {
-		status: "success",
+		ok: true,
 	}
 }
