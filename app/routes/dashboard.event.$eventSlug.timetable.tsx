@@ -10,17 +10,21 @@ import database from "~/services/db.server"
 import { eventRecordTable, timelineTable } from "~/schema"
 import { eq, and } from "drizzle-orm"
 
+
+
 const schema = z.object({
     timestamp: z.iso.datetime({ local: true }),
     label: z.string().min(3).max(128),
 })
+
+type Schema = z.infer<typeof schema>
 
 // TODO: move this to services?
 z.config(z.locales.hu())
 
 export default function TimetablePage() {
     const lastResult = useActionData<typeof action>()
-    const [form, fields] = useForm({
+    const [form, fields] = useForm<Schema>({
         lastResult,
         constraint: getZodConstraint(schema),
     })
@@ -56,9 +60,10 @@ export async function action({ request, params }: Route.ActionArgs) {
     const { user } = await AuthorizedOnly(request, ["organizer"])
 
     // check if submission is correct?
-    if (submission.status == "error") {
+    if (submission.status != "success") {
         return submission.reply()
     }
+
 
     // if slug and owner match user can edit event
     const [event] = await database
@@ -77,17 +82,18 @@ export async function action({ request, params }: Route.ActionArgs) {
             { status: 500 },
         )
 
-    const { label, timestamp } = submission.payload
-
-    console.log(submission)
+    const { label, timestamp } = submission.value
 
     // insert a new time / label into timetable
-    const result = await database.insert(timelineTable).values({
+    const [result] = await database.insert(timelineTable).values({
         eventId: event.id,
         label,
-        timestamp: new Date(timestamp.toString())
-    })
+        timestamp
+    }).returning()
 
+    if (!result) {
+        throw new Error("nem sikerult letrehozni az idopontot")
+    }
 
     return submission.reply()
 }
