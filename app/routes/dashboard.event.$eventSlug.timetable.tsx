@@ -8,7 +8,7 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { AuthorizedOnly } from "~/services/auth.server"
 import database from "~/services/db.server"
 import { eventRecordTable, timelineTable } from "~/schema"
-import { eq, and } from "drizzle-orm"
+import { eq, and, param } from "drizzle-orm"
 
 
 
@@ -22,8 +22,20 @@ type Schema = z.infer<typeof schema>
 // TODO: move this to services?
 z.config(z.locales.hu())
 
-export default function TimetablePage() {
+
+export const loader = async ({ request, params }: Route.LoaderArgs) => {
+
+    const [event] = await database.select().from(eventRecordTable).where(eq(eventRecordTable.slug, params.eventSlug))
+    const timetable = await database.select().from(timelineTable).where(eq(timelineTable.eventId, event.id))
+
+    return { timetable }
+}
+
+
+export default function TimetablePage({ loaderData }: Route.ComponentProps) {
     const lastResult = useActionData<typeof action>()
+    const { timetable } = loaderData
+
     const [form, fields] = useForm<Schema>({
         lastResult,
         constraint: getZodConstraint(schema),
@@ -48,6 +60,18 @@ export default function TimetablePage() {
 
                 <Button type="submit">rogzit</Button>
             </Form>
+
+            <div>
+                <h2>idopontok</h2>
+                <ul>
+                    {timetable.map((item) => {
+                        return <li key={item.id}>
+                            <p>{item.label}</p>
+                            <p>{item.timestamp.toISOString()}</p>
+                        </li>
+                    })}
+                </ul>
+            </div>
         </div>
     )
 }
@@ -88,7 +112,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     const [result] = await database.insert(timelineTable).values({
         eventId: event.id,
         label,
-        timestamp
+        timestamp: new Date(timestamp)
     }).returning()
 
     if (!result) {
