@@ -41,6 +41,7 @@
     "javascript-time-ago": "^2.5.11",
     "lucide-react": "^0.511.0",
     "pg": "^8.16.0",
+    "pino": "^9.7.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.6.0",
@@ -51,7 +52,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.0.0",
     "@react-router/dev": "^7.6.0",
     "@storybook/addon-onboarding": "9.0.6",
     "@storybook/react-vite": "9.0.6",

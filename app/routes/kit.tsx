@@ -3,7 +3,16 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { NavigationBar } from "~/components/navigation-bar"
 import { Home, User } from "lucide-react"
-import SearchContainer from "~/components/home/Search"
+import { logger } from '~/services/logging.server'
+
+
+export const loader = () => {
+
+	logger.info("loading Kits endpoint")
+
+	return {}
+}
+
 
 
 export default function Kits() {
