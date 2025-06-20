@@ -3,7 +3,7 @@ import { event_records } from "~/schema"
 import database from "~/services/db.server"
 
 export async function getEvents() {
-	const events = await database.select().from(events)
+	const events = await database.select().from(event_records)
 	return events
 }
 
