@@ -5,7 +5,7 @@ import { OrganizersEventList } from "~/components/dashboard/organizers_event_lis
 import { Link } from "react-router"
 
 export const loader = async () => {
-	const events = await database.select().from(events)
+	const events = await database.select().from(event_records)
 
 	return { events }
 }
