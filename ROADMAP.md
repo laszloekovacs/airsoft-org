@@ -4,7 +4,7 @@
 [ ] search functionality: Redis vector search, semantic search
 [ ] comment section
 [ ] umami integration for general usage stats
-[ ] SigNoz log and monitoring integration
+[ ] SigNoz / hyperDX log and monitoring integration. OpenTelemetry
 [ ] capcha with cap
 [ ] qr codes for promo material. https://qr-code-styling.com/
 [ ] image upload and manipulation. react-easy-crop
