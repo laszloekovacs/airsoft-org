@@ -7,7 +7,7 @@ import { z } from "zod/v4"
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { AuthorizedOnly } from "~/services/auth.server"
 import database from "~/services/db.server"
-import { eventRecordTable, timelineTable } from "~/schema"
+import { event_records, event_schedule_records } from "~/schema"
 import { eq, and, param } from "drizzle-orm"
 
 
@@ -25,8 +25,8 @@ z.config(z.locales.hu())
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
 
-    const [event] = await database.select().from(eventRecordTable).where(eq(eventRecordTable.slug, params.eventSlug))
-    const timetable = await database.select().from(timelineTable).where(eq(timelineTable.eventId, event.id))
+    const [event] = await database.select().from(event_records).where(eq(event_records.slug, params.eventSlug))
+    const timetable = await database.select().from(event_schedule_records).where(eq(event_schedule_records.eventId, event.id))
 
     return { timetable }
 }
@@ -92,11 +92,11 @@ export async function action({ request, params }: Route.ActionArgs) {
     // if slug and owner match user can edit event
     const [event] = await database
         .select()
-        .from(eventRecordTable)
+        .from(event_records)
         .where(
             and(
-                eq(eventRecordTable.slug, params.eventSlug),
-                eq(eventRecordTable.ownerId, user.id),
+                eq(event_records.slug, params.eventSlug),
+                eq(event_records.ownerId, user.id),
             ),
         )
 
@@ -109,7 +109,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     const { label, timestamp } = submission.value
 
     // insert a new time / label into timetable
-    const [result] = await database.insert(timelineTable).values({
+    const [result] = await database.insert(event_schedule_records).values({
         eventId: event.id,
         label,
         timestamp: new Date(timestamp)

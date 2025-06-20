@@ -1,6 +1,6 @@
 import database from "~/services/db.server"
 import type { Route } from "./+types/_home.events.$eventId"
-import { eventRecordTable, userAtEventTable } from "~/schema"
+import { event_records, event_user_records } from "~/schema"
 import { eq, and } from "drizzle-orm"
 import { z } from "zod"
 import { Link } from "react-router"
@@ -13,8 +13,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 	const event = await database
 		.select()
-		.from(eventRecordTable)
-		.where(eq(eventRecordTable.slug, params.eventId))
+		.from(event_records)
+		.where(eq(event_records.slug, params.eventId))
 
 	if (!event) {
 		throw new Response("Event not found", { status: 404 })
@@ -23,8 +23,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	// look up if already applied. 
 
 	if (sessionData) {
-		const applications = await database.select().from(userAtEventTable).where(
-			and(eq(userAtEventTable.userId, sessionData.user.id), eq(userAtEventTable.eventId, event[0].id))
+		const applications = await database.select().from(event_user_records).where(
+			and(eq(event_user_records.userId, sessionData.user.id), eq(event_user_records.eventId, event[0].id))
 		)
 
 		if (applications.length > 0) {

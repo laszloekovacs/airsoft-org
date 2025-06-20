@@ -1,9 +1,9 @@
 import { user } from "~/schema/auth-schema"
-import { eventRecordTable } from "~/schema"
+import { event_records } from "~/schema"
 import database from "~/services/db.server"
 
 export async function getEvents() {
-	const events = await database.select().from(eventRecordTable)
+	const events = await database.select().from(events)
 	return events
 }
 
