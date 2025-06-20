@@ -1,16 +1,14 @@
-import { Form, useActionData, type ActionFunctionArgs } from "react-router"
+import { getFormProps, getInputProps, useForm } from "@conform-to/react"
+import { getZodConstraint, parseWithZod } from "@conform-to/zod/v4"
+import { and, eq } from "drizzle-orm"
+import { Form, useActionData } from "react-router"
+import { z } from "zod/v4"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
-import type { Route } from "./+types/dashboard.event.$eventSlug.timetable"
-import { getZodConstraint, parseWithZod } from "@conform-to/zod/v4"
-import { z } from "zod/v4"
-import { getFormProps, getInputProps, useForm } from "@conform-to/react"
+import { event_records, event_schedule_records } from "~/schema"
 import { AuthorizedOnly } from "~/services/auth.server"
 import database from "~/services/db.server"
-import { event_records, event_schedule_records } from "~/schema"
-import { eq, and, param } from "drizzle-orm"
-
-
+import type { Route } from "./+types/dashboard.event.$eventSlug.timetable"
 
 const schema = z.object({
     timestamp: z.iso.datetime({ local: true }),
@@ -67,7 +65,7 @@ export default function TimetablePage({ loaderData }: Route.ComponentProps) {
                     {timetable.map((item) => {
                         return <li key={item.id}>
                             <p>{item.label}</p>
-                            <p>{item.timestamp.toISOString()}</p>
+                            <time>{item.timestamp.toISOString()}</time>
                         </li>
                     })}
                 </ul>
