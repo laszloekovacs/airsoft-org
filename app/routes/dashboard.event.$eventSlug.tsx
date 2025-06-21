@@ -2,7 +2,7 @@ import { Link, Outlet } from "react-router"
 import type { Route } from "./+types/dashboard.event.$eventSlug"
 
 import { NavigationBar } from "~/components/navigation-bar"
-import { Home, Group, ArrowLeft, Braces, Clock, Image } from "lucide-react"
+import { Home, Group, ArrowLeft, Braces, Clock, Image, ScrollText } from "lucide-react"
 
 
 
@@ -45,6 +45,11 @@ export default function DashboardEventsPage({
 						name: "időpontok",
 						to: "./timetable",
 						icon: <Clock className="w-4 h-4" />
+					},
+					{
+						name: "leiras",
+						to: "./description",
+						icon: <ScrollText className="w-4 h-4" />
 					}
 				]}
 			/>
