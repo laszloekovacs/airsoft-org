@@ -66,5 +66,5 @@ export const action = async ({ request }: Route.ActionArgs) => {
     const formData = await request.formData()
     const submission = parseWithZod(formData, { schema: formSchema })
 
-
+    return submission.reply()
 }

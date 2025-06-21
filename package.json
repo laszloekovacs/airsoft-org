@@ -53,7 +53,7 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.0",
+    "@biomejs/biome": "^2.0.4",
     "@react-router/dev": "^7.6.0",
     "@storybook/addon-onboarding": "9.0.6",
     "@storybook/react-vite": "9.0.6",
