@@ -1,5 +1,9 @@
-
 // takes a list of threads
-export const CommentSection = () => {
 
+
+
+export const CommentSection = ({ threads }: any) => {
+
+
+    return <p>hello</p>
 }

@@ -16,7 +16,7 @@ export const comments = t.pgTable(
 		entityId: t.uuid("entity_id").notNull(),
 
 		// the parent, null if this is a top level comment
-		threadId: t.uuid("thread_id"),
+		parentId: t.uuid("parent_id"),
 
 		createdAt: t.timestamp("created_at").defaultNow(),
 
@@ -27,7 +27,7 @@ export const comments = t.pgTable(
 	},
 	(table) => [
 		t.foreignKey({
-			columns: [table.threadId],
+			columns: [table.parentId],
 			foreignColumns: [table.id],
 			name: "thread_id_fk",
 		}),
