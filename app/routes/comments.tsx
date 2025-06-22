@@ -18,7 +18,7 @@ export const loader = async () => {
 }
 
 export default function CommentsPreview({ loaderData }: Route.ComponentProps) {
-    const threads = loaderData
+    const { threads } = loaderData
 
     return <div>
 
