@@ -1,14 +1,14 @@
 import { Outlet } from "react-router"
-import HomePageHeading from "~/components/HomePageHeading"
-import SiteLinks from "~/components/site-links"
-import { authServer } from "~/services/auth.server"
-import type { Route } from "./+types/_home"
 import {
 	AuthenticatedSessionMenu,
 	UnauthenticatedSessionMenu,
 } from "~/components/home/SessionMenu"
+import HomePageHeading from "~/components/HomePageHeading"
+import SiteLinks from "~/components/site-links"
 import { Button } from "~/components/ui/button"
 import { authClient } from "~/services/auth.client"
+import { authServer } from "~/services/auth.server"
+import type { Route } from "./+types/_home"
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const sessionData = await authServer.api.getSession(request)

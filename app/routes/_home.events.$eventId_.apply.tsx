@@ -1,12 +1,12 @@
-import { redirect, useActionData, useFetcher } from "react-router"
-import type { Route } from "./+types/_home.events.$eventId_.apply"
+import { eq } from "drizzle-orm"
+import { redirect, useFetcher } from "react-router"
+import { Button } from "~/components/ui/button"
+import { Checkbox } from "~/components/ui/checkbox"
+import { Label } from "~/components/ui/label"
+import * as d from "~/schema"
 import { AuthenticatedOnly, authServer } from "~/services/auth.server"
 import database from "~/services/db.server"
-import * as d from "~/schema"
-import { eq } from "drizzle-orm"
-import { Label } from "~/components/ui/label"
-import { Checkbox } from "~/components/ui/checkbox"
-import { Button } from "~/components/ui/button"
+import type { Route } from "./+types/_home.events.$eventId_.apply"
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	AuthenticatedOnly(request)
