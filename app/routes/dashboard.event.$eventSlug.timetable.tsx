@@ -23,8 +23,8 @@ z.config(z.locales.hu())
 
 export const loader = async ({ request, params }: Route.LoaderArgs) => {
 
-    const [event] = await database.select().from(d.events).where(eq(d.events.slug, params.eventSlug))
-    const timetable = await database.select().from(d.event_schedule_records).where(eq(d.event_schedule_records.eventId, event.id))
+    const [event] = await database.select().from(d.eventsTable).where(eq(d.eventsTable.slug, params.eventSlug))
+    const timetable = await database.select().from(d.eventScheduleTable).where(eq(d.eventScheduleTable.eventId, event.id))
 
     return { timetable }
 }
@@ -90,11 +90,11 @@ export async function action({ request, params }: Route.ActionArgs) {
     // if slug and owner match user can edit event
     const [event] = await database
         .select()
-        .from(d.events)
+        .from(d.eventsTable)
         .where(
             and(
-                eq(d.events.slug, params.eventSlug),
-                eq(d.events.ownerId, user.id),
+                eq(d.eventsTable.slug, params.eventSlug),
+                eq(d.eventsTable.ownerId, user.id),
             ),
         )
 
@@ -107,7 +107,7 @@ export async function action({ request, params }: Route.ActionArgs) {
     const { label, timestamp } = submission.value
 
     // insert a new time / label into timetable
-    const [result] = await database.insert(d.event_schedule_records).values({
+    const [result] = await database.insert(d.eventScheduleTable).values({
         eventId: event.id,
         label,
         timestamp: new Date(timestamp)

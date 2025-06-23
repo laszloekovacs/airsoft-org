@@ -1,10 +1,10 @@
 import type { InferSelectModel } from "drizzle-orm"
-import type { event_faction_records } from "~/schema"
+import type { eventFaction } from "~/schema"
 import { Ellipsis } from "lucide-react"
 
 type FactionCardProps = {
     onDelete?: () => void
-} & InferSelectModel<typeof event_faction_records>
+} & InferSelectModel<typeof eventFaction>
 
 export const FactionCard = (props: FactionCardProps) => {
     const { name, description, expectedParticipants } = props

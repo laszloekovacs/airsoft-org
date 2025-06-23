@@ -1,7 +1,7 @@
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 
-export const comments = t.pgTable(
+export const commentsTable = t.pgTable(
 	"comments",
 	{
 		id: t.uuid("id").primaryKey().defaultRandom(),
@@ -15,7 +15,7 @@ export const comments = t.pgTable(
 		// this comment is part of this discussion
 		discussionId: t
 			.uuid("discussion_id")
-			.references(() => discussions.id, { onDelete: "cascade" }),
+			.references(() => discussionsTable.id, { onDelete: "cascade" }),
 
 		// the parent, null if this is a top level comment
 		parentId: t.uuid("parent_id"),
@@ -38,6 +38,6 @@ export const comments = t.pgTable(
 
 // discussion referencing an event or anything
 // that can have a discussion. reference this in events, etc.
-export const discussions = t.pgTable("discussions", {
+export const discussionsTable = t.pgTable("discussions", {
 	id: t.uuid().primaryKey().defaultRandom(),
 })

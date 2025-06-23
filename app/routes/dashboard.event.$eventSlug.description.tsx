@@ -15,11 +15,11 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
     const [event] = await database
         .select()
-        .from(d.events)
+        .from(d.eventsTable)
         .where(
             and(
-                eq(d.events.slug, params.eventSlug),
-                eq(d.events.ownerId, user.id),
+                eq(d.eventsTable.slug, params.eventSlug),
+                eq(d.eventsTable.ownerId, user.id),
             ),
         )
 

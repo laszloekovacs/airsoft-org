@@ -1,10 +1,10 @@
 // takes a list of threads
-import { comments } from "~/schema/comments"
+import { commentsTable } from "~/schema/comments"
 import type { InferSelectModel } from "drizzle-orm"
 import { Comment } from "./comment"
 
 
-type CommentRecordType = InferSelectModel<typeof comments>
+type CommentRecordType = InferSelectModel<typeof commentsTable>
 
 type CommentSectionProps = {
     threads: Array<CommentRecordType>

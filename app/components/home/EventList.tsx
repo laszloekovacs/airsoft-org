@@ -1,9 +1,9 @@
 import type { InferSelectModel } from "drizzle-orm"
 import { Link } from "react-router"
-import type { events } from "~/schema"
+import type { eventsTable } from "~/schema"
 
 export const EventList = (props: {
-	eventList: Array<InferSelectModel<typeof events>>
+	eventList: Array<InferSelectModel<typeof eventsTable>>
 }) => {
 	const { eventList } = props
 
@@ -25,7 +25,7 @@ export const EventList = (props: {
 }
 
 export const EventItem = (props: {
-	event: InferSelectModel<typeof events>
+	event: InferSelectModel<typeof eventsTable>
 }) => {
 	const { title, startDate, slug } = props.event
 	return (

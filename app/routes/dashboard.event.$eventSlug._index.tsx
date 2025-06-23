@@ -13,15 +13,15 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 	// get event from slug
 	const event = await database
 		.select()
-		.from(d.events)
-		.where(eq(d.events.slug, eventSlug))
+		.from(d.eventsTable)
+		.where(eq(d.eventsTable.slug, eventSlug))
 
 	if (event.length == 0) throw new Error()
 
 	const attendees = await database
 		.select()
-		.from(d.event_user_records)
-		.where(eq(d.event_user_records.eventId, event[0].id))
+		.from(d.eventUserTable)
+		.where(eq(d.eventUserTable.eventId, event[0].id))
 
 	return { attendees }
 }

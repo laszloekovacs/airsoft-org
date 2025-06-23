@@ -54,11 +54,11 @@ export async function action({
 	// find event id from stub
 	const event = await database
 		.select()
-		.from(d.events)
-		.where(eq(d.events.slug, params.eventId))
+		.from(d.eventsTable)
+		.where(eq(d.eventsTable.slug, params.eventId))
 
 	// create an entry in the application
-	const result = await database.insert(d.event_user_records).values({
+	const result = await database.insert(d.eventUserTable).values({
 		userId: user.id,
 		eventId: event[0].id,
 	})

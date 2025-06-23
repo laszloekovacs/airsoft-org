@@ -13,8 +13,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 	const event = await database
 		.select()
-		.from(d.events)
-		.where(eq(d.events.slug, params.eventId))
+		.from(d.eventsTable)
+		.where(eq(d.eventsTable.slug, params.eventId))
 
 	if (!event) {
 		throw new Response("Event not found", { status: 404 })
@@ -23,8 +23,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	// look up if already applied. 
 
 	if (sessionData) {
-		const applications = await database.select().from(d.event_user_records).where(
-			and(eq(d.event_user_records.userId, sessionData.user.id), eq(d.event_user_records.eventId, event[0].id))
+		const applications = await database.select().from(d.eventUserTable).where(
+			and(eq(d.eventUserTable.userId, sessionData.user.id), eq(d.eventUserTable.eventId, event[0].id))
 		)
 
 		if (applications.length > 0) {

@@ -61,8 +61,8 @@ export async function action({
 					async (slug) => {
 						const existingEvents = await database
 							.select()
-							.from(d.events)
-							.where(eq(d.events.slug, slug))
+							.from(d.eventsTable)
+							.where(eq(d.eventsTable.slug, slug))
 
 						return existingEvents.length == 0
 					},
@@ -85,7 +85,7 @@ export async function action({
 	if (parseResult.success) {
 		// create event in the database
 		const { title, date, eventUrlSlug } = parseResult.data
-		const result = await database.insert(d.events).values({
+		const result = await database.insert(d.eventsTable).values({
 			title,
 			startDate: date,
 			slug: eventUrlSlug,

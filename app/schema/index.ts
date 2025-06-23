@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm"
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
-import { discussions } from "./comments"
+import { discussionsTable } from "./comments"
 
 export const eventPublicationState = t.pgEnum("event_publication_state", [
 	"draft",
@@ -11,7 +11,7 @@ export const eventPublicationState = t.pgEnum("event_publication_state", [
 /**
  * Event information table
  */
-export const events = t.pgTable(
+export const eventsTable = t.pgTable(
 	"events",
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -79,7 +79,7 @@ export const events = t.pgTable(
 		locationSummary: t.text().notNull(),
 
 		// detailed location information
-		location: t.integer().references(() => venue_records.id, {
+		location: t.integer().references(() => venuesTable.id, {
 			onDelete: "set null",
 		}),
 
@@ -94,7 +94,7 @@ export const events = t.pgTable(
 		// the discussion relating to this event. need to manually delete?
 		discussion: t
 			.uuid()
-			.references(() => discussions.id, { onDelete: "set null" }),
+			.references(() => discussionsTable.id, { onDelete: "set null" }),
 	},
 	(table) => [
 		// postgres built in tsvector for search
@@ -164,8 +164,8 @@ export const events = t.pgTable(
 /*
  * user attendance on event many-to-many associative table
  */
-export const event_user_records = t.pgTable(
-	"event_user_records",
+export const eventUserTable = t.pgTable(
+	"event_user",
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
@@ -193,14 +193,12 @@ export const event_user_records = t.pgTable(
 		eventId: t
 			.integer()
 			.notNull()
-			.references(() => events.id, { onDelete: "cascade" }),
+			.references(() => eventsTable.id, { onDelete: "cascade" }),
 
 		// null means the player is in the waiting list.
-		factionId: t
-			.integer("faction_id")
-			.references(() => event_faction_records.id, {
-				onDelete: "set null",
-			}),
+		factionId: t.integer("faction_id").references(() => eventFaction.id, {
+			onDelete: "set null",
+		}),
 	},
 	/* user allowed only once to apply for a single event */
 	(table) => [t.unique().on(table.eventId, table.userId)],
@@ -209,8 +207,8 @@ export const event_user_records = t.pgTable(
 /**
  * Description of a faction at an event
  */
-export const event_faction_records = t.pgTable(
-	"event_faction_records",
+export const eventFaction = t.pgTable(
+	"event_faction",
 	{
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 
@@ -218,7 +216,7 @@ export const event_faction_records = t.pgTable(
 		eventId: t
 			.integer("event_id")
 			.notNull()
-			.references(() => events.id, {
+			.references(() => eventsTable.id, {
 				onDelete: "cascade",
 			}),
 
@@ -243,8 +241,8 @@ export const event_faction_records = t.pgTable(
  * Locations or map details for the event
  */
 
-export const venue_records = t.pgTable(
-	"venue_records",
+export const venuesTable = t.pgTable(
+	"venues",
 	{
 		id: t.integer("id").primaryKey().generatedAlwaysAsIdentity(),
 
@@ -300,8 +298,8 @@ export const venue_records = t.pgTable(
 /**
  * prices table. eg: entry fee, rental gear, welcome drink etc.
  */
-export const event_fee_records = t.pgTable(
-	"event_fee_records",
+export const eventFees = t.pgTable(
+	"event_fees",
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
@@ -312,7 +310,7 @@ export const event_fee_records = t.pgTable(
 		eventId: t
 			.integer()
 			.notNull()
-			.references(() => events.id, {
+			.references(() => eventsTable.id, {
 				onDelete: "cascade",
 			}),
 
@@ -331,7 +329,7 @@ export const event_fee_records = t.pgTable(
 /**
  * timeline of the event: eg: breakfast, orientation, play, end
  */
-export const event_schedule_records = t.pgTable("event_schedule_records", {
+export const eventScheduleTable = t.pgTable("event_schedule", {
 	id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 
 	// allows for notification on change
@@ -341,7 +339,7 @@ export const event_schedule_records = t.pgTable("event_schedule_records", {
 	eventId: t
 		.integer()
 		.notNull()
-		.references(() => events.id, {
+		.references(() => eventsTable.id, {
 			onDelete: "cascade",
 		}),
 

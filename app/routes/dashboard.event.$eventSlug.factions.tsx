@@ -14,8 +14,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const [event] = await database
 		.select()
-		.from(d.events)
-		.where(eq(d.events.slug, eventSlug))
+		.from(d.eventsTable)
+		.where(eq(d.eventsTable.slug, eventSlug))
 
 	// throw if event not found
 	if (!event) throw data("nincs ilyen esemény", { status: 404 })
@@ -23,9 +23,9 @@ export async function loader({ params }: Route.LoaderArgs) {
 	// return the factions for this event, can be zero length
 	const factions = await database
 		.select()
-		.from(d.event_faction_records)
-		.where(eq(d.event_faction_records.eventId, event.id))
-		.orderBy(d.event_faction_records.name)
+		.from(d.eventFaction)
+		.where(eq(d.eventFaction.eventId, event.id))
+		.orderBy(d.eventFaction.name)
 
 	return { event, factions }
 }
@@ -126,15 +126,15 @@ const createFaction = async (
 		// check if event getting edited is owned by user; event exists
 		const [event] = await tx
 			.select()
-			.from(d.events)
-			.where(and(eq(d.events.slug, eventSlug), eq(d.events.ownerId, userId)))
+			.from(d.eventsTable)
+			.where(and(eq(d.eventsTable.slug, eventSlug), eq(d.eventsTable.ownerId, userId)))
 
 		if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
 		try {
 			// insert new faction
 			const [faction] = await tx
-				.insert(d.event_faction_records)
+				.insert(d.eventFaction)
 				.values({ eventId: event.id, name })
 				.returning()
 		} catch (error: unknown) {

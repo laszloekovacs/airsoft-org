@@ -3,7 +3,7 @@ import { user } from "~/schema/auth-schema"
 import database from "~/services/db.server"
 
 export async function getEvents() {
-	const events = await database.select().from(d.events)
+	const events = await database.select().from(d.eventsTable)
 	return events
 }
 
