@@ -12,8 +12,8 @@ export const comments = t.pgTable(
 		// the poster
 		userId: t.text("user_id").references(() => user.id),
 
-		// entity id that references anything that can be commented on
-		entityId: t.uuid("entity_id").notNull(),
+		// this comment is part of this discussion
+		discussionId: t.uuid("discussion_id").references(() => discussions.id),
 
 		// the parent, null if this is a top level comment
 		parentId: t.uuid("parent_id"),
@@ -33,3 +33,9 @@ export const comments = t.pgTable(
 		}),
 	],
 )
+
+// discussion referencing an event or anything
+// that can have a discussion. reference this in events, etc.
+export const discussions = t.pgTable("discussions", {
+	id: t.uuid().primaryKey().defaultRandom(),
+})

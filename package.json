@@ -12,8 +12,7 @@
     "drizzle-kit-push": "bun drizzle-kit push",
     "drizzle-kit-migrate": "bun drizzle-kit migrate",
     "studio": "bunx drizzle-kit studio",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "storybook dev -p 6006"
   },
   "dependencies": {
     "@conform-to/react": "^1.7.0",

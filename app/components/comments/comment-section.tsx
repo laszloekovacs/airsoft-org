@@ -22,7 +22,9 @@ export const CommentSection = (props: CommentSectionProps) => {
     return (
         <ul>
             {threads.map((item) => (
-                <Comment key={item.id} content={item.content} />
+                <li key={item.id}>
+                    <Comment content={item.content} />
+                </li>
             ))}
         </ul>
     )

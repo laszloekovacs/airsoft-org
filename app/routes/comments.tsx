@@ -1,8 +1,8 @@
+import { and, eq, isNull } from "drizzle-orm"
+import { CommentSection } from "~/components/comments/comment-section"
 import { comments } from "~/schema/comments"
 import database from "~/services/db.server"
-import { and, eq, isNull } from "drizzle-orm"
 import type { Route } from "./+types/comments"
-import { CommentSection } from "~/components/comments/comment-section"
 
 export const loader = async () => {
     // load all TOP LEVEL (parent == null) comments with a specific entity Id
