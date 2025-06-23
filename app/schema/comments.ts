@@ -13,7 +13,9 @@ export const comments = t.pgTable(
 		userId: t.text("user_id").references(() => user.id),
 
 		// this comment is part of this discussion
-		discussionId: t.uuid("discussion_id").references(() => discussions.id),
+		discussionId: t
+			.uuid("discussion_id")
+			.references(() => discussions.id, { onDelete: "cascade" }),
 
 		// the parent, null if this is a top level comment
 		parentId: t.uuid("parent_id"),

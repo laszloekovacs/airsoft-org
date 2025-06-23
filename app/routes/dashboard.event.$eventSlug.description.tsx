@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Form, useActionData } from "react-router"
 import { Button } from "~/components/ui/button"
-import { event_records } from "~/schema"
+import * as d from "~/schema"
 import { AuthorizedOnly } from "~/services/auth.server"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.description"
@@ -15,11 +15,11 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
     const [event] = await database
         .select()
-        .from(event_records)
+        .from(d.events)
         .where(
             and(
-                eq(event_records.slug, params.eventSlug),
-                eq(event_records.ownerId, user.id),
+                eq(d.events.slug, params.eventSlug),
+                eq(d.events.ownerId, user.id),
             ),
         )
 

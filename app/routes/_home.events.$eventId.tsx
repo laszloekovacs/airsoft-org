@@ -1,6 +1,6 @@
 import database from "~/services/db.server"
 import type { Route } from "./+types/_home.events.$eventId"
-import { event_records, event_user_records } from "~/schema"
+import * as d from "~/schema"
 import { eq, and } from "drizzle-orm"
 import { z } from "zod"
 import { Link } from "react-router"
@@ -13,8 +13,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 
 	const event = await database
 		.select()
-		.from(event_records)
-		.where(eq(event_records.slug, params.eventId))
+		.from(d.events)
+		.where(eq(d.events.slug, params.eventId))
 
 	if (!event) {
 		throw new Response("Event not found", { status: 404 })
@@ -23,8 +23,8 @@ export const loader = async ({ params, request }: Route.LoaderArgs) => {
 	// look up if already applied. 
 
 	if (sessionData) {
-		const applications = await database.select().from(event_user_records).where(
-			and(eq(event_user_records.userId, sessionData.user.id), eq(event_user_records.eventId, event[0].id))
+		const applications = await database.select().from(d.event_user_records).where(
+			and(eq(d.event_user_records.userId, sessionData.user.id), eq(d.event_user_records.eventId, event[0].id))
 		)
 
 		if (applications.length > 0) {
@@ -43,7 +43,7 @@ export default function EventDetailPage({ loaderData }: Route.ComponentProps) {
 
 
 			<h1 className="text-2xl mb-2">{event.title}</h1>
-			<p className="mb-4">{event.date}</p>
+			<p className="mb-4">{event.startDate}</p>
 
 
 

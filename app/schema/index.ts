@@ -1,6 +1,7 @@
+import { sql } from "drizzle-orm"
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
-import { sql } from "drizzle-orm"
+import { discussions } from "./comments"
 
 export const eventPublicationState = t.pgEnum("event_publication_state", [
 	"draft",
@@ -10,8 +11,8 @@ export const eventPublicationState = t.pgEnum("event_publication_state", [
 /**
  * Event information table
  */
-export const event_records = t.pgTable(
-	"event_records",
+export const events = t.pgTable(
+	"events",
 	{
 		id: t.integer().primaryKey().generatedAlwaysAsIdentity(),
 		createdAt: t
@@ -89,6 +90,11 @@ export const event_records = t.pgTable(
 
 		// array of links to fb, x, discord etc or even phone number.
 		socials: t.text("socials").array().notNull().default(sql`ARRAY[]::text[]`),
+
+		// the discussion relating to this event. need to manually delete?
+		discussion: t
+			.uuid()
+			.references(() => discussions.id, { onDelete: "set null" }),
 	},
 	(table) => [
 		// postgres built in tsvector for search
@@ -187,7 +193,7 @@ export const event_user_records = t.pgTable(
 		eventId: t
 			.integer()
 			.notNull()
-			.references(() => event_records.id, { onDelete: "cascade" }),
+			.references(() => events.id, { onDelete: "cascade" }),
 
 		// null means the player is in the waiting list.
 		factionId: t
@@ -212,7 +218,7 @@ export const event_faction_records = t.pgTable(
 		eventId: t
 			.integer("event_id")
 			.notNull()
-			.references(() => event_records.id, {
+			.references(() => events.id, {
 				onDelete: "cascade",
 			}),
 
@@ -306,7 +312,7 @@ export const event_fee_records = t.pgTable(
 		eventId: t
 			.integer()
 			.notNull()
-			.references(() => event_records.id, {
+			.references(() => events.id, {
 				onDelete: "cascade",
 			}),
 
@@ -335,7 +341,7 @@ export const event_schedule_records = t.pgTable("event_schedule_records", {
 	eventId: t
 		.integer()
 		.notNull()
-		.references(() => event_records.id, {
+		.references(() => events.id, {
 			onDelete: "cascade",
 		}),
 

@@ -1,11 +1,11 @@
 import type { Route } from "./+types/dashboard._index"
-import { event_records } from "~/schema"
+import * as d from "~/schema"
 import database from "~/services/db.server"
 import { OrganizersEventList } from "~/components/dashboard/organizers_event_list"
 import { Link } from "react-router"
 
 export const loader = async () => {
-	const events = await database.select().from(event_records)
+	const events = await database.select().from(d.events)
 
 	return { events }
 }

@@ -14,6 +14,6 @@ $$ LANGUAGE plpgsql;
 -- triggers update when event is inserted or updated
 CREATE OR REPLACE TRIGGER trigger_update_search_vector
 BEFORE INSERT OR UPDATE 
-ON event_record 
+ON events
 FOR EACH ROW 
 EXECUTE FUNCTION update_search_vector();

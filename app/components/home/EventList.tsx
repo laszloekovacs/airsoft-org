@@ -1,9 +1,9 @@
 import type { InferSelectModel } from "drizzle-orm"
 import { Link } from "react-router"
-import type { event_records } from "~/schema"
+import type { events } from "~/schema"
 
 export const EventList = (props: {
-	eventList: Array<InferSelectModel<typeof event_records>>
+	eventList: Array<InferSelectModel<typeof events>>
 }) => {
 	const { eventList } = props
 
@@ -25,12 +25,12 @@ export const EventList = (props: {
 }
 
 export const EventItem = (props: {
-	event: InferSelectModel<typeof event_records>
+	event: InferSelectModel<typeof events>
 }) => {
-	const { title, date, slug } = props.event
+	const { title, startDate, slug } = props.event
 	return (
 		<li className="flex flex-row gap-2 py-3">
-			<p>{date}</p>
+			<p>{startDate}</p>
 			<Link to={`/events/${slug}`}>
 				<h2 className="font-semibold">{title}</h2>
 			</Link>

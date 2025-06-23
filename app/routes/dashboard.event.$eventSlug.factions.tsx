@@ -1,5 +1,5 @@
 import { eq, and } from "drizzle-orm"
-import { event_records, event_faction_records } from "~/schema"
+import * as d from "~/schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug.factions"
 import { Input } from "~/components/ui/input"
@@ -14,8 +14,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 	const [event] = await database
 		.select()
-		.from(event_records)
-		.where(eq(event_records.slug, eventSlug))
+		.from(d.events)
+		.where(eq(d.events.slug, eventSlug))
 
 	// throw if event not found
 	if (!event) throw data("nincs ilyen esemény", { status: 404 })
@@ -23,9 +23,9 @@ export async function loader({ params }: Route.LoaderArgs) {
 	// return the factions for this event, can be zero length
 	const factions = await database
 		.select()
-		.from(event_faction_records)
-		.where(eq(event_faction_records.eventId, event.id))
-		.orderBy(event_faction_records.name)
+		.from(d.event_faction_records)
+		.where(eq(d.event_faction_records.eventId, event.id))
+		.orderBy(d.event_faction_records.name)
 
 	return { event, factions }
 }
@@ -126,15 +126,15 @@ const createFaction = async (
 		// check if event getting edited is owned by user; event exists
 		const [event] = await tx
 			.select()
-			.from(event_records)
-			.where(and(eq(event_records.slug, eventSlug), eq(event_records.ownerId, userId)))
+			.from(d.events)
+			.where(and(eq(d.events.slug, eventSlug), eq(d.events.ownerId, userId)))
 
 		if (!event) throw data("nincs ilyen esemény", { status: 404 })
 
 		try {
 			// insert new faction
 			const [faction] = await tx
-				.insert(event_faction_records)
+				.insert(d.event_faction_records)
 				.values({ eventId: event.id, name })
 				.returning()
 		} catch (error: unknown) {
