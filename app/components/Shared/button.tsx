@@ -18,7 +18,7 @@ const styles = cva({
     },
 })
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
+type ButtonProps = React.ComponentProps<"button"> &
     VariantProps<typeof styles>
 
 export const Button: React.FC<ButtonProps> = ({
