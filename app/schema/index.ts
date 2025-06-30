@@ -375,5 +375,5 @@ export const eventUserView = t.pgView("event_user_view").as((qb) =>
 		})
 		.from(eventUserTable)
 		.leftJoin(user, eq(user.id, eventUserTable.userId))
-		.leftJoin(eventFaction, eq(eventFaction.id, eventUserTable.eventId)),
+		.leftJoin(eventFaction, eq(eventFaction.id, eventUserTable.factionId)),
 )
