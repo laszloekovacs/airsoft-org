@@ -221,7 +221,7 @@ export const eventFaction = t.pgTable(
 			}),
 
 		// name and description with potional image
-		name: t.text("name").notNull(),
+		name: t.text("faction_name").notNull(),
 		description: t.text("description"),
 
 		// intent how many players should be in here
@@ -368,7 +368,7 @@ export const eventUserView = t.pgView("event_user_view").as((qb) =>
 			expected_participants: eventFaction.expectedParticipants,
 
 			/* user profile data */
-			username: user.name,
+			userName: user.name,
 			email: user.email,
 			image: user.image,
 			callsign: user.callsign,
