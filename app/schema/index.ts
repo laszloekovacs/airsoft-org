@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import * as t from "drizzle-orm/pg-core"
 import { user } from "./auth-schema"
 import { discussionsTable } from "./comments"
@@ -351,3 +351,29 @@ export const eventScheduleTable = t.pgTable("event_schedule", {
 	// if some parts are on a different day than the main event, it's helpfull to show full date. Sould this be automated?
 	displayLongDateTime: t.boolean().notNull().default(false),
 })
+
+// event applications joined with user profile info
+export const eventUserView = t.pgView("event_user_view").as((qb) =>
+	qb
+		.select({
+			/* eventUser data */
+			id: eventUserTable.id,
+			eventId: eventUserTable.eventId,
+			factionId: eventUserTable.factionId,
+			userId: eventUserTable.userId,
+
+			/* faction data */
+			factionName: eventFaction.name,
+			description: eventFaction.description,
+			expected_participants: eventFaction.expectedParticipants,
+
+			/* user profile data */
+			username: user.name,
+			email: user.email,
+			image: user.image,
+			callsign: user.callsign,
+		})
+		.from(eventUserTable)
+		.leftJoin(user, eq(user.id, eventUserTable.userId))
+		.leftJoin(eventFaction, eq(eventFaction.id, eventUserTable.eventId)),
+)

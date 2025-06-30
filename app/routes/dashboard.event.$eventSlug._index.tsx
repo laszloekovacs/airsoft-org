@@ -1,6 +1,7 @@
 import { useDragAndDrop } from "@formkit/drag-and-drop/react"
 import { eq } from "drizzle-orm"
 import * as d from "~/schema"
+import { user } from "~/schema/auth-schema"
 import database from "~/services/db.server"
 import type { Route } from "./+types/dashboard.event.$eventSlug._index"
 
@@ -18,58 +19,27 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 
 	if (event.length == 0) throw new Error()
 
+	// get the users and group them by faction
 	const attendees = await database
 		.select()
 		.from(d.eventUserTable)
 		.where(eq(d.eventUserTable.eventId, event[0].id))
+		.innerJoin(user, eq(user.id, d.eventUserTable.userId))
+		.groupBy(d.eventUserTable.id, d.eventUserTable.factionId, d.eventUserTable.userId, user.id)
+
+
+	// query the users by group
+
 
 	return { attendees }
 }
 
-/**
- *
- * @param param0
- * @returns
- */
+
 export default function RegistrationPage({ loaderData }: Route.ComponentProps) {
-	type Item = (typeof attendees)[0]
-	const { attendees } = loaderData
-	const doneItems: Item[] = []
-
-	const [unasignedRef, attendeeList] = useDragAndDrop<HTMLUListElement, Item>(
-		attendees,
-		{
-			group: "A",
-		},
-	)
-
-	const [doneRef, dones] = useDragAndDrop<HTMLUListElement, Item>(doneItems, {
-		group: "A",
-
-		onDragend(data) {
-			console.log(data)
-			console.log(doneItems)
-		},
-	})
 
 	return (
 		<div>
-			<h1>csapatok</h1>
-			<ul ref={unasignedRef} className="bg-red-200 min-h-18">
-				{attendeeList.map((item) => (
-					<li key={item.id}>
-						<p>{item.userId}</p>
-					</li>
-				))}
-			</ul>
-
-			<ul ref={doneRef} className="bg-amber-200 min-h-18">
-				{dones.map((item) => (
-					<li key={item.id}>
-						<p>{item.userId}</p>
-					</li>
-				))}
-			</ul>
+			<pre>{JSON.stringify(loaderData, null, 2)}</pre>
 		</div>
 	)
 }
