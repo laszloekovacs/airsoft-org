@@ -74,9 +74,12 @@ export const AuthorizedOnly = async (
 
 	// throw error if no claim is set
 	if (claimsRequired.length == 0) {
+		/*
 		throw new Response("Claims required for resource, but none set", {
 			status: 401,
 		})
+*/
+		throw new Error("Nincs megfelelő jogosultságod")
 	}
 
 	const { claims } = sessionCookieData.user
